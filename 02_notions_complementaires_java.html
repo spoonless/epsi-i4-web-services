@@ -34,23 +34,22 @@
 				</section>
 				<section>
 					<section>
-						<h2>Caractéristiques du langage Java</h2>
-					</section>
-					<section>
-						<p>La compilation du code source ne produit pas un binaire mais du <em>bytecode</em></p>
-						<figure>
-							<figcaption>Le fichier source Hello.java</figcaption>
-							<pre><code data-trim>
+						<article>
+							<header>Compilation</header>
+							<p>La compilation du code source ne produit pas un binaire mais du <em>bytecode</em></p>
+							<figure>
+								<figcaption>Le fichier source Hello.java</figcaption>
+								<pre><code class="java" data-trim>
 public class Hello {
   public static void main(String[] args) {
     System.out.println("hello the world!");
   }
 }
-							</code></pre>
-						</figure>
-						<figure>
-							<figcaption>Le fichier Hello.class désassemblé avec <em>javap</em></figcaption>
-							<pre><code data-trim>
+								</code></pre>
+							</figure>
+							<figure>
+								<figcaption>Le fichier Hello.class désassemblé avec <em>javap</em></figcaption>
+								<pre><code class="java" data-trim>
 public class Hello {
   public static void main(java.lang.String[]);
     Signature: ([Ljava/lang/String;)V
@@ -60,37 +59,179 @@ public class Hello {
        5: invokevirtual #24
        8: return        
 }
-							</code></pre>
-						</figure>
+								</code></pre>
+							</figure>
+						</article>
 					</section>
 					<section>
-						<p>Le bytecode est exécutable dans une machine virtuelle (JVM)</p>
-						<figure>
-							<figcaption>Le fichier source Hello.java</figcaption>
-							<pre><code data-trim>
+						<article>
+							<p>Le bytecode est exécutable dans une machine virtuelle Java (JVM)</p>
+							<figure>
+								<figcaption>Le fichier source Hello.java</figcaption>
+								<pre><code class="java" data-trim>
 public class Hello {
   public static void main(String[] args) {
     System.out.println("hello the world!");
   }
 }
-							</code></pre>
-						</figure>
-						<figure>
-							<figcaption>Compilation du fichier Hello.java</figcaption>
-							<pre><code>$ javac Hello.java</code></pre>
-						</figure>
-						<figure>
-							<figcaption>Execution de la classe Hello</figcaption>
-							<pre><code data-trim>
+								</code></pre>
+							</figure>
+							<figure>
+								<figcaption>Compilation du fichier Hello.java</figcaption>
+								<pre><code class="bash">$ javac Hello.java</code></pre>
+							</figure>
+							<figure>
+								<figcaption>Exécution de la classe Hello</figcaption>
+								<pre><code class="bash" data-trim>
 $ java Hello
 hello the world!
-							</code></pre>
-						</figure>
+								</code></pre>
+							</figure>
+						</article>
 					</section>
 					<section>
-						<p>Conséquence : Un programme est portable sur un système disposant d'un machine virtuelle Java</p>
+						<p>Conséquence : Un programme est portable sur un système disposant d'une machine virtuelle Java.</p>
 						<blockquote>Compile once, run anywhere</blockquote>
 					</section>
+				</section>
+
+				<section>
+					<section>
+						<article>
+							<header>Édition de lien</header>
+							<p>Java utilise un système de <strong>lien dynamique à l'exécution</strong> (dynamic link).</p>
+							<p>Un programme Java est une collection de fichiers .class parfois rassemblés dans une archive (i.e. fichier .jar).</p>
+							<p>L'édition de lien se fait au chargement d'un fichier .class dans la JVM. 
+							Le <em><strong>ClassLoader</strong></em> a la responsabilité de charger les classes manquantes.</p>
+							<p>Le <em>ClassLoader</em> est accessible programmatiquement.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Étant donné deux classes <code>Spaceship</code> et <code>Engine</code></p>
+							<figure>
+								<figcaption>Spaceship.java</figcaption>
+								<pre><code class="java" data-trim>
+public class Spaceship {
+  private Engine engine = new Engine();
+
+  public void takeoff() {
+    engine.startup();
+  }
+}
+								</code></pre>
+								<figcaption>Engine.java</figcaption>
+								<pre><code class="java" data-trim>
+public class Engine {
+  public void startup() {
+    // ...
+  }
+}
+								</code></pre>
+							</figure>
+							<p>Une référence à la classe <code>Spaceship</code> dans un programme entraînera 
+							son chargement par le <em>ClassLoader</em>. La classe <code>Engine</code> 
+							sera également chargée car elle est nécessaire au fonctionnement de <code>Spaceship</code>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Si une classe ne peut pas être trouvée, on obtient l'erreur <code>NoClassDefFoundError</code> <strong>à l'exécution</strong>.</p>
+							<figure>
+								<figcaption>Erreur à l'exécution lorsque la classe <code>Engine</code> n'est pas trouvable</figcaption>
+								<pre><code class="java" data-trim>
+Exception in thread "main" java.lang.NoClassDefFoundError: Engine
+        at Spaceship.&lt;init&gt;(Spaceship.java:2)
+Caused by: java.lang.ClassNotFoundException: Engine
+        at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+        at java.security.AccessController.doPrivileged(Native Method)
+        at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+        at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+        ... 2 more
+								</code></pre>
+							</figure>
+						</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Le <em>ClassLoader</em> par défaut de la JVM charge les classes à partir des fichiers .class.</p>
+        					<p>L'ensemble des répertoires et des archives contenant les <em>packages</em> et les fichiers .class est appelé le <strong>classpath</strong>.</p>
+							<figure>
+								<figcaption>Lancement d'un programme sous *NIX en spécifiant le classpath</figcaption>
+								<pre><code class="bash" data-trim>java -classpath .:spaceship/bin:lib/galaxy.jar SpaceBattle</code></pre>
+							</figure>
+							<figure>
+								<figcaption>Lancement d'un programme sous Windows en spécifiant le classpath</figcaption>
+								<pre><code class="dos" data-trim>java -classpath .;spaceship/bin;lib/galaxy.jar SpaceBattle</code></pre>
+							</figure>
+							<p>A noter : le séparateur pour le paramètre classpath est différent selon les OS ':' sous *NIX et ';' sous Windows.</p>
+        				</article>
+        			</section>
+        		</section>
+        		<section>
+        			<section>
+        				<article>
+        					<header>Les packages</header>
+        				</article>
+        			</section>
+				</section>
+        		<section>
+        			<section>
+        				<article>
+        					<header>L'héritage</header>
+        				</article>
+        			</section>
+				</section>
+        		<section>
+        			<section>
+        				<article>
+        					<header>Gestion de la mémoire</header>
+        				</article>
+        			</section>
+				</section>
+        		<section>
+        			<section>
+        				<article>
+        					<header>Les exceptions</header>
+        				</article>
+        			</section>
+				</section>
+        		<section>
+        			<section>
+        				<article>
+        					<header>Les interfaces</header>
+        				</article>
+        			</section>
+				</section>
+        		<section>
+        			<section>
+        				<article>
+        					<header>La synchronisation</header>
+        				</article>
+        			</section>
+				</section>
+        		<section>
+        			<section>
+        				<article>
+        					<header>La sérialisation</header>
+        				</article>
+        			</section>
+				</section>
+        		<section>
+        			<section>
+        				<article>
+        					<header>Les annotations</header>
+        				</article>
+        			</section>
+				</section>
+        		<section>
+        			<section>
+        				<article>
+        					<header>Les JavaBeans</header>
+        				</article>
+        			</section>
 				</section>
 			</div>
 		</div>

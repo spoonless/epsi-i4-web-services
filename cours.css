@@ -16,6 +16,23 @@ dd {
 	font-size: 90% !important;
 }
 
+article {
+	text-align: justify;
+}
+
+article > header {
+	color: #333333;
+    font-family: "Quicksand",sans-serif;
+    letter-spacing: -0.08em;
+    line-height: 0.9em;
+    margin: 0 0 20px;
+    text-shadow: none;
+    text-transform: uppercase;
+	font-size: 1.3em;
+	margin-bottom: 0.5em !important;
+	border-bottom: thin solid rgb(180,180,180)!important;
+}
+
 figure > figcaption {
 	text-align: left;
 	font-size: 80% !important;
