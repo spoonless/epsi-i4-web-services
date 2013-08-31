@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+dl {
+	text-align: justify;
+}
+
+dt {
+	margin-top: 0.5em !important;
+	font-style: italic;
+	list-style: disc;
+	display: list-item;
+}
+
+dd {
+	margin-left: 1em !important;
+	font-size: 90% !important;
+}
