@@ -29,12 +29,72 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Blank slideshow</h1>
+					<h2>Notions<br/>complémentaires<br/>en Java</h2>
 					<small>EPSI I4 Web Services / David Gayerie - 2013-2014</small>
 				</section>
+				<section>
+					<section>
+						<h2>Caractéristiques du langage Java</h2>
+					</section>
+					<section>
+						<p>La compilation du code source ne produit pas un binaire mais du <em>bytecode</em></p>
+						<figure>
+							<figcaption>Le fichier source Hello.java</figcaption>
+							<pre><code data-trim>
+public class Hello {
+  public static void main(String[] args) {
+    System.out.println("hello the world!");
+  }
+}
+							</code></pre>
+						</figure>
+						<figure>
+							<figcaption>Le fichier Hello.class désassemblé avec <em>javap</em></figcaption>
+							<pre><code data-trim>
+public class Hello {
+  public static void main(java.lang.String[]);
+    Signature: ([Ljava/lang/String;)V
+    Code:
+       0: getstatic     #16
+       3: ldc           #22
+       5: invokevirtual #24
+       8: return        
+}
+							</code></pre>
+						</figure>
+					</section>
+					<section>
+						<p>Le bytecode est exécutable dans une machine virtuelle (JVM)</p>
+						<figure>
+							<figcaption>Le fichier source Hello.java</figcaption>
+							<pre><code data-trim>
+public class Hello {
+  public static void main(String[] args) {
+    System.out.println("hello the world!");
+  }
+}
+							</code></pre>
+						</figure>
+						<figure>
+							<figcaption>Compilation du fichier Hello.java</figcaption>
+							<pre><code>$ javac Hello.java</code></pre>
+						</figure>
+						<figure>
+							<figcaption>Execution de la classe Hello</figcaption>
+							<pre><code data-trim>
+$ java Hello
+hello the world!
+							</code></pre>
+						</figure>
+					</section>
+					<section>
+						<p>Conséquence : Un programme est portable sur un système disposant d'un machine virtuelle Java</p>
+						<blockquote>Compile once, run anywhere</blockquote>
+					</section>
+				</section>
 			</div>
-
 		</div>
+		
 
 		<script src="reveal.js-2.5.0/lib/js/head.min.js"></script>
 		<script src="reveal.js-2.5.0/js/reveal.min.js"></script>
