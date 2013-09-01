@@ -173,13 +173,112 @@ Caused by: java.lang.ClassNotFoundException: Engine
         				</article>
         			</section>
         		</section>
+
+
         		<section>
         			<section>
         				<article>
         					<header>Les packages</header>
+        					<p>Afin d'éviter la collision de nom (des classes, interfaces ou annotations portant le même nom),
+        					Java supporte la notion de packages.</p>
+        					<p>Un package est simplement un répertoire dans lequel sont placés les fichiers Java.</p>
+        					<p>Un package définit un espace de nom commun à l'ensemble des éléments de ce package.</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Le package d'un fichier source doit être la première instruction du fichier. 
+        					Il est spécifié avec le mot-clé <strong>package</strong>.<p>
+        					<pre><code class="java" data-trim>
+package com.battleship;
+
+public class Spaceship {
+
+  // ...
+
+}
+        					</code></pre>
+        					<p>Le fichier source doit se trouver dans le répertoire </p>
+        					<pre><code class="dos" data-trim>com/battleship</code></pre>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Pour référencer la classe <code>Spaceship</code> dans un autre fichier source, on peut :</p>
+        					<ul>
+        						<li>Soit utiliser son nom complet (c'est-à-dire en incluant le package) :
+        							<pre><code class="java" data-trim>com.battleship.Spaceship spaceship = new com.battleship.Spaceship();</code></pre>
+        						</li>
+        						<li>Soit inclure la classe dans l'espace de noms courant avec l'instruction <strong>import</strong> en début de fichier :
+        							<pre><code class="java" data-trim>import com.battleship.Spaceship;</code></pre>
+        							On peut alors écrire
+        							<pre><code class="java" data-trim>Spaceship spaceship = new Spaceship();</code></pre>
+        						</li>
+        					</ul> 
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>La mot-clé <strong>import</strong> permet aussi d'inclure la totalité des éléments
+        					d'un package en utilisant * :</p>
+        					<pre><code class="java" data-trim>import com.battleship.*;</code></pre>
+        					<p>Il n'est pas nécessaire d'importer un élément qui se trouve dans le même package.</p>
+        					<p>Les éléments appartenant au package <strong>java.lang</strong> (comme la classe <code>String</code> par exemple)
+        					sont implicitement importés.</p>
+        					<p>Par convention, le nom des packages s'écrit en minuscules.</p>
+        					<p>Les packages commençant par <strong>java</strong> ou <strong>javax</strong> sont réservés.</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Il est également possible d'importer les éléments <strong>static</strong> d'une classe.<p>
+        					<p>Cela permet d'invoquer des méthodes ou de référencer les attributs sans avoir à les préfixer par le nom de la classe.</p>
+							<figure>
+								<pre><code class="java" data-trim>
+class Angle {
+  private double radianAngle;
+
+  public Angle(double radianAngle) {
+    this.radianAngle = Math.max(0d, radianAngle);
+    this.radianAngle = Math.min(2 * Math.PI, this.radianAngle);
+  }
+}
+								</code></pre>
+								<pre><code class="java" data-trim>
+import static java.lang.Math.*;
+
+class Angle {
+  private double radianAngle;
+
+  public Angle(double radianAngle) {
+    this.radianAngle = max(0d, radianAngle);
+    this.radianAngle = min(2 * PI, this.radianAngle);
+  }
+}
+								</code></pre>
+							</figure>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Un package peut contenir un fichier spécial : <strong>package-info.java</strong></p>
+        					<p>Ce fichier peut contenir la documentation du package mais aussi des annotations de niveau package.</p>
+							<figure>
+								<figcaption>Exemple d'un fichier package-info.java</figcaption>
+									<pre><code class="java" data-trim>
+/**
+ * La javadoc du package vient ici...
+ */
+@javax.xml.bind.annotation.XmlSchema
+(namespace = "http://www.epsi.fr/i4-web-services/myfirstwebservice")
+package fr.epsi.i4_web_services.myfirstwebservice;
+								</code></pre>
+							</figure>
         				</article>
         			</section>
 				</section>
+
+
         		<section>
         			<section>
         				<article>
