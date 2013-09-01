@@ -1,4 +1,7 @@
 @CHARSET "UTF-8";
+@IMPORT url("reveal.js-2.5.0/css/reveal.min.css");
+@IMPORT url("reveal.js-2.5.0/css/theme/sky.css");
+@IMPORT url("reveal.js-2.5.0/lib/css/zenburn.css");
 
 dl {
 	text-align: justify;
