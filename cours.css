@@ -47,3 +47,16 @@ blockquote:before {
 blockquote:after {
 	content: "\00201D";
 }
+
+nav {
+	text-align: right;
+	font-size: 0.5em !important;
+	margin: 0.3em !important;
+}
+
+a.download {
+	background-image: url('assets/images/download.png');
+	background-size:1.3em;
+	background-repeat: no-repeat;
+	padding-left: 1.4em;
+}
