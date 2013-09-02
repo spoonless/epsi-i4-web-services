@@ -179,7 +179,7 @@ Caused by: java.lang.ClassNotFoundException: Engine
         			<section>
         				<article>
         					<header>Les packages</header>
-        					<p>Afin d'éviter la collision de nom (des classes, interfaces ou annotations portant le même nom),
+        					<p>Afin d'éviter la collision de nom (des classes, interfaces, énumérations ou annotations portant le même nom),
         					Java supporte la notion de packages.</p>
         					<p>Un package est simplement un répertoire dans lequel sont placés les fichiers Java.</p>
         					<p>Un package définit un espace de nom commun à l'ensemble des éléments de ce package.</p>
@@ -262,7 +262,8 @@ class Angle {
         			<section>
         				<article>
         					<p>Un package peut contenir un fichier spécial : <strong>package-info.java</strong></p>
-        					<p>Ce fichier peut contenir la documentation du package mais aussi des annotations de niveau package.</p>
+        					<p>Ce fichier contient obligatoirement l'instruction <strong>package</strong> comme pour un fichier normal.</p>
+        					<p>De plus, il peut contenir la documentation du package mais également des annotations de niveau package.</p>
 							<figure>
 								<figcaption>Exemple d'un fichier package-info.java</figcaption>
 									<pre><code class="java" data-trim>
@@ -278,28 +279,139 @@ package fr.epsi.i4_web_services.myfirstwebservice;
         			</section>
 				</section>
 
-
-        		<section>
-        			<section>
-        				<article>
-        					<header>L'héritage</header>
-        				</article>
-        			</section>
-				</section>
-        		<section>
-        			<section>
-        				<article>
-        					<header>Gestion de la mémoire</header>
-        				</article>
-        			</section>
-				</section>
         		<section>
         			<section>
         				<article>
         					<header>Les exceptions</header>
+        					<p>Une exception permet d'interrompre un traitement lorsqu'une situation exceptionnelle se produit.</p>
+        					<p>Une exception est propagée dans la pile des appels de méthodes. 
+        					Elle peut être interceptée progammatiquement.</p>
+        					<p>Si elle n'est interceptée par aucune méthode, elle remonte la pile d'appel et interrompt le tread d'exécution.</p>
+        					<p>S'il s'agit du thread principal, le programme s'interrompt en erreur.</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Les exceptions sont représentées par des classes qui ont comme ancêtre <strong>java.lang.Throwable</strong></p>
+							<figure>
+								<figcaption>La hiérarchie de base des exceptions</figcaption>
+								<img src="assets/images/exception_inheritance.png"/>
+							</figure>
+        					<p>Les classes héritant de <strong>java.lang.Error</strong> sont réservées pour la JVM afin de signaler des erreurs systèmes :</p>
+        					<ul>
+        						<li>NoClassDefFoundError</li>
+        						<li>OutOfMemoryError</li>
+        						<li>StackOverflowError</li>
+        						<li>...</li>
+        					</ul>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Pour lancer une exception on utilise le mot-clé <strong>throw</strong>.</p>
+							<pre><code class="java" data-trim>
+// La classe hérite de exception qui hérite elle-même de throwable.
+// Par convention le nom de la classe se termine par Exception.
+public class EndOfTheWorldException extends Exception {
+}
+							</code></pre>
+							<p>On peut maintenant signaler l'événement exceptionnel de la fin du monde en lançant l'exception :</p>
+							<pre><code class="java" data-trim>
+throw new EndOfTheWorldException();
+							</code></pre>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>On distingue deux catégories d'exception :</p>
+        					<ul>
+        						<li>Les <em>checked exceptions</em> apparaissent dans la signature des méthodes qui peuvent
+        						les lancer ou les propager lors d'un appel grâce au mot-clé <strong>throws</strong>.
+									<pre><code class="java" data-trim>
+public void pressTheRedButton() throws EndOfTheWorldException {
+  if(this.isTheEndOfTheWorld()) {
+    throw new EndOfTheWorldException();
+  }
+  // ...
+}
+
+public void doSomethingSilly() throws EndOfTheWorldException {
+  pressTheRedButton();
+}
+									</code></pre>
+									<p>Plusieurs <em>checked exceptions</em> peuvent être spécifiées en les séparant par une virgule :</p>
+									<pre><code class="java" data-trim>
+public Stuff buy(long amount, Currency currency) 
+  throws NotEnoughMoneyException, NotAcceptedCurrencyException, 
+         StuffUnavailableException {
+  // ...
+}
+									</code></pre>
+								</li>
+							</ul>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<ul>
+        						<li>Les <em>unchecked exceptions</em> héritent directement ou indirectement 
+        						de <strong>RuntimeException</strong> ou de <strong>Error</strong>.
+        						<p>La déclaration de ces exceptions est <strong>optionnelle</strong> 
+        						dans la signature des méthodes pouvant les lancer ou les propager.</p>
+									<pre><code class="java" data-trim>
+public class EntityNotFoundException extends RuntimeException {
+  public EntityNotFoundException(String message) {
+    super(message);
+  } 
+}
+									</code></pre>
+									<pre><code class="java" data-trim>
+// Il n'est pas nécessaire d'ajouter :
+//       throws EntityNotFoundException
+// car EntityNotFoundException hérite de RuntimeException.
+public Entity get(String id) {
+  Entity entity = database.load(id);
+  if (entity == null) {
+    throw new EntityNotFoundException("Cannot find entity " + id);
+  }
+  return entity;
+}
+									</code></pre>
+								</li>
+							</ul>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Une exception peut être interceptée par une méthode dans la pile d'appel :</p>
+							<pre><code class="java" data-trim>
+try {
+  evilMind.pressTheRedButton();
+}
+catch (EndOfTheWorldException ex) {
+  hero.saveTheWorld();
+}
+							</code></pre>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>TODO clause finally</p>
+							<pre><code class="java" data-trim>
+try {
+  evilMind.pressTheRedButton();
+}
+catch (EndOfTheWorldException ex) {
+  hero.saveTheWorld();
+}
+finally {
+  hero.arrest(evilMind);
+}
+							</code></pre>
         				</article>
         			</section>
 				</section>
+
         		<section>
         			<section>
         				<article>

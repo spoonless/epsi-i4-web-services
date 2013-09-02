@@ -3,27 +3,27 @@
 @IMPORT url("reveal.js-2.5.0/css/theme/sky.css");
 @IMPORT url("reveal.js-2.5.0/lib/css/zenburn.css");
 
-dl {
+.reveal dl {
 	text-align: justify;
 }
 
-dt {
-	margin-top: 0.5em !important;
+.reveal dt {
+	margin-top: 0.5em;
 	font-style: italic;
 	list-style: disc;
 	display: list-item;
 }
 
-dd {
-	margin-left: 1em !important;
-	font-size: 90% !important;
+.reveal dd {
+	margin-left: 1em;
+	font-size: 90%;
 }
 
-article {
+.reveal article {
 	text-align: justify;
 }
 
-article > header {
+.reveal article > header {
 	color: #333333;
     font-family: "Quicksand",sans-serif;
     letter-spacing: -0.08em;
@@ -33,14 +33,14 @@ article > header {
     text-transform: uppercase;
 	font-size: 1.3em;
 	margin-bottom: 0.5em !important;
-	border-bottom: thin solid rgb(180,180,180)!important;
+	border-bottom: thin solid rgb(180,180,180);
 }
 
-figure > figcaption {
+.reveal figure > figcaption {
 	text-align: left;
 	font-size: 80% !important;
 	color: rgb(59, 117, 158);
-	padding-bottom: 0px !important;
+	padding-bottom: 0px;
 }
 
 blockquote:before {
@@ -51,10 +51,10 @@ blockquote:after {
 	content: "\00201D";
 }
 
-nav {
+.reveal nav {
 	text-align: right;
-	font-size: 0.5em !important;
-	margin: 0.3em !important;
+	font-size: 0.5em;
+	margin: 0.3em;
 }
 
 a.download {
@@ -62,4 +62,12 @@ a.download {
 	background-size:1.3em;
 	background-repeat: no-repeat;
 	padding-left: 1.4em;
+}
+
+.reveal figure > img {
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+	border:0px;
+	padding: 0.2em;
+	margin: auto;
+	margin-left: 2em;
 }
