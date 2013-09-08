@@ -392,11 +392,16 @@ catch (EndOfTheWorldException ex) {
   hero.saveTheWorld();
 }
 							</code></pre>
+        					<p>Le block défini par le mot-clé <strong>catch</strong> est exécuté <strong>uniquement</strong>
+        					si une exception de type <strong>EndOfTheWorldException</strong> est lancée lors de l'exécution
+        					du block défini par le mot-clé <strong>try</strong>.
+        					</p>
         				</article>
         			</section>
         			<section>
         				<article>
-        					<p>TODO clause finally</p>
+        					<p>Un block défini par le mot-clé <strong>finally</strong> est exécuté systématiquement après un block
+        					<strong>try</strong> et un block <strong>catch</strong> (si une exception a été attrapée).</p>
 							<pre><code class="java" data-trim>
 try {
   evilMind.pressTheRedButton();
@@ -405,7 +410,37 @@ catch (EndOfTheWorldException ex) {
   hero.saveTheWorld();
 }
 finally {
+  // Finalement, le héros arrête l'esprit du mal qu'il ait eu
+  // ou non à sauver le monde.
   hero.arrest(evilMind);
+}
+							</code></pre>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Un block <strong>finally</strong> est souvent utilisé en Java pour libérer 
+        					des ressources système à la fin d'un traitement.</p>
+							<pre><code class="java" data-trim>
+public String getFileContent(String filename) throws java.io.IOException {
+  java.io.FileReader reader = new java.io.FileReader(filename);
+  try {
+    int nbCharRead = 0;
+    char[] buffer = new char[1024];
+    StringBuilder builder = new StringBuilder();
+    // L'appel à reader.read peut lancer une java.io.IOException
+    while ((nbCharRead = reader.read(buffer)) &gt;= 0) {
+      builder.append(buffer, 0, nbCharRead);
+    }
+    // le retour explicite n'empêche pas l'exécution du block finally.
+    return builder.toString();
+  }
+  // Ce block est obligatoirement exécuté après le block try.
+  // Ainsi le flux de lecture sur le fichier est fermé 
+  // avant le retour de la méthode. 
+  finally {
+    reader.close();
+  }
 }
 							</code></pre>
         				</article>

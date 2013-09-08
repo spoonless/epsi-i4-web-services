@@ -71,3 +71,7 @@ a.download {
 	margin: auto;
 	margin-left: 2em;
 }
+
+.reveal pre code {
+    max-height: none;
+}
