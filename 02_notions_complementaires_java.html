@@ -451,6 +451,135 @@ public String getFileContent(String filename) throws java.io.IOException {
         			<section>
         				<article>
         					<header>Les interfaces</header>
+        					<p>Une interface permet d'établir un contrat implémenté par des classes. 
+        					L'interface ne fournit pas d'implémentation mais uniquement la signature des méthodes à implémenter.</p>
+        					<p>Une interface peut déclarer des constantes souvent utilisées comme valeurs remarquables de retour
+        					ou de paramètres.</p>
+							<figure>
+								<figcaption>Un exemple d'interface</figcaption>
+								<pre><code class="java" data-trim>
+public interface Playable {
+  int FIRST_STREAM = 0;
+  int LAST_STREAM = Integer.MAX_VALUE;
+
+  void play() throws PlayerNotReadyException, StreamInterruptedException;
+  void stop();
+  // on peut passer le numéro du flux à jouer 
+  // ou FIRST_STREAM ou LAST_STREAM
+  boolean selectStream(int streamNum);
+}
+								</code></pre>
+							</figure>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Les attributs déclarés dans une interface sont implicitement <strong>public static final</strong>.
+        					Ce sont donc bien des constantes.</p> 
+        					<p>Les méthodes déclarées dans une interface sont implicitement <strong>public abstract</strong>.</p> 
+							<figure>
+								<figcaption>Une interface explicitant tous les mots-clés</figcaption>
+								<pre><code class="java" data-trim>
+public interface Playable {
+
+  // les mots-clés public static final peuvent être explicités.
+  public static final int FIRST_STREAM = 0;
+  public static final int LAST_STREAM = Integer.MAX_VALUE;
+
+  // les mots-clés public abstract peuvent être explicités.
+  public abstract void play() 
+             throws PlayerNotReadyException, StreamInterruptedException;
+  public abstract void stop();
+  public abstract boolean selectStream(int streamNum);
+}
+								</code></pre>
+							</figure>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Une classe <strong>concrète</strong> héritant d'une interface doit fournir
+        					une implémentation de toutes les méthodes de l'interface.</p> 
+							<figure>
+								<figcaption>Une classe implémentant l'interface Playable</figcaption>
+								<pre><code class="java" data-trim>
+public class VideoPlayer implements Playable {
+
+  public void play() {
+    // implementation here
+  }
+  
+  public void stop() {
+    // implementation here
+  }
+  
+  public boolean selectStream(int streamNum) {
+    // implementation here
+  }
+}
+								</code></pre>
+							</figure>
+	        				<p>Les règles à respecter dans la signature des méthodes de la classe sont les mêmes que pour
+	        				la redéfinition de méthode (overriding).</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Une interface permet d'introduire un <em>couplage faible</em> entre les éléments d'un système.</p>
+							<figure>
+								<figcaption>Un exemple de l'utilisation de l'interface Playable</figcaption>
+								<img src="assets/images/playable_inheritance.png"/>
+							</figure>
+	        				<p>Si la classe <code>ButtonBar</code> permet d'afficher graphiquement des boutons "play" et "stop", 
+	        				elle permet à l'utilisateur de contrôler n'importe quelle classe implémentant <code>Playable</code>.</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Une interface peut hériter <strong>d'une ou de plusieurs</strong> autres interfaces.</p> 
+							<figure>
+								<figcaption>L'héritage d'interface</figcaption>
+								<pre><code class="java" data-trim>
+public interface Navigable {
+  void next();
+  void previous();
+}
+								</code></pre>
+								<pre><code class="java" data-trim>
+public interface Playable {
+  void play() throws PlayerNotReadyException, StreamInterruptedException;
+  void stop();
+}
+								</code></pre>
+								<pre><code class="java" data-trim>
+// Une classe implémentant l'interface Player doit
+// fournir une implémentation des méthodes déclarées
+// par Player, Navigable et Playable.
+public interface Player extends Navigable, Playable {
+  int getSelectedStream();
+}
+								</code></pre>
+							</figure>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Certaines interfaces ne définissent aucune méthode. On parle alors d'<strong>interfaces marqueur</strong>.
+        					Elle indique que les classes qui les implémentent ont <em>certaines propriétés</em>.</p>
+        					<p>L'API Java standard propose des interfaces marqueurs :</p>
+        					<ul>
+        						<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html" target="api">java.lang.Cloneable</a></li>
+        						<li><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html" target="api">java.io.Serializable</a> (nous y reviendrons)</li>
+        						<li>...</li>
+        					</ul>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+							<figure>
+								<figcaption>Les interfaces implémentées par la classe java.util.ArrayList</figcaption>
+								<img src="assets/images/arraylist_interfaces.png"/>
+							</figure>
         				</article>
         			</section>
 				</section>
