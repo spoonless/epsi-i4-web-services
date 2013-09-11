@@ -32,15 +32,8 @@
     text-shadow: none;
     text-transform: uppercase;
 	font-size: 1.3em;
-	margin-bottom: 0.5em !important;
+	margin-bottom: 0.5em;
 	border-bottom: thin solid rgb(180,180,180);
-}
-
-.reveal figure > figcaption {
-	text-align: left;
-	font-size: 80% !important;
-	color: rgb(59, 117, 158);
-	padding-bottom: 0px;
 }
 
 blockquote:before {
@@ -64,6 +57,18 @@ a.download {
 	padding-left: 1.4em;
 }
 
+.reveal figure{
+	margin-top:0.5em;
+	margin-bottom:0.5em;
+}
+
+.reveal figure > figcaption {
+	text-align: left;
+	font-size: 80%;
+	color: rgb(100, 95, 120);
+	padding-bottom: 0px;
+}
+
 .reveal figure > img {
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 	border:0px;
@@ -74,4 +79,8 @@ a.download {
 
 .reveal pre code {
     max-height: none;
+}
+
+.reveal figure > pre {
+    margin-top: 0;
 }
