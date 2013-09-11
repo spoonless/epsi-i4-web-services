@@ -445,6 +445,35 @@ public String getFileContent(String filename) throws java.io.IOException {
 							</code></pre>
         				</article>
         			</section>
+        			<section>
+        				<article>
+        					<p>Depuis Java 7, on peut utiliser une expression 
+        					<em><a href="http://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html" target="javadoc">try-with-resources</a></em>. 
+        					Pour gérer le cas particulier des resources que l'on souhaite fermer automatiquement.</p>
+							<pre><code class="java" data-trim>
+public String getFileContent(String filename) throws java.io.IOException {
+  // La resource que l'on souhaite fermer automatiquement et
+  // déclarer après le mot-clé try entre parenthèses.  
+  try (java.io.FileReader reader = new java.io.FileReader(filename)) {
+    int nbCharRead = 0;
+    char[] buffer = new char[1024];
+    StringBuilder builder = new StringBuilder();
+    while ((nbCharRead = reader.read(buffer)) &gt;= 0) {
+      builder.append(buffer, 0, nbCharRead);
+    }
+    return builder.toString();
+  }
+  // On évite l'utilisation du bloc finally de l'exemple
+  // précédent. Le try-with-resource garantit que reader.close()
+  // est appelé.
+}
+							</code></pre>
+        					<p>Seules les classes implémentant l'interface 
+        					<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html" target="javadoc">java.lang.AutoCloseable</a> 
+        					ou <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html" target="javadoc">java.io.Closeable</a> 
+        					peuvent être utilisées dans une expression <em>try-with-resources</em>.</p>
+        				</article>
+        			</section>
 				</section>
 
         		<section>
@@ -568,8 +597,8 @@ public interface Player extends Navigable, Playable {
         					Elles indiquent que les classes qui les implémentent ont <em>certaines propriétés</em>.</p>
         					<p>L'API Java standard propose des interfaces marqueurs :</p>
         					<ul>
-        						<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html" target="api">java.lang.Cloneable</a></li>
-        						<li><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html" target="api">java.io.Serializable</a> (nous y reviendrons)</li>
+        						<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html" target="javadoc">java.lang.Cloneable</a></li>
+        						<li><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html" target="javadoc">java.io.Serializable</a> (nous y reviendrons)</li>
         						<li>...</li>
         					</ul>
         				</article>
@@ -586,14 +615,31 @@ public interface Player extends Navigable, Playable {
         		<section>
         			<section>
         				<article>
-        					<header>La synchronisation</header>
+        					<header>La sérialisation</header>
+        					<p>La sérialisation est un mécanisme permettant d'écrire dans un flux les données binaires 
+        					d'un objet ou d'une grappe d'objets.</p>
+        					<p>La sérialisation permet, par exemple, de sauvegarder dans un fichier ou de transmettre 
+        					à travers un réseau, la représentation d'un objet.</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Une classe est sérialisable si elle-même ou une classe parente implémente l'interface marqueur 
+        					<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html" target="javadoc">java.io.Serializable</a></p>
+							<figure>
+								<figcaption>Une classe sérialisable</figcaption>
+								<pre><code class="java" data-trim>
+public class MyClass implements java.io.Serializable {
+}
+								</code></pre>
+							</figure>
         				</article>
         			</section>
 				</section>
         		<section>
         			<section>
         				<article>
-        					<header>La sérialisation</header>
+        					<header>La synchronisation</header>
         				</article>
         			</section>
 				</section>
