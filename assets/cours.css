@@ -51,7 +51,7 @@ blockquote:after {
 }
 
 a.download {
-	background-image: url('assets/images/download.png');
+	background-image: url('images/download.png');
 	background-size:1.3em;
 	background-repeat: no-repeat;
 	padding-left: 1.4em;
