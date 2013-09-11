@@ -2,8 +2,8 @@
 (function(){
 	var isEnabled = true;
 
-	document.querySelector( '.reveal' ).addEventListener( 'mousedown', function( event ) {
-		if( event.ctrlKey && isEnabled ) {
+	document.querySelector( '.reveal' ).addEventListener( 'click', function( event ) {
+		if( isEnabled && event.target && (event.target.tagName == 'CODE' || event.target.tagName == 'IMG')) {
 			event.preventDefault();
 			zoom.to({ element: event.target, pan: false });
 		}
@@ -52,8 +52,8 @@ var zoom = (function(){
 	}
 
 	// Zoom out if the user hits escape
-	document.addEventListener( 'keyup', function( event ) {
-		if( level !== 1 && event.keyCode === 27 ) {
+	document.addEventListener( 'keydown', function( event ) {
+		if( level !== 1 ) {
 			zoom.out();
 		}
 	}, false );
