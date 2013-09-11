@@ -3,7 +3,7 @@
 	var isEnabled = true;
 
 	document.querySelector( '.reveal' ).addEventListener( 'mousedown', function( event ) {
-		if( event.altKey && isEnabled ) {
+		if( event.ctrlKey && isEnabled ) {
 			event.preventDefault();
 			zoom.to({ element: event.target, pan: false });
 		}
