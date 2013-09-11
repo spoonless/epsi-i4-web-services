@@ -32,8 +32,9 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h2>Notions<br/>complémentaires<br/>en Java</h2>
-					<small>EPSI I4 Web Services / David Gayerie - 2013-2014</small>
+					<img alt="" src="assets/images/java-logo.png">
+					<p><small>Notions complémentaires en Java</small></p>
+					<p><small>EPSI I4 Web Services / David Gayerie - 2013-2014</small></p>
 				</section>
 				<section>
 					<section>
@@ -613,11 +614,11 @@ public interface Player extends Navigable, Playable {
         			</section>
 				</section>
         		<section>
-        			<section>
+					<section>
         				<article>
         					<header>La sérialisation</header>
-        					<p>La sérialisation est un mécanisme permettant d'écrire dans un flux les données binaires 
-        					d'un objet ou d'une grappe d'objets.</p>
+        					<p>La sérialisation est un mécanisme permettant d'écrire ou de lire dans un flux les données 
+        					binaires d'un objet ou d'une hiérarchie d'objets.</p>
         					<p>La sérialisation permet, par exemple, de sauvegarder dans un fichier ou de transmettre 
         					à travers un réseau, la représentation d'un objet.</p>
         				</article>
@@ -625,14 +626,80 @@ public interface Player extends Navigable, Playable {
         			<section>
         				<article>
         					<p>Une classe est sérialisable si elle-même ou une classe parente implémente l'interface marqueur 
-        					<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html" target="javadoc">java.io.Serializable</a></p>
+        					<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html" target="javadoc">java.io.Serializable</a>.</p>
 							<figure>
 								<figcaption>Une classe sérialisable</figcaption>
 								<pre><code class="java" data-trim>
-public class MyClass implements java.io.Serializable {
+package epsi;
+
+import java.io.Serializable;
+
+public class Student implements Serializable {
+
+  private static final long serialVersionUID = 1L;
+
+  private final String name;
+  private final int age;
+
+  public Student(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  public String toString() {
+    return "Hello, my name is " + name +
+           " and I am " + age + " years old.";
+  }
 }
 								</code></pre>
 							</figure>
+        				</article>
+        			</section>
+					<section>
+        				<article>
+        					<p>La serialisation ignore :</p>
+        					<ul>
+        						<li>Les attributs de classe (<strong>static</strong>)</li>
+        						<li>Les attributs déclarés avec le mot-clé <strong>transient</strong></li>
+        						<li>Les attributs des classes parentes n'implémentant pas java.io.Serializable</li>
+        					</ul>
+        					<p>De plus, si un objet contient un attribut non nul pointant sur un objet non sérialisable, 
+        					la sérialisation échoue avec l'exception <em>java.io.NotSerializableException</em>.</p>
+        				</article>
+				</section>
+        		<section>
+        				<article>
+        					<p>Il existe un attribut jouant un rôle spécial :<br><strong>serialVersionUID</strong>.</p>
+							<pre><code class="java" data-trim>
+private static final long serialVersionUID = -2939239776154334018L;
+							</code></pre>
+							<p>Cet attribut permet de versionner la définition d'une classe lors de la sérialisation.
+							Pendant la désérialisation, la version des données sérialisées est comparée à la version
+							de la classe Java chargée par la JVM. Si les version diffèrent, la désérialisation se
+							termine avec l'exception<br>
+							<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InvalidClassException.html" target="javadoc">java.io.InvalidClassException</a>.</p> 
+        				</article>
+        			</section>
+	        		<section>
+        				<article>
+        					<p>Pour sérialiser un objet, on utilise la classe 
+        					<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html" target="javadoc">java.io.ObjectOutputStream</a> 
+        					qui propose la méthode writeObject(Object).</p>
+								<pre><code class="java" data-trim>
+Student student = new Student("John Doe", 24);
+try (ObjectOutputStream oos = new ObjectOutputStream(outputStream)) {
+  oos.writeObject(student);
+}
+								</code></pre>
+        					<p>Pour désérialiser un objet, on utilise la classe 
+        					<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html" target="javadoc">java.io.ObjectInputStream</a> 
+        					qui propose la méthode readObject().</p>
+								<pre><code class="java" data-trim>
+Student student = null;
+try (ObjectInputStream ois = new ObjectInputStream(inputStream)) {
+  student = Student.class.cast(ois.readObject());
+}
+								</code></pre>
         				</article>
         			</section>
 				</section>
