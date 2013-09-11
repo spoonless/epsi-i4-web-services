@@ -28,7 +28,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>epsi.StudentServer</mainClass>
+					<mainClass>epsi.Servers</mainClass>
 				</configuration>
 			</plugin>
 

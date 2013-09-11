@@ -1,8 +1,8 @@
 package epsi;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,15 +11,15 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class StudentServer implements Runnable {
+public class TeacherServer implements Runnable {
 
-	private static Logger LOGGER = Logger.getLogger("StudentServer");
+	private static Logger LOGGER = Logger.getLogger("TeacherServer");
 
 	@Override
 	public void run() {
 		ExecutorService executor = Executors.newCachedThreadPool();
 
-		try (ServerSocket serverSocket = new ServerSocket(9999)) {
+		try (ServerSocket serverSocket = new ServerSocket(8888)) {
 			LOGGER.info("Server started on port " + serverSocket.getLocalPort());
 			while (true) {
 				Socket socket = serverSocket.accept();
@@ -33,7 +33,7 @@ public class StudentServer implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		new StudentServer().run();
+		new TeacherServer().run();
 	}
 
 	private static class ServantRunnable implements Runnable {
@@ -46,9 +46,8 @@ public class StudentServer implements Runnable {
 		@Override
 		public void run() {
 			InetAddress inetAddress = socket.getInetAddress();
-			try (InputStream is = socket.getInputStream(); ObjectInputStream ois = new ObjectInputStream(is)) {
-				Student s = Student.class.cast(ois.readObject());
-				LOGGER.info("From " + inetAddress + "\n> " + s);
+			try (OutputStream os = socket.getOutputStream(); ObjectOutputStream oos = new ObjectOutputStream(os)) {
+				oos.writeObject(new Student("David Gayerie", 39));
 			} catch (Exception e) {
 				LOGGER.log(Level.SEVERE, "From " + inetAddress, e);
 			} finally {
