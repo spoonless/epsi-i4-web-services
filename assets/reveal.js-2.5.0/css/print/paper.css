@@ -16,7 +16,7 @@ body {
 	width: auto;
 	height: auto;
 	border: 0;
-	margin: 0 5%;
+	margin: 0;
 	padding: 0;
 	float: none !important;
 	overflow: visible;
@@ -128,7 +128,7 @@ ul, ol, div, p {
 
 	visibility: visible !important;
 	position: static !important;
-	width: 90% !important;
+	width: 100% !important;
 	height: auto !important;
 	display: block !important;
 	overflow: visible !important;

@@ -7,11 +7,7 @@
 		<meta name="author" content="David Gayerie">
 
 		<link rel="stylesheet" href="assets/cours.css">
-
-		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
-		<script>
-			document.write( '<link rel="stylesheet" href="assets/reveal.js-2.5.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-		</script>
+		<link rel="stylesheet" href="assets/cours-paper.css" media="print">
 
 		<!--[if lt IE 9]>
 		<script src="assets/reveal.js-2.5.0/lib/js/html5shiv.js"></script>
@@ -31,10 +27,10 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>
-					<img alt="" src="assets/images/java-logo.png">
-					<p><small>Notions complémentaires en Java</small></p>
-					<p><small>EPSI I4 Web Services / David Gayerie - 2013-2014</small></p>
+				<section class="title">
+					<img alt="Java logo" src="assets/images/java-logo.png">
+					<h1 class="small">Notions complémentaires en Java</h1>
+					<p class="copyright">EPSI I4 Web Services / David Gayerie - 2013-2014</p>
 				</section>
 				<section>
 					<section>

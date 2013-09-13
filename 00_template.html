@@ -7,11 +7,7 @@
 		<meta name="author" content="David Gayerie">
 
 		<link rel="stylesheet" href="assets/cours.css">
-
-		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
-		<script>
-			document.write( '<link rel="stylesheet" href="assets/reveal.js-2.5.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-		</script>
+		<link rel="stylesheet" href="assets/cours-paper.css" media="print">
 
 		<!--[if lt IE 9]>
 		<script src="assets/reveal.js-2.5.0/lib/js/html5shiv.js"></script>
@@ -31,9 +27,9 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>
+				<section class="title">
 					<h1>Blank slideshow</h1>
-					<small>EPSI I4 Web Services / David Gayerie - 2013-2014</small>
+					<p class="copyright">EPSI I4 Web Services / David Gayerie - 2013-2014</p>
 				</section>
 			</div>
 

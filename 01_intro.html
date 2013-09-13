@@ -7,11 +7,7 @@
 		<meta name="author" content="David Gayerie">
 
 		<link rel="stylesheet" href="assets/cours.css">
-
-		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
-		<script>
-			document.write( '<link rel="stylesheet" href="assets/reveal.js-2.5.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-		</script>
+		<link rel="stylesheet" href="assets/cours-paper.css" media="print">
 
 		<!--[if lt IE 9]>
 		<script src="assets/reveal.js-2.5.0/lib/js/html5shiv.js"></script>
@@ -31,10 +27,9 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>
-					<h1>Java EE</h1>
-					<h1>Web Services</h1>
-					<small>EPSI I4 Web Services / David Gayerie - 2013-2014</small>
+				<section class="title">
+					<h1>Java EE<br>Web Services</h1>
+					<p class="copyright">EPSI I4 Web Services / David Gayerie - 2013-2014</p>
 				</section>
 				<section>
 					<h1>Préambule</h1>
@@ -42,45 +37,49 @@
 					<h2>Que connaissez-vous ?</h2>
 				</section>
 				<section>
-					<h2>Feuille de route</h2>
-					<ul>
-						<li class="fragment fade-in">Notions complémentaires en Java</li>
-						<li class="fragment fade-in">Introduction à Java Enterprise Edition (Java EE)</li>
-						<li class="fragment fade-in">Couche Web : conteneur de servlets</li>
-						<li class="fragment fade-in">Web Services SOAP (JAX-WS)</li>
-						<li class="fragment fade-in">Web Services REST (JAX-RS)</li>
-						<li class="fragment fade-in">Gestion des beans et dépendance d'injection (CDI)</li>
-						<li class="fragment fade-in">Couche métier : Entreprise Java Beans (EJB)</li>
-						<li class="fragment fade-in">Couche de données : La persistance (JPA)</li>
-						<li class="fragment fade-in">Les pico conteneurs : Spring Framework</li>
-					</ul>
+					<article>
+						<header>Feuille de route</header>
+						<ul>
+							<li class="fragment fade-in">Notions complémentaires en Java</li>
+							<li class="fragment fade-in">Introduction à Java Enterprise Edition (Java EE)</li>
+							<li class="fragment fade-in">Couche Web : conteneur de servlets</li>
+							<li class="fragment fade-in">Web Services SOAP (JAX-WS)</li>
+							<li class="fragment fade-in">Web Services REST (JAX-RS)</li>
+							<li class="fragment fade-in">Gestion des beans et dépendance d'injection (CDI)</li>
+							<li class="fragment fade-in">Couche métier : Entreprise Java Beans (EJB)</li>
+							<li class="fragment fade-in">Couche de données : La persistance (JPA)</li>
+							<li class="fragment fade-in">Les pico conteneurs : Spring Framework</li>
+						</ul>
+					</article>
 				</section>
 				<section>
-					<h2>Les packages requis</h2>
-					<dl>
-						<dt>Java 7 SDK</dt>
-						<dd>Le kit de développement Java 7<br/>
-						<em><small><a target="download" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">
-						http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
-						</a></small></em>
-						</dd>
-						<dt>Eclipse IDE for Java EE Developpers</dt>
-						<dd>L'environnement de développement<br/>
-						<em><small><a target="download" href="http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplerr">
-						http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplerr
-						</a></small></em>
-						</dd>
-						<dt>Java EE SDK (inclus Glassfish)</dt>
-						<dd>Serveur d'application Java EE<br/>
-						<em><small><a target="download" href="http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-7-downloads-1956236.html">
-						http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-7-downloads-1956236.html</a></small></em>
-						</dd>
-						<dt>Apache TomEE Plus</dt>
-						<dd>Une alternative plus légère à Glassfish<br/>
-						<em><small><a target="download" href="http://tomee.apache.org/downloads.html">
-						http://tomee.apache.org/downloads.html</a></small></em>
-						</dd>
-					</dl>
+					<article>
+						<header>Les packages requis</header>
+						<dl>
+							<dt>Java 7 SDK</dt>
+							<dd>Le kit de développement Java 7<br/>
+							<em><small><a target="download" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">
+							http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+							</a></small></em>
+							</dd>
+							<dt>Eclipse IDE for Java EE Developpers</dt>
+							<dd>L'environnement de développement<br/>
+							<em><small><a target="download" href="http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplerr">
+							http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplerr
+							</a></small></em>
+							</dd>
+							<dt>Java EE SDK (inclus Glassfish)</dt>
+							<dd>Serveur d'application Java EE<br/>
+							<em><small><a target="download" href="http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-7-downloads-1956236.html">
+							http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-7-downloads-1956236.html</a></small></em>
+							</dd>
+							<dt>Apache TomEE Plus</dt>
+							<dd>Une alternative plus légère à Glassfish<br/>
+							<em><small><a target="download" href="http://tomee.apache.org/downloads.html">
+							http://tomee.apache.org/downloads.html</a></small></em>
+							</dd>
+						</dl>
+					</article>
 				</section>
 			</div>
 

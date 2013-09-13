@@ -17,13 +17,13 @@ page.viewportSize  = {
 };
 
 page.paperSize = {
-	format: 'letter',
-	orientation: 'landscape',
+	format: 'A4',
+	orientation: 'portrait',
 	margin: {
-		left: '0',
-		right: '0',
-		top: '0',
-		bottom: '0'
+		left: '2cm',
+		right: '2cm',
+		top: '2cm',
+		bottom: '2cm'
 	}
 };
 
