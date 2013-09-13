@@ -47,6 +47,7 @@ public class StudentServer implements Runnable {
 		public void run() {
 			InetAddress inetAddress = socket.getInetAddress();
 			try (InputStream is = socket.getInputStream(); ObjectInputStream ois = new ObjectInputStream(is)) {
+				this.socket.setSoTimeout(15000);
 				Student s = Student.class.cast(ois.readObject());
 				LOGGER.info("From " + inetAddress + "\n> " + s);
 			} catch (Exception e) {
