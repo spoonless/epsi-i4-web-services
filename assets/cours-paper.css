@@ -6,6 +6,10 @@
 	display:none;
 }
 
+.reveal .slides section.not-printable {
+	display: none !important;
+}
+
 .reveal .slides>section>section {
 	page-break-after: avoid !important;
 }
@@ -36,8 +40,8 @@
 }
 
 
-.reveal a:link:after,
-.reveal a:visited:after {
+.reveal a:not(.explicit):link:after,
+.reveal a:not(.explicit):visited:after {
 	content: " (" attr(href) ") ";
 	color: #222 !important;
 	font-size: 90%;
