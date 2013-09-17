@@ -2,7 +2,7 @@ package epsi.battle.net;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.client.WebTarget;
 
 import org.glassfish.jersey.filter.LoggingFilter;
 
@@ -16,7 +16,8 @@ public class RestClient {
 		Client client = ClientBuilder.newClient();
 		client.register(new LoggingFilter());
 
-		Response response = client.target("http://eu.battle.net/api/wow/data/character/races?locale=fr_FR").request().buildGet().invoke();
-		System.out.println(response.readEntity(Races.class).getRaces());
+		WebTarget target = client.target("http://eu.battle.net");
+		Races races = target.path("/api/wow/data/character/races").queryParam("locale", "fr_FR").request().get(Races.class);
+		System.out.println(races.getRaces());
 	}
 }
