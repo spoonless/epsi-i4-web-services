@@ -1,15 +1,9 @@
 package epsi.battle.net;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "race")
 public class Race {
 
-	public static enum Side {
-		alliance, horde
-	};
-
 	private Long id;
-	private Side side;
+	private WowSide side;
 	private String name;
 
 	public Long getId() {
@@ -20,11 +14,11 @@ public class Race {
 		this.id = id;
 	}
 
-	public Side getSide() {
+	public WowSide getSide() {
 		return side;
 	}
 
-	public void setSide(Side side) {
+	public void setSide(WowSide side) {
 		this.side = side;
 	}
 
