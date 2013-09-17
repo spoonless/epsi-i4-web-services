@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Beers from Open Beer Database</title>
+<style type="text/css">
+table {
+	width: 80% 
+}
+tbody tr:nth-child(odd) { 
+	background-color:#eee;
+}
+
+td {
+	padding-top:0.5em; 
+	padding-bottom:0.5em; 
+}
+
+td.description {
+	text-overflow: ellipsis;
+    display: inline-block;
+    width: 50em;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: top;
+}
+</style>
+</head>
+<body>
+<h1>Exemple d'accès au Web Service REST <a href="http://openbeerdatabase.com/">Open Beer Database</a></h1>
+<nav>
+	<img src="previous.png" onclick="navigate(-1)">
+	<img src="next.png" onclick="navigate(1)">
+</nav>
+
+<table>
+	<col width="20%">
+	<col width="20%">
+	<thead>
+		<tr>
+			<th>Brewery</th>
+			<th>Beer</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody id="beers">
+	</tbody>
+</table>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+	var currentPage = 0;
+	function navigate(pageIncrement) {
+		var nextPage = currentPage + pageIncrement;
+		if (nextPage < 1) {
+			return;
+		}
+		$("#beers").empty();
+ 		$.getJSON("http://api.openbeerdatabase.com/v1/beers.json?callback=?&per_page=10&page=" + nextPage, function(data) {
+ 			currentPage = data.page;
+ 			var result = new Array(); 
+ 			var j = -1;
+ 			var beers = data.beers;
+ 			for (var key=0, size=beers.length; key<size; key++){
+ 				result[++j] ='<tr><td>';
+ 				result[++j] = beers[key].brewery ? beers[key].brewery.name : "";
+ 				result[++j] = '</td><td>';
+ 				result[++j] = beers[key].name;
+ 				result[++j] = '</td><td class="description">';
+ 				result[++j] = beers[key].description;
+ 				result[++j] = '</td></tr>';
+ 			 }
+ 			 $('#beers').html(result.join(''));  			
+ 		});
+	}
+
+	$(function() {
+		navigate(1);
+	});
+</script>
+</body>
+</html>
