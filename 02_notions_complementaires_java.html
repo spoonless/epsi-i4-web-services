@@ -175,9 +175,9 @@ Caused by: java.lang.ClassNotFoundException: Engine
         		<section>
         			<section>
         				<article>
-        					<header>Les packages</header>
+        					<header>Les paquets (packages)</header>
         					<p>Afin d'éviter la collision de nom (des classes, interfaces, énumérations ou annotations portant le même nom),
-        					Java supporte la notion de packages.</p>
+        					Java supporte la notion de paquets (packages).</p>
         					<p>Un package est simplement un répertoire dans lequel sont placés les fichiers Java.</p>
         					<p>Un package définit un espace de nom commun à l'ensemble des éléments de ce package.</p>
         				</article>
@@ -653,14 +653,14 @@ public class Student implements Serializable {
         			</section>
 					<section>
         				<article>
-        					<p>La serialisation ignore :</p>
+        					<p>Si un objet contient un attribut non nul pointant sur un objet non sérialisable, 
+        					la sérialisation échoue avec l'exception <em>java.io.NotSerializableException</em>.</p>
+        					<p>Cependant, la serialisation ignore :</p>
         					<ul>
         						<li>Les attributs de classe (<strong>static</strong>)</li>
         						<li>Les attributs déclarés avec le mot-clé <strong>transient</strong></li>
         						<li>Les attributs des classes parentes n'implémentant pas java.io.Serializable</li>
         					</ul>
-        					<p>De plus, si un objet contient un attribut non nul pointant sur un objet non sérialisable, 
-        					la sérialisation échoue avec l'exception <em>java.io.NotSerializableException</em>.</p>
         				</article>
 				</section>
         		<section>
@@ -703,6 +703,54 @@ try (ObjectInputStream ois = new ObjectInputStream(inputStream)) {
         			<section>
         				<article>
         					<header>La synchronisation</header>
+        					<p>Lorsqu'un programme s'exécute dans un environnement multi-thread, l'accès à des ressources partagées 
+        					(mémoire, fichier, ...) devient problématique.</p>
+        					<p>Comment garantir que les ressources demeurent consistantes, si plusieurs threads y accèdent en lecture
+        					et en écriture ?</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Dans un environnement serveur, l'accès à des ressources partagées est une problématique permanente 
+        					car un serveur "évolué" s'exécute toujours dans un environnement multi-thread.</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Il est possible en Java de synchroniser l'exécution d'un méthode, c'est-à-dire de garantir qu'un seul thread 
+        					à la fois peut exécuter la méthode. On utilise pour cela le mot-clé <strong>synchronized</strong>.</p>
+							<figure>
+								<figcaption>Un exemple de ressource synchronisée</figcaption>
+								<pre><code class="java" data-trim>
+import java.util.ArrayList;
+import java.util.List;
+
+public class Bill {
+  private List&lt;Item&gt; items = new ArrayList&lt;&gt;();
+  private long totalAmount;
+
+  public synchronized void addItem(Item item) {
+    items.add(item);
+    totalAmount += item.getAmount();
+  }
+
+  public synchronized long getTotalAmount() {
+    return totalAmount;
+  }
+}
+								</code></pre>
+							</figure>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Il est également possible de ne synchroniser qu'une portion de code. On founit alors une instance d'objet non nulle qui sert de verrou.</p>
+							<figure>
+								<figcaption>Un exemple de bloc de code synchronisée</figcaption>
+								<pre><code class="java" data-trim>
+TODO trouver une exemple !
+								</code></pre>
+							</figure>
         				</article>
         			</section>
 				</section>
@@ -710,13 +758,8 @@ try (ObjectInputStream ois = new ObjectInputStream(inputStream)) {
         			<section>
         				<article>
         					<header>Les annotations</header>
-        				</article>
-        			</section>
-				</section>
-        		<section>
-        			<section>
-        				<article>
-        					<header>Les JavaBeans</header>
+        					<p>Les annotations en Java sont des marqueurs qui permettent d'ajouter des méta-données aux classes, 
+        					aux méthodes, aux attributs, aux paramètres, aux variables, aux paquets ou aux annotations elles-memes.</p>
         				</article>
         			</section>
 				</section>
