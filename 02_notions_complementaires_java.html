@@ -767,7 +767,7 @@ public class CarPark {
     // ...
   }
 	
-  public int getAvailablePlaces() {
+  public synchronized int getAvailablePlaces() {
     // ...
   }
 }
@@ -808,14 +808,16 @@ public class CarPark {
     }
   }
 
-  public synchronized void unpark(Ticket ticket) {
+  public void unpark(Ticket ticket) {
     synchronized(this) {
       // ...
     }
   }
 	
   public int getAvailablePlaces() {
-    // ...
+    synchronized(this) {
+      // ...
+    }
   }
 }
 								</code></pre>
