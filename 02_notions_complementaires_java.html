@@ -30,7 +30,7 @@
 				<section class="title">
 					<img alt="Java logo" src="assets/images/java-logo.png">
 					<h1 class="small">Notions complémentaires en Java</h1>
-					<p class="copyright">EPSI I4 Web Services / David Gayerie - 2013-2014</p>
+					<p class="copyright">EPSI I4 Web Services / <a class="explicit" href="mailto:david.gayerie.epsi@free.fr">David Gayerie</a> - 2013-2014</p>
 				</section>
 				<section>
 					<section>
@@ -705,8 +705,43 @@ try (ObjectInputStream ois = new ObjectInputStream(inputStream)) {
         					<header>La synchronisation</header>
         					<p>Lorsqu'un programme s'exécute dans un environnement multi-thread, l'accès à des ressources partagées 
         					(mémoire, fichier, ...) devient problématique.</p>
-        					<p>Comment garantir que les ressources demeurent consistantes, si plusieurs threads y accèdent en lecture
+        					<p>Comment garantir que les ressources demeurent cohérentes si plusieurs threads y accèdent en lecture
         					et en écriture ?</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+							<figure>
+								<figcaption>Une classe "sensible" dans un environnement multi-thread</figcaption>
+								<pre><code class="java" data-trim>
+/**
+ * Un modèle de parking de voitures.
+ */
+public class CarPark {
+	
+  /**
+   * @Return un ticket de parking pour chaque véhicule entrant
+   */
+  public Ticket park() throws NoPlaceAvailableException {
+    // ...
+  }
+
+  /**
+   * Enregistre la sortie de parking d'un véhicule selon son ticket
+   */
+  public void unpark(Ticket ticket) {
+    // ...
+  }
+	
+  /**
+   * @Return le nombre de places disponibles 
+   */
+  public int getAvailablePlaces() {
+    // ...
+  }
+}
+								</code></pre>
+							</figure>
         				</article>
         			</section>
         			<section>
@@ -717,25 +752,23 @@ try (ObjectInputStream ois = new ObjectInputStream(inputStream)) {
         			</section>
         			<section>
         				<article>
-        					<p>Il est possible en Java de synchroniser l'exécution d'un méthode, c'est-à-dire de garantir qu'un seul thread 
-        					à la fois peut exécuter la méthode. On utilise pour cela le mot-clé <strong>synchronized</strong>.</p>
+        					<p>Il est possible en Java de synchroniser l'exécution des méthodes, c'est-à-dire de garantir qu'un seul thread 
+        					à la fois peut exécuter du code synchronisé. On utilise pour cela le mot-clé <strong>synchronized</strong>.</p>
 							<figure>
-								<figcaption>Un exemple de ressource synchronisée</figcaption>
+								<figcaption>Un exemple de méthodes synchronisées</figcaption>
 								<pre><code class="java" data-trim>
-import java.util.ArrayList;
-import java.util.List;
-
-public class Bill {
-  private List&lt;Item&gt; items = new ArrayList&lt;&gt;();
-  private long totalAmount;
-
-  public synchronized void addItem(Item item) {
-    items.add(item);
-    totalAmount += item.getAmount();
+public class CarPark {
+	
+  public synchronized Ticket park() throws NoPlaceAvailableException {
+    // ...
   }
 
-  public synchronized long getTotalAmount() {
-    return totalAmount;
+  public synchronized void unpark(Ticket ticket) {
+    // ...
+  }
+	
+  public int getAvailablePlaces() {
+    // ...
   }
 }
 								</code></pre>
@@ -744,13 +777,63 @@ public class Bill {
         			</section>
         			<section>
         				<article>
-        					<p>Il est également possible de ne synchroniser qu'une portion de code. On founit alors une instance d'objet non nulle qui sert de verrou.</p>
+        					<p>Il est également possible de ne synchroniser qu'une portion de code. 
+        					On fournit alors une instance d'objet non nulle qui sert de verrou.</p>
 							<figure>
-								<figcaption>Un exemple de bloc de code synchronisée</figcaption>
-								<pre><code class="java" data-trim>
-TODO trouver une exemple !
+								<figcaption>Un exemple de bloc de code synchronisé avec un verrou</figcaption>
+								<pre><code class="java">
+  public void doSomethingInConcurrency(Resource sharedResource)
+    synchronized(sharedResource) {
+      sharedResource.setModificationDate(Calendar.getInstance());
+      // ...
+    }
+  }
 								</code></pre>
 							</figure>
+        					<p>A l'entrée du block synchronisé, un thread acquière le verrou (dans l'exemple&nbsp;: <em>sharedResource</em>). 
+        					Tout autre thread voulant acquérir le verrou est bloqué jusqu'à ce 
+        					que le verrou soit relâché automatiquement par la sortie du bloc d'exécution synchronisé.</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>Ainsi une méthode synchronisée est implicitement un bloc synchronisé sur l'instance de la classe (this).</p>
+							<figure>
+								<pre><code class="java" data-trim>
+public class CarPark {
+	
+  public Ticket park() throws NoPlaceAvailableException {
+    synchronized(this) {
+      // ...
+    }
+  }
+
+  public synchronized void unpark(Ticket ticket) {
+    synchronized(this) {
+      // ...
+    }
+  }
+	
+  public int getAvailablePlaces() {
+    // ...
+  }
+}
+								</code></pre>
+							</figure>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>La synchronisation est une des solutions proposées par Java 
+        					pour le partage de ressources dans la programmation concurrente.</p>
+        					<p>Cette solution a plusieurs défauts majeurs&nbsp;: création de goulets d'étranglement, surcoût de cycle CPU, mauvaise scalabilité...</p>
+        				</article>
+        			</section>
+        			<section>
+        				<article>
+        					<p>La gestion de ressources partagées dans un environnement concurrent est <strong>extrêmement</strong> délicate !</p>
+        					<p>La meilleure solution consiste à <strong>limiter</strong> les ressources partagées entre threads et à en laisser la responsabilité à des
+        					composants logiciel fiables (comme les gestionnaires de transaction, les conteneurs Java EE,...).
         				</article>
         			</section>
 				</section>
@@ -761,7 +844,7 @@ TODO trouver une exemple !
         					<p>Les annotations en Java sont des marqueurs qui permettent d'ajouter des méta-données aux classes, 
         					aux méthodes, aux attributs, aux paramètres, aux variables, aux paquets ou aux annotations elles-mêmes.</p>
         					<p>Les annotations sont utilisées dans des domaines divers. Leur intérêt principal est de fournir une
-        					<em>méta-information</em> sur un élément qui pourra être exploitée par un programme.</p>
+        					<em>méta-information</em> qui pourra être exploitée par un programme.</p>
         				</article>
         			</section>
         			<section>
@@ -792,18 +875,22 @@ public @XmlRootElement class Spaceship {
         			</section>
         			<section>
         				<article>
-        					<p>Certaines annotations définissent des attributs permettant des les paramétrer si nécessaire
+        					<p>Certaines annotations déclarent des attributs
         					 (par exemple l'annotation <a target="javadoc" href="http://docs.oracle.com/javaee/7/api/javax/xml/bind/annotation/XmlElement.html">javax.xml.bind.annotation.XmlElement</a>)</p>
 							<pre><code class="java">
   @XmlElement(name="moteur", required=true) 
   private Engine engine;
 							</code></pre>
-        					<p>Par convention, si l'attribut de l'annotation s'appelle <strong>value</strong>
+        					<p>Par convention, si un attribut de l'annotation s'appelle <strong>value</strong>
         					et qu'il est le seul paramètre spécifié, alors son nom peut être omis pour plus de lisibilité.</p> 
 							<pre><code class="java">
-  // équivalent à value="unused"
   @SuppressWarnings("deprecation") 
   public void myMethod() {
+    //...
+  }
+
+  @SuppressWarnings(value="deprecation") 
+  public void myOtherMethod() {
     //...
   }
 							</code></pre>
@@ -811,7 +898,7 @@ public @XmlRootElement class Spaceship {
         			</section>
         			<section>
         				<article>
-        					<p>Un nombre très limité d'annotations est traitable par le compilateur lui-même.</p>
+        					<p>Un nombre très limité d'annotations sont exploitées directement par le compilateur.</p>
         					<p>On trouve les annotations déclarées dans le paquet <strong>java.lang</strong>&nbsp;: </p>
         					<ul>
         						<li><a target="javadoc" href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html">Deprecated</a></li>
@@ -827,14 +914,14 @@ public @XmlRootElement class Spaceship {
         					c'est-à-dire la façon dont une annotation sera conservée. Les différentes rétentions d'annotation sont :</p>
         					<ul>
         						<li><strong>source</strong> : l'annotation est accessible durant la compilation mais n'est pas intégrée dans le fichier class généré.</li>
-        						<li><strong>class</strong> : l'annotation est accessible durant la compilation, elle est intégrée dans le fichier class généré mais elle n'est pas chargée dans la VM à l'exécution.</li>
-        						<li><strong>runtime</strong> : l'annotation est accessible durant la compilation, elle est intégrée dans le fichier class généré et elle est chargée dans la VM à l'exécution. Elle est accessible par introspection.</li>
+        						<li><strong>class</strong> : l'annotation est accessible durant la compilation, elle est intégrée dans le fichier class généré mais elle n'est pas chargée dans la JVM à l'exécution.</li>
+        						<li><strong>runtime</strong> : l'annotation est accessible durant la compilation, elle est intégrée dans le fichier class généré et elle est chargée dans la JVM à l'exécution. Elle est accessible par introspection.</li>
         					</ul>
         				</article>
         			</section>
         			<section>
         				<article>
-        					<p>Pour les annotations de rétention source, la JVM prévoit un mécanisme pour enrichir le processus de compilation avec
+        					<p>Pour les annotations de rétention <strong>source</strong>, la JVM prévoit un mécanisme pour inclure lors de la compilation 
         					des <a target="javadoc" href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/processing/Processor.html">processeurs d'annotations</a>. 
         					Par exemple, ces processeurs peuvent servir à vérifier le code ou générer du code supplémentaire.</p>
         					<p><a target="lombok" href="http://projectlombok.org/">Lombok</a> est un exemple de projet open-source fournissant des annotations permettant de générer du code
@@ -880,7 +967,7 @@ public @interface MyAnnotation {
         			</section>
         			<section>
         				<article>
-							<p>Une annotation peut elle-même être annotée. Les annotations supportées en Java 7 sont :</p> 
+							<p>Une annotation peut elle-même être annotée. Les annotations d'annotation fournies par Java 7 sont :</p> 
 							<ul>
 								<li><a target="javadoc" href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Documented.html">Documented</a></li> 
 								<li><a target="javadoc" href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html">Inherited</a></li> 
