@@ -32,57 +32,264 @@
 					<p class="copyright">EPSI I4 Web Services / <a class="explicit" href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a> - 2013-2014</p>
 				</section>
 				<section>
-					<article>
-						<header>Les packages et les ressources requis</header>
-						<dl>
-							<dt>Java 7 SDK</dt>
-							<dd>Le kit de développement Java 7<br/>
-							<small>
-							<em><a class="explicit" target="download" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">
-							http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</a></em>
-							<br>
-							La documentation en ligne : <em><a class="explicit" target="javadoc" href="http://docs.oracle.com/javase/7/docs/">
-							http://docs.oracle.com/javase/7/docs/</a></em>
-							<br>
-							L'API en ligne : <em><a class="explicit" target="javadoc" href="http://docs.oracle.com/javase/7/docs/api/">
-							http://docs.oracle.com/javase/7/docs/api/</a></em>
-							</small>
-							</dd>
-							<dt>Java EE 6</dt>
-							<dd>
-							<small>L'API en ligne : <em><a class="explicit" target="javadoc" href="http://docs.oracle.com/javaee/6/api/">
-							http://docs.oracle.com/javaee/6/api/</a></em></small>
-							</dd>
-							<dt>Eclipse IDE for Java EE Developpers</dt>
-							<dd>L'environnement de développement<br/>
-							<em><small><a class="explicit" target="download" href="http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplerr">
-							http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplerr
-							</a></small></em>
-							</dd>
-							<dt>Apache TomEE Plus</dt>
-							<dd>Le serveur pour déployer les applications Java EE<br/>
-							<em><small><a class="explicit" target="download" href="http://tomee.apache.org/downloads.html">
-							http://tomee.apache.org/downloads.html</a></small></em>
-							</dd>
-						</dl>
-					</article>
+					<section>
+						<article>
+							<header>Les packages requis</header>
+							<dl>
+								<dt>Java 7 SDK</dt>
+								<dd>Le kit de développement Java 7<br/>
+								<small>
+								<em><a class="explicit" target="download" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">
+								http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</a></em>
+								<br>
+								La documentation en ligne : <em><a class="explicit" target="javadoc" href="http://docs.oracle.com/javase/7/docs/">
+								http://docs.oracle.com/javase/7/docs/</a></em>
+								<br>
+								L'API en ligne : <em><a class="explicit" target="javadoc" href="http://docs.oracle.com/javase/7/docs/api/">
+								http://docs.oracle.com/javase/7/docs/api/</a></em>
+								</small>
+								</dd>
+								<dt>Java EE 6</dt>
+								<dd>
+								<small>L'API en ligne : <em><a class="explicit" target="javadoc" href="http://docs.oracle.com/javaee/6/api/">
+								http://docs.oracle.com/javaee/6/api/</a></em></small>
+								</dd>
+								<dt>Eclipse IDE for Java EE Developpers</dt>
+								<dd>L'environnement de développement<br/>
+								<em><small><a class="explicit" target="download" href="http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplerr">
+								http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplerr
+								</a></small></em>
+								</dd>
+								<dt>Apache TomEE Plus</dt>
+								<dd>Le serveur pour déployer les applications Java EE<br/>
+								<em><small><a class="explicit" target="download" href="http://tomee.apache.org/downloads.html">
+								http://tomee.apache.org/downloads.html</a></small></em>
+								</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Les packages optionels</header>						
+							<dl>
+								<dt>Maven 3</dt>
+								<dd>Un outil de gestion technique de projet<br/>
+								<em><small><a class="explicit" target="download" href="http://maven.apache.org/download.cgi">
+								http://maven.apache.org/download.cgi</a></small></em>
+								</dd>
+								<dt>Java EE SDK (inclus Glassfish)</dt>
+								<dd>Le serveur d'application Java EE de référence<br/>
+								<em><small><a class="explicit" target="download" href="http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-7-downloads-1956236.html">
+								http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-7-downloads-1956236.html</a></small></em>
+								</dd>
+							</dl>
+						</article>
+					</section>
 				</section>
 				<section>
-					<article>
-						<header>Les packages optionels</header>
-						<dl>
-							<dt>Maven 3</dt>
-							<dd>Un outil de gestion technique de projet<br/>
-							<em><small><a class="explicit" target="download" href="http://maven.apache.org/download.cgi">
-							http://maven.apache.org/download.cgi</a></small></em>
-							</dd>
-							<dt>Java EE SDK (inclus Glassfish)</dt>
-							<dd>Le serveur d'application Java EE de référence<br/>
-							<em><small><a class="explicit" target="download" href="http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-7-downloads-1956236.html">
-							http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-7-downloads-1956236.html</a></small></em>
-							</dd>
-						</dl>
-					</article>
+					<section>
+						<article>
+							<header>Introduction à Maven</header>
+							<p>Maven permet de gérer le projet à partir d'un fichier 
+							<strong>pom.xml</strong> à la racine du projet.</p>
+							<figure>
+								<figcaption>Un fichier pom.xml minimaliste</figcaption>
+								<pre><code class="xml" data-trim>
+&lt;project 
+	xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;epsi.i4&lt;/groupId&gt;
+  &lt;artifactId&gt;MyFirstMavenProject&lt;/artifactId&gt;
+  &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+&lt;/project&gt;
+								</code></pre>
+							</figure>							
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>La balise &lt;build&gt; permet de déclarer et de configurer les plugins
+							utilisés pour construire le projet.</p>
+							<figure>
+								<figcaption>La section build dans le pom.xml</figcaption>
+								<pre><code class="xml">
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;!-- Configurer le compilateur pour la bonne version de Java --&gt;
+      &lt;plugin&gt;
+        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.1&lt;/version&gt;
+        &lt;configuration&gt;
+          &lt;source&gt;1.7&lt;/source&gt;
+          &lt;target&gt;1.7&lt;/target&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+								</code></pre>
+							</figure>							
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>La balise &lt;properties&gt; permet de déclarer des propriétés
+							lues par les plugins ou de centraliser des valeurs pour les référencer sous
+							la forme ${nom de la propriété} dans le fichier pom.xml.</p>
+							<figure>
+								<figcaption>La section properties dans le pom.xml</figcaption>
+								<pre><code class="xml">
+  &lt;properties&gt;
+    &lt;!-- Utiliser UTF-8 comme encodage par défaut --&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+  &lt;/properties&gt;
+								</code></pre>
+							</figure>							
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>La balise &lt;dependencies&gt; permet de déclarer les bibliothèques
+							dont dépent le projet. Par défaut, les dépendances sont téléchargées
+							depuis le <a href="http://mvnrepository.com/" target="mavenrepo">Maven central repository</a>.</p>
+							<figure>
+								<figcaption>La section dependencies dans le pom.xml</figcaption>
+								<pre><code class="xml">
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.glassfish.jersey.core&lt;/groupId&gt;
+      &lt;artifactId&gt;jersey-client&lt;/artifactId&gt;
+      &lt;version&gt;2.3&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+								</code></pre>
+							</figure>							
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les dépendances ont une portée (scope) qui définit le type de lien avec le projet.</p>
+							<figure>
+								<figcaption>Un exemple de dépendance de portée <em>test</em></figcaption>
+								<pre><code class="xml">
+    &lt;dependency&gt;    
+      &lt;groupId&gt;junit&lt;/groupId&gt;
+      &lt;artifactId&gt;junit&lt;/artifactId&gt;
+      &lt;version&gt;4.11&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les portées de dépendance sont :</p>
+							<dl>
+								<dt>compile (valeur par défaut)</dt>
+								<dd>La dépendance est nécessaire à la compilation et à l'exécution.</dd>
+								<dt>provided</dt>
+								<dd>La dépendance est nécessaire à la compilation mais sera fournie par l'environnement d'exécution.</dd>
+								<dt>runtime</dt>
+								<dd>La dépendance n'est pas nécessaire à la compilation mais elle est nécessaire à l'exécution.</dd>
+								<dt>test</dt>
+								<dd>La dépendance n'est nécessaire ni à la compilation ni à l'exécution. Par contre, elle
+								est nécessaire à compilation et à l'exécution des tests.</dd>
+							</dl>
+							<p>Il existe aussi les portées <em>system</em> et <em>import</em> pour des utilisations avancées.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Maven suit le principe de <a href="http://fr.wikipedia.org/wiki/Convention_plut%C3%B4t_que_configuration" target="wikipedia">convention plutôt que de configuration</a>.
+							Il incite donc à suivre une arborescence type pour tous les projets.</p>
+							<figure>
+								<figcaption>L'arborescence type d'un projet Maven</figcaption>
+								<pre><code class="bash" data-trim>
++ src
+| + main
+| | + java      # contient les sources Java du projet
+| | + resources # contient les fichiers non compilés du projet
+| + test
+| | + java      # contient les sources Java pour les tests
+| | + resources # contient les fichiers non compilés pour les tests
++ target        # le répertoire de travail de Maven
+pom.xml
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Pour aller plus loin...</header>
+							<dl>
+								<dt>Maven by Example</dt>
+								<dd><a class="explicit" target="doc" href="http://books.sonatype.com/mvnex-book/reference/public-book.html">
+								http://books.sonatype.com/mvnex-book/reference/public-book.html</a>
+								</dd>
+								<dt>Maven: The Complete Reference</dt>
+								<dd><a class="explicit" target="doc" href="http://books.sonatype.com/mvnref-book/reference/public-book.html">
+								http://books.sonatype.com/mvnref-book/reference/public-book.html</a>
+								</dd>
+							</dl>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Consommer un service Web</header>
+							<p>1. Choisissez un service Web :</p>
+							<dl>
+								<dt>Freegeoip</dt>
+								<dd><a class="explicit" target="webservice" href="http://freegeoip.net/">
+								http://freegeoip.net/</a>
+								</dd>
+								<dt>Open Beer Database</dt>
+								<dd><a class="explicit" target="webservice" href="http://openbeerdatabase.com/">
+								http://openbeerdatabase.com/</a>
+								</dd>
+								<dt>World of Warcraft</dt>
+								<dd><a class="explicit" target="webservice" href="http://blizzard.github.io/api-wow-docs/">
+								http://blizzard.github.io/api-wow-docs/</a>
+								</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>2. Testez le service depuis un navigateur Web en récupérant des données.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>3. Implémentez un client Java à l'aide de l'API client Jersey.<p>
+							<dl>
+								<dt>Documentation API client Jersey</dt>
+								<dd><a class="explicit" target="api" href="https://jersey.java.net/documentation/latest/client.html">
+								https://jersey.java.net/documentation/latest/client.html</a>
+								</dd>
+								<dt>Dépendances Maven</dt>
+								<dd>
+								<pre><code class="xml">
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.glassfish.jersey.core&lt;/groupId&gt;
+    &lt;artifactId&gt;jersey-client&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.glassfish.jersey.media&lt;/groupId&gt;
+    &lt;artifactId&gt;jersey-media-moxy&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt;
+  &lt;/dependency&gt;
+								</code></pre>
+								</dd>
+							</dl>
+							
+						</article>
+					</section>
 				</section>
 			</div>
 		</div>
