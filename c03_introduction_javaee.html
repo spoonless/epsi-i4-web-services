@@ -61,7 +61,44 @@
 					<section>
 						<article>
 							<header>Conteneurs &amp; composants</header>
-							<p></p>
+							<p>Un conteneur est une brique logicielle dans lequel sont déployés des <strong>composants</strong>.
+							Les composants sont fournis par les développeurs d'application et sont regroupés en module.</p> 
+							<p>Le conteneur a la charge	de gérer le cycle de vie des composants, d'orchestrer leurs interactions 
+							et de leur donner accès à un ensemble de services.</p>
+						</article>
+					</section>
+					<section>
+						<p>Java EE fournit 4 conteneurs :</p>
+						<ul>
+							<li>Conteneur Web</li>
+							<li>Conteneur EJB</li>
+							<li>Conteneur application cliente</li>
+							<li>Conteneur Applet</li>
+						</ul>
+					</section>
+					<section>
+						<article>
+							<header>Conteneur Web</header>
+							<p>Le conteneur Web permet le déploiement des composants Servlet et JSP.
+							Il gère l'accès à l'application par les protocoles Web (HTTP).</p>
+							<p>Il permet également le déploiement de composants basés sur la
+							technologie Servlet :</p>
+							<ul>
+								<li>Les services Web XML-RPC, RESTful et SOAP/HTTP.</li>
+								<li>Les applications Web (JSF)</li>
+							</ul>
+							<p>Un module Web est packagé sous la forme d'une archive war
+							et peut contenir un descripteur de déploiement <strong>WEB-INF/web.xml</strong>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Conteneur EJB</header>
+							<p>Le conteneur EJB permet le déploiement des Enterprise Java Beans (EJB).</p>
+							<p>Les EJB sont conçus pour gérer la logique métier d'une application dans un
+							environnement transactionnel.</p>
+							<p>Un module EJB est packagé sous la forme d'une archive jar
+							et peut contenir un descripteur de déploiement <strong>META-INF/ejb-jar.xml</strong>.</p>
 						</article>
 					</section>
 				</section>
@@ -69,7 +106,17 @@
 					<section>
 						<article>
 							<header>Les services</header>
-							<p></p>
+							<p>Les services sont un ensemble de bibliothèques auxquelles les composants
+							ont accès. Ils sont pour la plupart présentés sous la forme d'interfaces et d'annotations.</p>
+							<p>Une liste non-exhaustive de service :<p>
+							<ul>
+								<li>L'injection de dépendance (CDI)</li>
+								<li>La validation de données (Bean validation)</li>
+								<li>La persistance en base de données (JPA)</li>
+								<li>La gestion des transactions (JTA)</li>
+								<li>L'envoi et la reception de mail (JavaMail)</li>
+								<li>...</li>
+							</ul>
 						</article>
 					</section>
 				</section>
@@ -77,14 +124,31 @@
 					<section>
 						<article>
 							<header>Le serveur d'application</header>
-							<p></p>
+							<p>Les conteneurs et les services sont regroupés dans un serveur d'application.</p>
+							<p>Une application Java EE <strong>n'est pas autonome</strong>. Elle doit être déployée
+							dans un <strong>serveur d'application</strong> Java EE.</p>
 						</article>
+					</section>
+					<section>
+						<p>Les serveurs d'application Java EE :</p>
+						<ul>
+							<li>Glassfish (serveur de référence)</li>
+							<li>Géronimo (serveur de la communauté Apache)</li>
+							<li>JBoss</li>
+							<li>JOnAS (OW2)</li>
+							<li>Websphere (IBM)</li>
+						</ul>
+					</section>
+					<section class="not-printable">
+						... et TomEE ?
 					</section>
 				</section>
 				<section>
 					<section>
 						<article>
 							<header>Architecture multi-tiers</header>
+							<p>Java EE promeut le développement d'application suivant une approche multi-couches.
+							On parle d'application N-tiers ou multi-tiers.</p>
 							<p></p>
 						</article>
 					</section>
