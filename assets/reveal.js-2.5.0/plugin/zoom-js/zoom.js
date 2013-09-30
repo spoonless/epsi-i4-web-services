@@ -3,7 +3,7 @@
 	var isEnabled = true;
 
 	document.querySelector( '.reveal' ).addEventListener( 'click', function( event ) {
-		if( isEnabled && event.target && (event.target.tagName == 'CODE' || event.target.tagName == 'IMG')) {
+		if( isEnabled && event.target && (event.target.tagName == 'CODE' || event.target.tagName == 'IMG') && event.ctrlKey) {
 			event.preventDefault();
 			zoom.to({ element: event.target, pan: false });
 		}
