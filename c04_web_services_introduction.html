@@ -49,8 +49,174 @@
 					<section>
 						<article>
 							<header>HTTP (HyperText Transfer Protocol)</header>
-							<p>HTTP est un protocol applicatif qui est le fondement de l'échange de données pour le World Wide Web.</p>
-							<p>HTTP version 1.1 est défini dans la <a href="http://tools.ietf.org/html/rfc2616">RFC 2616</a> datant de 1999.</p>
+							<p>HTTP est un protocole applicatif qui est le fondement de l'échange de données pour le World Wide Web.</p>
+							<p>Comme tous les protocoles applicatifs de l'Internet, HTTP est orienté texte.</p>
+							<p>HTTP version 1.1 est défini dans la <a href="http://tools.ietf.org/html/rfc2616" target="_blank">RFC 2616</a> datant de 1999.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Exemple de l'envoi d'une requête</p>
+							<figure>
+								<figcaption>Un requête HTTP GET</figcaption>
+								<pre><code class="http">GET /Programmes/Formation-informatique HTTP/1.1
+Host: www.epsi.fr
+								</code></pre>
+							</figure>
+							<figure>
+								<figcaption>La réponse du serveur</figcaption>
+								<pre><code class="http">HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 420
+
+&lt;html&gt;
+...
+&lt;/html&gt;</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>Structure d'une requête HTTP</figcaption>
+								<pre><code class="http">[méthode] [URI (chemin de ressource)] HTTP/1.1
+[Nom de l'en-tête]: [Valeur de l'en-tête]
+[ligne blanche]
+[entité envoyée]</code></pre>
+							</figure>
+							<p>En HTTP 1.1, seul l'en-tête <em>Host</em> est obligatoire.</p>
+							<figure>
+								<figcaption>Structure d'une réponse HTTP</figcaption>
+								<pre><code class="http">HTTP/1.1 [code statut] [message]
+[Nom de l'en-tête]: [Valeur de l'en-tête]
+[ligne blanche]
+[entité reçue]</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<p>Les <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html" target="_blank">méthodes HTTP</a> :</p>
+						<ul>
+							<li>OPTIONS</li>
+							<li>GET</li>
+							<li>HEAD</li>
+							<li>PUT</li>
+							<li>PATCH</li>
+							<li>DELETE</li>
+							<li>POST</li>
+							<li>TRACE</li>
+							<li>CONNECT</li>
+						</ul>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>OPTIONS</dt>
+								<dd>Obtenir les options de communication (par exemple : les méthodes autorisées pour l'URI)</dd>
+
+								<dt>GET</dt>
+								<dd>Demander au serveur une entité identifiée par l'URI</dd>
+
+								<dt>HEAD</dt>
+								<dd>Comme un GET sauf que la réponse ne contient <em>jamais</em> l'entité. Utile pour connaître uniquement les en-têtes des réponses.</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>PUT</dt>
+								<dd>Stocker ou mettre à jour l'entité envoyé à l'adresse de l'URI</dd>
+
+								<dt><a href="http://tools.ietf.org/html/rfc5789" target="_blank">PATCH</a></dt>
+								<dd>Appliquer un ensemble de modification à l'entité identifiée par l'URI</dd>
+
+								<dt>DELETE</dt>
+								<dd>Détruire l'entité identifiée l'URI</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>POST</dt>
+								<dd>Annoter des ressources existantes</dd>
+								<dd>Poster un message dans un système de centralisation d'articles</dd>
+								<dd>Fournir un bloc de données (formulaire) à un processus de traitement</dd>
+								<dd>&Eacute;tendre une base de données par une opération d'ajout</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les <a href="http://en.wikipedia.org/wiki/List_of_HTTP_header_fields" target="_blank">en-têtes</a> HTTP :</p>
+							<p>Remarque le nom des en-têtes est insensible à la casse.</p>
+							<p>Pour les requêtes et les réponses contenant une entité, il est nécessaire de connaitre
+							la taille de l'entité et le type de contenu.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Pour la taille, on peut utiliser l'en-tête <em>Content-Length</em> ou <em>Transfer-Encoding</em></p>
+							<dl>
+								<dt>Content-Length</dt>
+								<dd>Indique la taille de l'entité en octets</dd>
+
+								<dt>Transfer-Encoding</dt>
+								<dd>Avec la valeur <em>chuncked</em> indique que l'entité est transmise par morceau. 
+								Très utile quand le serveur ne peut pas connaître la taille de la réponse avant de l'avoir émise.</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Pour identifier le contenu, on utilise principalement l'en-tête <em>Content-Type</em>.</p>
+							<dl>
+								<dt>Content-Type</dt>
+								<dd>Indique le type <a href="http://en.wikipedia.org/wiki/MIME" target="_blank">MIME</a> de l'entité : text/plain, text/html, application/json, image/jpeg, ...</dd>
+
+								<dt>Content-Language</dt>
+								<dd>Indique la langue ou une liste de langues naturelles nécessaire pour comprendre l'entité</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les familles de <a target="wiki" href="http://fr.wikipedia.org/wiki/Liste_des_codes_HTTP">codes de statut</a> de la réponse :</p>
+							<ul>
+								<li>1XX : Information</li>
+								<li>2XX : Succès</li>
+								<li>3XX : Redirection</li>
+								<li>4XX : Erreur du client</li>
+								<li>5XX : Erreur du serveur</li>
+							</ul>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Un exemple plus complet :</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Idempotence et sureté des méthodes HTTP :</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Pour aller plus loin:</p>
+							<dl>
+								<dt>HTTP Made Really Easy</dt>
+								<dd><a class="explicit" target="_blank" href="http://www.jmarshall.com/easy/http/">http://www.jmarshall.com/easy/http/</a></dd>
+							</dl>
+							<dl>
+								<dt>La RFC 2616 de l'IETF</dt>
+								<dd><a class="explicit" target="_blank" href="http://tools.ietf.org/html/rfc2616">http://tools.ietf.org/html/rfc2616</a></dd>
+							</dl>
+							<dl>
+								<dt>La RFC 5789 définissant la méthode PATCH</dt>
+								<dd><a class="explicit" target="_blank" href="http://tools.ietf.org/html/rfc5789">http://tools.ietf.org/html/rfc5789</a></dd>
+							</dl>
 						</article>
 					</section>
 				</section>
@@ -66,9 +232,9 @@
 						<article>
 							<header>Les grandes familles de Web services</header>
 							<ul>
-								<li>*-RPC (XML-RPC, JSON-RPC)</li>
 								<li>Web services RESTful</li>
 								<li>WS-* (SOAP, WSDL)</li>
+								<li>*-RPC (XML-RPC, JSON-RPC)</li>
 							</ul>
 							<p>Java EE supporte le développement de Web services pour ces trois familles</p>
 						</article>

@@ -21,6 +21,7 @@ http://java.dzone.com/articles/java-ee-7-deployment
 
 Web services
 
+http://martinfowler.com/articles/richardsonMaturityModel.html
 http://freegeoip.net/
 http://blizzard.github.io/api-wow-docs/
 http://www.programmableweb.com/apis/directory
@@ -38,3 +39,9 @@ http://www.w3.org/Protocols/rfc2616/rfc2616.html
 http://svn.apache.org/repos/asf/tomee/tomee/trunk/examples/rest-jaas/
 http://restcookbook.com/
 http://www.ibm.com/developerworks/library/wa-aj-tomcat/
+
+
+HTTP
+
+http://www.jmarshall.com/easy/http/
+
