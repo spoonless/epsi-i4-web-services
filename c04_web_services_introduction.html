@@ -42,7 +42,7 @@
 					<section>
 						<p><strong>Web = HTTP</strong></p>
 						<p><strong>service = client/serveur</strong></p>
-						<p>Un Web service s'appuie sur une architecture de type client/serveur et le protocole HTTP pour échanger de l'information.</p>
+						<p>Un Web service s'appuie sur le protocole HTTP selon les principes d'une architecture Client/Serveur pour échanger de l'information.</p>
 					</section>
 				</section>
 				<section>
@@ -126,13 +126,13 @@ Content-Length: 420
 						<article>
 							<dl>
 								<dt>PUT</dt>
-								<dd>Stocker ou mettre à jour l'entité envoyé à l'adresse de l'URI</dd>
+								<dd>Stocker ou mettre à jour l'entité envoyée à l'adresse de l'URI.</dd>
 
 								<dt><a href="http://tools.ietf.org/html/rfc5789" target="_blank">PATCH</a></dt>
-								<dd>Appliquer un ensemble de modification à l'entité identifiée par l'URI</dd>
+								<dd>Appliquer des modifications partielles à l'entité identifiée par l'URI.</dd>
 
 								<dt>DELETE</dt>
-								<dd>Détruire l'entité identifiée l'URI</dd>
+								<dd>Détruire l'entité identifiée par l'URI.</dd>
 							</dl>
 						</article>
 					</section>
@@ -140,19 +140,19 @@ Content-Length: 420
 						<article>
 							<dl>
 								<dt>POST</dt>
-								<dd>Annoter des ressources existantes</dd>
-								<dd>Poster un message dans un système de centralisation d'articles</dd>
-								<dd>Fournir un bloc de données (formulaire) à un processus de traitement</dd>
-								<dd>&Eacute;tendre une base de données par une opération d'ajout</dd>
+								<dd>Annoter des ressources existantes,</dd>
+								<dd>Poster un message dans un système de centralisation d'articles,</dd>
+								<dd>Fournir un bloc de données (formulaire) à un processus de traitement,</dd>
+								<dd>&Eacute;tendre une base de données par une opération d'ajout.</dd>
 							</dl>
 						</article>
 					</section>
 					<section>
 						<article>
 							<p>Les <a href="http://en.wikipedia.org/wiki/List_of_HTTP_header_fields" target="_blank">en-têtes</a> HTTP :</p>
-							<p>Remarque le nom des en-têtes est insensible à la casse.</p>
-							<p>Pour les requêtes et les réponses contenant une entité, il est nécessaire de connaitre
-							la taille de l'entité et le type de contenu.</p>
+							<p><em>A noter</em> : le nom des en-têtes est insensible à la casse.</p>
+							<p>Pour les requêtes et les réponses contenant une entité, on connaît
+							la taille de l'entité et le type de contenu grâce aux en-têtes.</p>
 						</article>
 					</section>
 					<section>
@@ -182,25 +182,271 @@ Content-Length: 420
 					</section>
 					<section>
 						<article>
-							<p>Les familles de <a target="wiki" href="http://fr.wikipedia.org/wiki/Liste_des_codes_HTTP">codes de statut</a> de la réponse :</p>
+							<p>Les familles de <a target="wiki" href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes">codes de statut</a> de la réponse :</p>
+							<dl>
+								<dt>1XX</dt><dd>Information</dd>
+								<dt>2XX</dt><dd>Succès (à connaître : 200, 201, 204)</dd>
+								<dt>3XX</dt><dd>Redirection (à connaître : 301, 303, 304, 307)</dd>
+								<dt>4XX</dt><dd>Erreur du client (à connaître : 400, 404, 405, 409, 410, 412, 415)</dd>
+								<dt>5XX</dt><dd>Erreur du serveur (à connaître : 500, 501, 502, 503)</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Cas d'utilisation :</p>
 							<ul>
-								<li>1XX : Information</li>
-								<li>2XX : Succès</li>
-								<li>3XX : Redirection</li>
-								<li>4XX : Erreur du client</li>
-								<li>5XX : Erreur du serveur</li>
+								<li>Création d'une entité dont on connait l'URI</li>
+								<li>Création d'une entité dont on ne connait pas l'URI</li>
+								<li>Suppression d'une entité</li>
+								<li>Requête conditionnelle (dernière modification)</li>
+								<li>Requête conditionnelle (Etag)</li>
+								<li>Redirections</li>
+								<li>Traitement asynchrone</li>
 							</ul>
 						</article>
 					</section>
 					<section>
 						<article>
-							<p>Un exemple plus complet :</p>
+							<p>Création d'une entité dont on connait l'URI</p>
+							<figure>
+								<figcaption>La requête</figcaption>
+								<pre><code class="http">PUT /individu/David+Gayerie HTTP/1.1
+Host: exemple.fr
+Content-Type: application/json; charset=utf-8
+Content-Length: 91
+
+{'name' : 'Gayerie', 
+ 'firstname' : 'David', 
+ 'email' : 'david.gayerie.epsi@mailoo.org'}</code></pre>
+							</figure>
+							<figure>
+								<figcaption>La réponse du serveur en cas de succès</figcaption>
+								<pre><code class="http">HTTP/1.1 201 Created
+								</code></pre>
+							</figure>
 						</article>
 					</section>
 					<section>
 						<article>
-							<p>Idempotence et sureté des méthodes HTTP :</p>
+							<p>Création d'une entité dont on ne connait pas l'URI</p>
+							<figure>
+								<figcaption>La requête</figcaption>
+								<pre><code class="http">POST /individu/ HTTP/1.1
+Host: exemple.fr
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+Content-Length: 65
+
+name=Gayerie&amp;firstname=David&amp;email=david.gayerie.epsi@mailoo.org</code></pre>
+							</figure>
+							<figure>
+								<figcaption>La réponse du serveur en cas de succès</figcaption>
+								<pre><code class="http">HTTP/1.1 201 Created
+Location: http://exemple.fr/individu/000001
+								</code></pre>
+							</figure>
+							<p>Le serveur fournit l'URI d'accès dans la réponse grâce à l'en-tête <em>Location</em>.</p>
 						</article>
+					</section>
+					<section>
+						<article>
+							<p>Suppression d'une entité</p>
+							<figure>
+								<figcaption>La requête</figcaption>
+								<pre><code class="http">DELETE /individu/000001 HTTP/1.1
+Host: exemple.fr
+								</code></pre>
+							</figure>
+							<figure>
+								<figcaption>La réponse du serveur en cas de succès</figcaption>
+								<pre><code class="http">HTTP/1.1 204 No content
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Requête conditionnelle (dernière modification)</p>
+							<figure>
+								<figcaption>La requête</figcaption>
+								<pre><code class="http">DELETE /individu/000001 HTTP/1.1
+Host: exemple.fr
+If-unmodified-since: Thu, 1 Jan 2010 00:00:00 GMT
+								</code></pre>
+							</figure>
+							<figure>
+								<figcaption>La réponse si l'entité a été modifiée depuis le 01/01/2010</figcaption>
+								<pre><code class="http">HTTP/1.1 412 Precondition failed
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Requête conditionnelle (Etag)</p>
+							<figure>
+								<figcaption>Récupération de l'entité et de son Etag</figcaption>
+								<pre><code class="http">GET /individu/000001 HTTP/1.1
+								</code></pre>
+							</figure>
+							<figure>
+								<figcaption>La réponse du serveur</figcaption>
+								<pre><code class="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 91
+ETag: "686897696a7c876b7e"
+
+{'name' : 'Gayerie', 
+ 'firstname' : 'David', 
+ 'email' : 'david.gayerie.epsi@mailoo.org'}</code></pre>
+							</figure>
+							<p>Etag est un en-tête optionnel : le serveur peut ne pas le retourner.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>La requête conditionnelle</figcaption>
+								<pre><code class="http">DELETE /individu/000001 HTTP/1.1
+Host: exemple.fr
+If-match: "686897696a7c876b7e"
+								</code></pre>
+							</figure>
+							<p>L'en-tête <em>If-match</em> retransmet l'ETag fourni par le serveur.</p>
+							<figure>
+								<figcaption>La réponse du serveur si l'entité a changé d'ETag depuis</figcaption>
+								<pre><code class="http">HTTP/1.1 412 Precondition failed
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les redirections :</p>
+							<figure>
+								<figcaption>La requête</figcaption>
+								<pre><code class="http">GET /individu/000001 HTTP/1.1
+Host: exemple.fr
+								</code></pre>
+							</figure>
+							<figure>
+								<figcaption>La réponse du serveur si l'entité n'est plus accessible à cette URI</figcaption>
+								<pre><code class="http">HTTP/1.1 301 Moved permanently
+Location: http://exemple.fr/individu/2013/000001
+								</code></pre>
+							</figure>
+							<p>L'en-tête <em>Location</em> dans la réponse fournit l'URI de redirection.</p>
+							<p>S'il n'existe plus d'URI pour atteindre l'entité, le serveur devrait retourner le code statut 410 (gone) ou 404 (not found).</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les codes de redirection :</p>
+							<dl>
+								<dt>301 Moved Permanently</dt>
+								<dd>Le serveur connaît l'entité mais ne peut plus la servir à l'URI donnée. Ce code signale au client qu'il doit maintenant utiliser une nouvelle URI.</dd>
+								<dt>302 Found</dt>
+								<dd>Code "historique" de redirection. Il est ambigu (utiliser plutôt 303 ou 307).</dd>
+								<dt>303 See Other</dt>
+								<dd>La requête a été exécutée mais son résultat est disponible avec un GET sur une autre URI.</dd>
+								<dt>307 Temporary redirect</dt>
+								<dd>La requête n'a pas pu être exécutée. Le client doit émettre à nouveau sa requête vers l'URI temporaire fournie par le serveur.</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Traitement asynchrone :</p>
+							<figure>
+								<figcaption>La requête</figcaption>
+								<pre><code class="http">DELETE /individu/000001 HTTP/1.1
+Host: exemple.fr
+								</code></pre>
+							</figure>
+							<figure>
+								<figcaption>La réponse du serveur si la requête est traitée en asynchrone</figcaption>
+								<pre><code class="http">HTTP/1.1 202 Accepted
+Location: http://exemple.fr/jobs/1948321
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les méthodes HTTP peuvent être classées selon deux critères : la sûreté et l'idempotence.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>Sûreté (safety)</dt>
+								<dd>
+								Une méthode est sûre si elle n'entraîne <em>aucune</em> modification d'état sur le serveur.
+								Une méthode sûre peut être utilisée entre 0 et N fois d'affilée sans que cela affecte le serveur.
+								</dd>
+							</dl>
+							<p>Les méthodes GET, HEAD et OPTIONS doivent être sûres.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>Idempotence (idempotent)</dt>
+								<dd>
+								Une méthode est idempotente si l'effet obtenu est le même qu'elle soit exécutée 1 ou N fois.
+								</dd>
+							</dl>
+							<p>Les méthodes GET, HEAD, OPTIONS, PUT et DELETE doivent être idempotentes.</p>
+						</article>
+					</section>
+					<section>
+						<table class="summaryTable">
+							<caption>Classement des méthodes HTTP</caption>
+							<thead>
+								<tr>
+									<th>&nbsp;</th>
+									<th>Sûre</th>
+									<th>Idempotente</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>OPTIONS</th>
+									<td>oui</td>
+									<td>oui</td>
+								</tr>
+								<tr>
+									<th>GET</th>
+									<td>oui</td>
+									<td>oui</td>
+								</tr>
+								<tr>
+									<th>HEAD</th>
+									<td>oui</td>
+									<td>oui</td>
+								</tr>
+								<tr>
+									<th>PUT</th>
+									<td>non</td>
+									<td>oui</td>
+								</tr>
+								<tr>
+									<th>PATCH</th>
+									<td>non</td>
+									<td>non</td>
+								</tr>
+								<tr>
+									<th>DELETE</th>
+									<td>non</td>
+									<td>oui</td>
+								</tr>
+								<tr>
+									<th>POST</th>
+									<td>non</td>
+									<td>non</td>
+								</tr>
+							</tbody>
+						</table>
 					</section>
 					<section>
 						<article>
@@ -224,6 +470,10 @@ Content-Length: 420
 					<section>
 						<article>
 							<header>Client/Serveur</header>
+							<p>L'architecture <a href="http://en.wikipedia.org/wiki/Client_server" target="wiki">Client/Serveur</a>
+							 est une architecture logique centralisée pour le développement d'applications distribuées.</p> 
+							 <p>Un programme serveur se met en attente de requêtes de programmes clients vers lesquels il retourne
+							 une réponse.</p>
 						</article>
 					</section>
 				</section>
@@ -236,14 +486,7 @@ Content-Length: 420
 								<li>WS-* (SOAP, WSDL)</li>
 								<li>*-RPC (XML-RPC, JSON-RPC)</li>
 							</ul>
-							<p>Java EE supporte le développement de Web services pour ces trois familles</p>
-						</article>
-					</section>
-				</section>
-				<section>
-					<section>
-						<article>
-							<header></header>
+							<p>Java EE supporte le développement de Web services pour ces trois familles.</p>
 						</article>
 					</section>
 				</section>

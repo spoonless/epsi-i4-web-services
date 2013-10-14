@@ -92,3 +92,25 @@ a.download {
 .reveal figure > pre {
     margin-top: 0;
 }
+
+.reveal .summaryTable {
+	margin-left: auto;
+	margin-right: auto;
+	min-width: 25em;
+}
+
+.reveal thead th {
+	text-align: center;
+}
+
+.reveal tbody td {
+	text-align: center;
+}
+
+.reveal th {
+	font-weight: bold;
+}
+
+.reveal tbody tr:nth-child(odd) {
+	background: #DDD;
+}
