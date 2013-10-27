@@ -15,6 +15,7 @@
 	</head>
 
 	<body>
+
 		<div class="reveal">
 			<nav>
 				<script>
@@ -27,32 +28,24 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section class="title">
-					<h1 class="small">Java EE - Web Services</h1>
+					<h1>Web Services RESTful</h1>
 					<p class="copyright">EPSI I4 Web Services / <a class="explicit" href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a> - 2013-2014</p>
-					<ul>
-						<li><a href="c02_notions_complementaires_java.html" target="_blank">Notions complémentaires en Java</a></li>
-						<li>Les Web services
-							<ul>
-								<li><a href="c04_web_services_introduction.html" target="_blank">Introduction aux Web Services</a></li>
-								<li><a href="c05_web_services_restful.html" target="_blank">Web Services RESTful (JAX-RS)</a></li>
-								<li>Web Services SOAP (JAX-WS)</li>
-							</ul>
-						</li>
-						<li><a href="c03_introduction_javaee.html" target="_blank">Introduction à Java Enterprise Edition (Java EE)</a></li>
-						<li>Conteneur Web
-							<ul>
-								<li>Les servlets</li>
-							</ul>
-						</li>
-						<li>Gestion des beans et dépendance d'injection (CDI)</li>
-						<li>Conteneur EJB
-							<ul>
-								<li>Enterprise Java Beans (EJB)</li>
-								<li>Entity bean : la persistance (JPA)</li>
-							</ul>
-						</li>
-						<li>Les pico conteneurs : Spring Framework</li>
-					</ul>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>REST</header>
+							<p>REST est un style d'architecture pour les systèmes hypermédia distribués.</p>
+							<p>Une implémentation qui se conforme à REST est dite <em>RESTful</em>.</p>
+							<p>Roy Fielding a formalisé l'architecture REST dans le chapitre 5 de sa <a target="_blank" href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">thèse</a> en 2000.</p>
+						</article>
+					</section>
+					<section>
+						<p>REST est le modèle d'architecture du Web !</p>
+					</section>
+					<section data-background="rgb(160,0,0)">
+						<p>Idée fausse : Je développe des Web Services RESTful car j'utilise un framework REST (comme JAX-RS).</p>
+					</section>
 				</section>
 			</div>
 
@@ -69,6 +62,7 @@
 			progress: true,
 			history: true,
 			center: true,
+			transition: "linear",
 
 			// Optional libraries used to extend on reveal.js
 			dependencies: [

@@ -39,7 +39,10 @@ http://www.w3.org/Protocols/rfc2616/rfc2616.html
 http://svn.apache.org/repos/asf/tomee/tomee/trunk/examples/rest-jaas/
 http://restcookbook.com/
 http://www.ibm.com/developerworks/library/wa-aj-tomcat/
+http://slid.es/xavierhanin/restx/fullscreen
 
+https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
+http://cxf.apache.org/docs/jax-rs-cors.html
 
 HTTP
 
