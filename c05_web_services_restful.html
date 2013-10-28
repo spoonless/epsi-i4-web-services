@@ -37,15 +37,203 @@
 							<header>REST</header>
 							<p>REST est un style d'architecture pour les systèmes hypermédia distribués.</p>
 							<p>Une implémentation qui se conforme à REST est dite <em>RESTful</em>.</p>
-							<p>Roy Fielding a formalisé l'architecture REST dans le chapitre 5 de sa <a target="_blank" href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">thèse</a> en 2000.</p>
+							<p>En 2000, Roy Fielding a formalisé l'architecture REST dans le chapitre 5 de sa <a target="_blank" href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">thèse</a>.</p>
+							<p>En 2007, Leonard Richardson et Sam Ruby présentent ROA (Resource Oriented Architecture) dans leur ouvrage <em>RESTful Web Services</em>.
+							ROA va devenir le modèle d'application de REST pour les Web services.</p>
 						</article>
 					</section>
 					<section>
-						<p>REST est le modèle d'architecture du Web !</p>
+						<article>
+							<p>Depuis quelques années, REST et RESTful sont devenus des buzzwords :(</p>
+						</article>
 					</section>
-					<section data-background="rgb(160,0,0)">
+					<section data-background="#FA5858">
 						<p>Idée fausse : Je développe des Web Services RESTful car j'utilise un framework REST (comme JAX-RS).</p>
 					</section>
+					<section>
+						<p>La première chose à retenir :<br>
+						REST est le modèle d'architecture du Web !</p>
+					</section>
+					<section>
+						<article>
+							<p>Un Web service RESTful suit les mêmes principes qu'un site Web pour les humains.</p>
+							<p>La différence principale tient au fait que la sémantique des données échangées <i>via</i>
+							le Web service est compréhensible par un programme (Web programmable).</p>
+							<p>Un Web service RESTful devrait être conçu comme un site Web (et réciproquement).</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Domaines principaux d'application des Web services RESTful :</p>
+							<ul>
+								<li>Applications Web riches (Ajax)</li>
+								<li>Applications pour Mobile</li>
+								<li>Le Web des objets</li>
+								<li>L'open data</li>
+							</ul>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>La ressource</header>
+							<p>REST est un style d'architecture <strong>orienté ressource</strong>.</p>
+							<p>Qu'est-ce qu'une ressource ?</p>
+							<blockquote>
+								<span>Any information that can be named can be a resource</span>
+								<footer>Roy Fielding</footer>
+							</blockquote>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Dans le domaine de Web :</p>
+							<pre><code>Information nommée = Information adressable</code></pre>
+							<pre><code>Adressable = URI (Uniform Resource Identifier)</code></pre>
+							<p>Une ressource Web est une donnée adressable par une ou plusieurs URI.</p>
+							<p>Exemple : ce cours est adressable à partir de l'URI <a href="http://spoonless.github.io/epsi-i4-web-services" class="explicit">http://spoonless.github.io/epsi-i4-web-services</a></p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Une ressource de Web service peut être accessible à partir de plusieurs URI. Une bonne pratique consiste à considérer qu'une des URI est l'URI "canonique".</p>
+							<p>Exemple d'un service pour connaître la liste des étudiants :</p>
+							<pre><code class="http">http://epsi.fr/bordeaux/informatique/i4/etudiants/2014 (URI canonique)</code></pre>
+							<pre><code class="http">http://epsi.fr/bordeaux/informatique/i4/etudiants/annee-courante</code></pre>
+							<p>Ces deux URI désignent la même ressource pendant une période.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Le serveur peut rediriger le client vers l'URI "canonique".</p>
+							<figure>
+								<figcaption>Canonicalisation par redirection</figcaption>
+								<pre><code class="http">GET /bordeaux/informatique/i4/etudiants/annee-courante HTTP/1.1
+Host: epsi.fr
+								</code></pre>
+								<pre><code class="http">HTTP/1.1 303 See Other
+Location: http://epsi.fr/bordeaux/informatique/i4/etudiants/2014
+
+</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Le serveur peut simplement informer le client qu'il existe une URI "canonique" grâce à l'en-tête <em>Content-location</em> dans la réponse.</p>
+							<figure>
+								<figcaption>Canonicalisation par lien</figcaption>
+								<pre><code class="http">GET /bordeaux/informatique/i4/etudiants/annee-courante HTTP/1.1
+Host: epsi.fr
+								</code></pre>
+								<pre><code class="http">HTTP/1.1 200 OK
+Content-location: http://epsi.fr/bordeaux/informatique/i4/etudiants/2014
+Content-type: application/xml; charset=utf-8
+Content-length: 436
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;etudiants&gt;
+  ...
+&lt;/etudiants&gt;</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Une bonne pratique est de définir des URI descriptives et hiérarchiques</p>
+							<pre><code class="http">http://epsi.fr/bordeaux/informatique/i4/etudiants/2014</code></pre>
+							<p>Cette URI suit un pattern facilement compréhensible :</p>
+							<pre><code class="http">http://epsi.fr/{ville}/{spécialité}/{code année}/etudiants/{promotion}</code></pre>
+							<p>Des URIs bien conçues facilitent l'utilisation des services.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>REST ne doit pas être confondu avec une autre approche de système distribué : le RPC (Remote Procedure Call)</p>
+							<p>Les services RPC exposent des procédures et sont <strong>orientés traitement</strong>. Le client envoie des paramètres et demande au serveur de lui retourner un résultat.</p>
+							<p>Les URI des Web services RPC se terminent souvent par des verbes.</p>
+						</article>
+					</section>
+					<section data-background="#FA5858">
+						<article>
+							<p>Idée fausse : Je développe des Web Services RESTful car mes services sont chacuns accessibles <i>via</i> une URI.</p>
+							<p>Exemple d'URI non RESTful:</p>
+							<pre><code class="http">http://mon.site.com/article147/delete</code></pre>
+							<pre><code class="http">http://mon.site.fr/data?ressource=ma+ressource</code></pre>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>La représentation</header>
+							<p>Dans une architecture REST, un client et un serveur n'échangent pas une ressource 
+							mais une représentation, c'est-à-dire <em>un ensemble de données relatives à l'état courant d'une ressource</em>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Une même ressource Web peut avoir plusieurs représentations : une image JPEG, une page HTML, un document XML, un document JSON...</p>
+							<p>Un serveur peut choisir la représentation de la ressource pour correspondre au mieux aux capacités du client : on parle de négociation de contenu.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>La négociation de contenu peut se faire grâce à l'en-tête <em>Accept</em> dans la requête</p>
+							<figure>
+								<figcaption>Négociation de contenu par en-tête</figcaption>
+								<pre><code class="http">GET /bordeaux/informatique/i4/etudiants/2014 HTTP/1.1
+Host: epsi.fr
+Accept: image/jpeg, application/json, */*
+								</code></pre>
+								<pre><code class="http">HTTP/1.1 200 OK
+Content-type: application/json; charset=utf-8
+Content-length: 350
+
+{
+  ...
+}</code></pre>
+							</figure>
+							<p>Si le serveur ne peut fournir une représentation acceptable par le client, il peut répondre le code erreur 415 "Unsupported Media Type".</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>La négociation de contenu peut se faire avec l'extension utilisée dans le chemin de la ressource.</p>
+							<figure>
+								<figcaption>Négociation de contenu par extension</figcaption>
+								<pre><code class="http">GET /bordeaux/informatique/i4/etudiants/2014.json HTTP/1.1
+Host: epsi.fr
+								</code></pre>
+								<pre><code class="http">HTTP/1.1 200 OK
+Content-type: application/json; charset=utf-8
+Content-length: 350
+
+{
+  ...
+}</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section data-background="#FA5858">
+						<article>
+							<p>Idée fausse : Je développe des Web Services RESTful car mon serveur retourne du JSON (ou XML (ou YAML (ou ATOM))).</p>
+						</article>
+					</section>
+				</section>
+				<section>
+					<article>
+						<header>Les contraintes REST</header>
+						<ul>
+							<li>client/serveur</li>
+							<li>interface uniforme (uniform interface)</li>
+							<li>sans état (stateless)</li>
+							<li>mise en cache</li>
+							<li>Layered System</li>
+							<li>Code-On-Demand</li>
+						</ul>
+					</article>
 				</section>
 			</div>
 

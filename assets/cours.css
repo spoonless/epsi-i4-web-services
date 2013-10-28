@@ -44,12 +44,16 @@
 	border-bottom: thin solid rgb(180,180,180);
 }
 
-blockquote:before {
+blockquote>*:first-child:before {
 	content: "\00201C";
 }
 
-blockquote:after {
+blockquote>*:first-child:after {
 	content: "\00201D";
+}
+
+blockquote>footer {
+	text-align: right;
 }
 
 .reveal nav {
