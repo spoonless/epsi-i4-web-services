@@ -223,17 +223,309 @@ Content-length: 350
 					</section>
 				</section>
 				<section>
+					<section>
+						<article>
+							<header>Les contraintes REST</header>
+							<ul>
+								<li>client/serveur</li>
+								<li>interface uniforme (uniform interface)</li>
+								<li>sans état (stateless)</li>
+								<li>mise en cache</li>
+								<li>Layered System</li>
+								<li>Code-On-Demand</li>
+							</ul>
+						</article>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>client/serveur</dt>
+								<dd>
+									<p>L'architecture <a href="http://en.wikipedia.org/wiki/Client_server" target="wiki">Client/Serveur</a>
+									 est une architecture logique centralisée pour le développement d'applications distribuées.</p> 
+									 <p>Un programme serveur se met en attente de requêtes de programmes clients vers lesquels il retourne
+									 une réponse.</p>
+
+									 <dl>
+									 	<dt>Web</dt>
+									 	<dd>Le Web est en grande partie conçu à partir de cette contrainte. HTTP est un protocole élaboré à partir du modèle client/serveur.</dd>
+									 </dl>
+									 
+									 <dl>
+									 	<dt>JAX-RS</dt>
+									 	<dd>JAX-RS repose sur le conteneur Web Java EE pour rendre les services accessibles en HTTP.</dd>
+									 </dl>
+								</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>interface uniforme (uniform interface)</dt>
+								<dd>
+									<p>Les composants d'une architecture REST doivent utiliser une interface uniforme.
+									Limiter l'interface permet de conserver une architecture simplifiée (plus simple à comprendre et plus simple à faire évoluer).
+									</p>
+									<dl>
+										<dt>Web</dt>
+										<dd>L'interface est contrainte par la méthode HTTP, l'URI et le content-type</dd>
+									</dl>
+									
+									<dl>
+										<dt>JAX-RS</dt>
+										<dd>Associe une méthode Java à une méthode HTTP (@GET, @POST, ...), au chemin de ressource (@Path)
+										et au content-type de la requête (@Consumes) et de la réponse (@Produces).</dd>
+									</dl>
+								</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>sans état (stateless)</dt>
+								<dd>
+									<p>Une requête doit contenir l'ensemble de l'information nécessaire à son traitement.
+									Chaque requête est donc "sans mémoire" (indépendantes de l'ordre des requêtes précédentes).
+									Les informations de session sont conservées uniquement par l'application cliente.</p>
+									<p>Le respect de cette contrainte permet de construire des architectures plus sûres et plus scalables.</p>
+
+									 <dl>
+									 	<dt>Web</dt>
+									 	<dd>Il existe des techniques très largement répandues qui enfreignent cette contrainte : utilisation des cookies pour identifier une session utilisateur temporaire sur le serveur.</dd>
+									 </dl>
+									 
+									 <dl>
+									 	<dt>JAX-RS</dt>
+									 	<dd>JAX-RS est une API sans état. Il est néanmoins possible de développer des applications Web Java EE avec état (stateful).</dd>
+									 </dl>
+								</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>mise en cache</dt>
+								<dd><p>La mise en cache est nécessaire pour améliorer l'efficacité des échanges réseaux. Cela implique que la représentation
+								d'une ressource doit pouvoir indiquée si elle peut être mise en cache par le client ou un système intermédiare.
+								</p>
+									<dl>
+										<dt>Web</dt>
+										<dd>Le Web dispose de multiple composants pour la mise en cache (navigateurs Web, proxies...). De plus HTTP supporte
+										la définition des stratégies de cache et les requêtes conditionnelles grâce aux en-têtes 
+										<a href="http://fr.wikipedia.org/wiki/Cache-Control" target="_blank">Cache-controle</a>, <a href="http://en.wikipedia.org/wiki/HTTP_ETag" target="_blank">ETag</a>, <a href="http://en.wikipedia.org/wiki/HTTP_ETag" target="_blank">If-None-Match</a>, If-Modified-Since.
+										</dd>
+									</dl>
+									
+									<dl>
+										<dt>JAX-RS</dt>
+										<dd>JAX-RS intègre l'évaluation des préconditions d'une requête HTTP grâce aux méthodes <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Request.html" target="_blank">Request.evaluatePreconditions()</a>
+										</dd>
+									</dl>
+								</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<figure>
+							<figcaption>Gestion des préconditions avec JAX-RS</figcaption>
+							<pre><code class="java" data-trim>
+@Path("/bill/{ref}")
+@GET
+public Response getBill(@PathParam("ref") String ref, @Context Request req){
+
+  Bill bill = billRepository.get(ref);
+
+  EntityTag etag = new EntityTag(Integer.toString(bill.hashCode()));
+  
+  ResponseBuilder builder = req.evaluatePreconditions(etag);
+
+  // Si la précondition échoue, builder sera null
+  if(builder == null){
+    // L'etag n'est pas celui transmis par le client 
+    // (ou le client n'en a pas fourni), il faut retourner les données.
+    builder = Response.ok(bill);
+    
+    // On retourne l'Etag au client
+    builder.tag(etag);
+  }
+
+  return builder.build();
+}
+							</code></pre>
+						</figure>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>layered system</dt>
+								<dd>
+									 <dl>
+									 	<dt>Web</dt>
+									 	<dd></dd>
+									 </dl>
+									 
+									 <dl>
+									 	<dt>JAX-RS</dt>
+									 	<dd></dd>
+									 </dl>
+								</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<dl>
+								<dt>code-on-demand</dt>
+								<dd>
+									 <dl>
+									 	<dt>Web</dt>
+									 	<dd></dd>
+									 </dl>
+									 
+									 <dl>
+									 	<dt>JAX-RS</dt>
+									 	<dd></dd>
+									 </dl>
+								</dd>
+							</dl>
+						</article>
+					</section>
+				</section>
+				<section>
 					<article>
-						<header>Les contraintes REST</header>
-						<ul>
-							<li>client/serveur</li>
-							<li>interface uniforme (uniform interface)</li>
-							<li>sans état (stateless)</li>
-							<li>mise en cache</li>
-							<li>Layered System</li>
-							<li>Code-On-Demand</li>
-						</ul>
+						<header>HATEOAS</header>
+						<p>Dans sa thèse, Roy Fielding cite une contrainte de l'interface uniforme :</p>
+						<blockquote>
+							<span>hypermedia as the engine of application state</span>
+						</blockquote>
+						<p>Cette contrainte est couramment abrégée en HATEOAS. Mais que signifie-t-elle ?</p>
 					</article>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Exemple : Paiement de factures</header>
+							<figure>
+								<figcaption>Activité d'un système de paiement de factures</figcaption>
+								<img src="assets/images/diagramme_activite_paiement_facture.svg" >
+							</figure>
+							<p>Comment modéliser un système de paiement de factures RESTful ?</p>
+						</article>
+					</section>
+					<section>
+						<figure>
+							<figcaption>Création d'une facture</figcaption>
+							<pre><code class="http">PUT /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
+Host: facture-en-ligne.fr
+Content-type: application/x-www-form-urlencoded; charset=utf-8
+[...]
+
+montant=2100&amp;client=MonClient</code></pre>
+							<pre><code class="http">HTTP/1.1 201 CREATED
+[...]
+
+</code></pre>
+						</figure>
+					</section>
+					<section>
+						<figure>
+							<figcaption>Modification d'une facture</figcaption>
+							<pre><code class="http">PUT /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
+Host: facture-en-ligne.fr
+Content-type: application/x-www-form-urlencoded; charset=utf-8
+[...]
+
+montant=2300&amp;client=MonClient</code></pre>
+							<pre><code class="http">HTTP/1.1 200 OK
+[...]
+
+</code></pre>
+						</figure>
+					</section>
+					<section>
+						<figure>
+							<figcaption>Consultation d'une facture (XML avec négociation de contenu)</figcaption>
+							<pre><code class="http">GET /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
+Host: facture-en-ligne.fr
+Accept: application/xml
+[...]
+
+</code></pre>
+							<pre><code class="http">HTTP/1.1 200 OK
+Content-type: application/xml; charset=utf-8
+[...]
+
+&lt;?xml version="1.0" ?&gt;
+&lt;facture&gt;
+  &lt;reference&gt;fact-2013005689&lt;/reference&gt;
+  &lt;client&gt;MonClient&lt;/client&gt;
+  &lt;montant&gt;2300&lt;/montant&gt;
+  &lt;date&gt;2013-11-01T18:30:10Z&lt;/date&gt;
+&lt;/facture&gt;</code></pre>
+						</figure>
+					</section>
+					<section>
+						<figure>
+							<figcaption>Consultation d'une facture (JSON avec négociation de contenu)</figcaption>
+							<pre><code class="http">GET /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
+Host: facture-en-ligne.fr
+Accept: application/json
+[...]
+
+</code></pre>
+							<pre><code class="http">HTTP/1.1 200 OK
+Content-type: application/json; charset=utf-8
+[...]
+
+{'reference':'fact-2013005689', 
+ 'montant':2300, 
+ 'client':'MonClient', 
+ 'date':'2013-11-01T18:30:10Z'}</code></pre>
+						</figure>
+					</section>
+					<section>
+						<figure>
+							<figcaption>Création d'une autorisation de paiement</figcaption>
+							<pre><code class="http">POST /utilisateur/moi/facture/fact-2013005689/autorisation HTTP/1.1
+Host: facture-en-ligne.fr
+Content-type: application/json
+[...]
+
+{'cardOwner':'', 
+ 'cardNumber':'1111222233334444', 
+ 'cardExpiryDate':'122014', 
+ 'cardSecurityNumber':'123'}</code></pre>
+							<pre><code class="http">HTTP/1.1 201 CREATED
+Location: http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689/autorisation/3F2504E0
+[...]
+
+</code></pre>
+						</figure>
+					</section>
+					<section>
+						<figure>
+							<figcaption>Modification d'une facture après autorisation</figcaption>
+							<pre><code class="http">PUT /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
+Host: facture-en-ligne.fr
+Content-type: application/x-www-form-urlencoded; charset=utf-8
+[...]
+
+montant=2312&amp;client=MonClient</code></pre>
+							<pre><code class="http">HTTP/1.1 409 CONFLICT
+Content-type: plain/text; charset=utf-8
+[...]
+
+La facture fact-2013005689 ne peut pas être modifiée car une autorisation 
+de paiement a déjà été effectuée avec succès.</code></pre>
+						</figure>
+						<p>En fonction de l'état des resources, certaines opérations peuvent ne plus être possibles et entraîner un rejet pour conflit.</p>
+					</section>
+				</section>
+				<section>
+					<h2>REST = Representational State Transfer</h2>
 				</section>
 			</div>
 
