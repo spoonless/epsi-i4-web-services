@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -15,7 +16,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
@@ -45,8 +45,8 @@ public class BookmarkResource {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response add(MultivaluedMap<String, String> form) {
-		Bookmark bookmark = new Bookmark(form.getFirst("name"), form.getFirst("description"), form.getFirst("url"));
+	public Response add(@FormParam("name") String name, @FormParam("description") String description, @FormParam("url") String url) {
+		Bookmark bookmark = new Bookmark(name, description, url);
 		return add(bookmark);
 	}
 

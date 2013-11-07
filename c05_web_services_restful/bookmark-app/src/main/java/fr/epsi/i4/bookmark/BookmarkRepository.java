@@ -37,10 +37,13 @@ public class BookmarkRepository {
 	}
 
 	@PostConstruct
-	public void populate() throws InvalidBookmarkException {
-		add(UUID.randomUUID().toString(), new Bookmark("restcookbook", "quelques articles intéressants sur REST", "http://restcookbook.com/"));
-		add(UUID.randomUUID().toString(), new Bookmark("tomee", "Le site officiel de tomee", "http://tomee.apache.org"));
-		add(UUID.randomUUID().toString(), new Bookmark("API REST WoW", "un exemple d'API rest", "http://blizzard.github.io/api-wow-docs/"));
+	public void populate() {
+		try {
+			add(UUID.randomUUID().toString(), new Bookmark("restcookbook", "quelques articles intéressants sur REST", "http://restcookbook.com/"));
+			add(UUID.randomUUID().toString(), new Bookmark("tomee", "Le site officiel de tomee", "http://tomee.apache.org"));
+			add(UUID.randomUUID().toString(), new Bookmark("API REST WoW", "un exemple d'API rest", "http://blizzard.github.io/api-wow-docs/"));
+		} catch (InvalidBookmarkException e) {
+		}
 	}
 
 }
