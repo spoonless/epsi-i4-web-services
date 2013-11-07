@@ -17,7 +17,11 @@ public class Bookmarks {
 		return links;
 	}
 
-	public void addLink(URI uri) {
+	public void addLink(Link link) {
+		links.add(link);
+	}
+
+	public void addBookmarkLink(URI uri) {
 		links.add(new Link(uri, "bookmark"));
 	}
 

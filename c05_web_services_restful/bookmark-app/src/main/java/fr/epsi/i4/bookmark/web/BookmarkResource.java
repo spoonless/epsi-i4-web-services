@@ -83,7 +83,7 @@ public class BookmarkResource {
 		}
 		BookmarkResponse bookmarkResponse = get(latestId);
 		URI contentLocationUri = getUriBuilderFromId(latestId).build();
-		return Response.ok().header("Content-location", contentLocationUri.toASCIIString()).entity(bookmarkResponse).build();
+		return Response.ok().header("Content-Location", contentLocationUri.toASCIIString()).entity(bookmarkResponse).build();
 	}
 
 	@DELETE
@@ -97,9 +97,14 @@ public class BookmarkResource {
 	public Bookmarks getAll() {
 		Bookmarks bookmarks = new Bookmarks();
 
+		UriBuilder uriBuilder = getUriBuilderFromId("{id}");
+
 		for (String id : bookmarkRepository.getIds()) {
-			URI uri = getUriBuilderFromId(id).build();
-			bookmarks.addLink(uri);
+			URI uri = uriBuilder.clone().build(id);
+			bookmarks.addBookmarkLink(uri);
+		}
+		if (!bookmarks.getLinks().isEmpty()) {
+			bookmarks.addLink(new Link(uriBuilder.build("latest"), "latest"));
 		}
 
 		return bookmarks;
