@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bookmarks</title>
+</head>
+<body>
+	<section>
+		<header>Consulter la liste de tous les bookmarks</header>
+		<form action="api/bookmarks/" method="get">
+			<button type="submit">consulter</button>
+		</form>
+	</section>
+	<section>
+		<header>Ajouter un bookmark</header>
+		<form action="api/bookmarks/" method="post">
+			<p><label for="name">Nom :</label><input id="name" type="text" name="name"></p>
+			<p><label for="description">Description :</label><input id="description" type="text" name="description"></p>
+			<p><label for="url">Description :</label><input id="url" type="text" name="url"></p>
+			<p><button type="submit">Ajouter</button></p>
+		</form>
+	</section>
+</body>
+</html>
