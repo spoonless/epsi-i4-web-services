@@ -221,6 +221,51 @@ Content-length: 350
 							<p>Idée fausse : Je développe des Web Services RESTful car mon serveur retourne du JSON (ou XML (ou YAML (ou ATOM))).</p>
 						</article>
 					</section>
+					<section>
+						<article>
+							<p>Pour Java EE, avec JAX-RS, le format de la représentation est géré par les annotations</p>
+							<dl>
+								<dt><a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/Consumes.html" target="_blank">@Consumes</a></dt>
+								<dd>Indique les types MIME du corps de la requête que peut accepter une méthode</dd>
+								<dt><a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/Produces.html" target="_blank">@Produces</a></dt>
+								<dd>Indique les types MIME du corps de la réponse que peut produire une méthode</dd>
+							</dl>
+							<p>JAX-RS inclut un <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html" target="_blank">binding</a>
+							entre les classes Java et les types MIME application/xml, application/json grâce aux annotations JAXB.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>Utilisation des annotations @Consumes et @Produces :</figcaption>
+								<pre><code class="java">
+  @PUT
+  @Path("{id}")
+  @Consumes({ "application/json", "application/xml" })
+  public void merge(@PathParam("id") String id, MyRepresentation rep) {
+    // ...
+  }
+
+  @GET
+  @Path("{id}")
+  @Produces({ "application/json", "application/xml" })
+  public MyRepresentation get(@PathParam("id") String id) {
+    // ...
+  }
+								</code></pre>
+							</figure>
+							<figure>
+								<figcaption>Utilisation du binding JAXB sur la représentation</figcaption>
+
+								<pre><code class="java">
+@XmlRootElement
+public class MyRepresentation {
+  // ...
+}
+								</code></pre>
+							</figure>
+						</article>
+					</section>
 				</section>
 				<section>
 					<section>
@@ -231,8 +276,8 @@ Content-length: 350
 								<li>interface uniforme (uniform interface)</li>
 								<li>sans état (stateless)</li>
 								<li>mise en cache</li>
-								<li>Layered System</li>
-								<li>Code-On-Demand</li>
+								<li>layered system</li>
+								<li>code-on-demand</li>
 							</ul>
 						</article>
 					</section>
@@ -315,7 +360,7 @@ Content-length: 350
 										<dt>Web</dt>
 										<dd>Le Web dispose de multiple composants pour la mise en cache (navigateurs Web, proxies...). De plus HTTP supporte
 										la définition des stratégies de cache et les requêtes conditionnelles grâce aux en-têtes 
-										<a href="http://fr.wikipedia.org/wiki/Cache-Control" target="_blank">Cache-controle</a>, <a href="http://en.wikipedia.org/wiki/HTTP_ETag" target="_blank">ETag</a>, <a href="http://en.wikipedia.org/wiki/HTTP_ETag" target="_blank">If-None-Match</a>, If-Modified-Since.
+										<a href="http://fr.wikipedia.org/wiki/Cache-Control" target="_blank">Cache-control</a>, <a href="http://en.wikipedia.org/wiki/HTTP_ETag" target="_blank">ETag</a>, <a href="http://en.wikipedia.org/wiki/HTTP_ETag" target="_blank">If-None-Match</a>, If-Modified-Since.
 										</dd>
 									</dl>
 									
@@ -361,15 +406,19 @@ public Response getBill(@PathParam("ref") String ref, @Context Request req){
 						<article>
 							<dl>
 								<dt>layered system</dt>
-								<dd>
+								<dd>Une architecture REST doit être composée en couches hiérarchiques.
+								Un composant ne peut dialoguer qu'avec ses voisins immédiats, c'est-à-dire les composants
+								appartenant aux couches adjacentes. Cette contrainte permet d'éviter un système centralisé et favorise
+								les techniques de mise en cache et de load balancing. 
 									 <dl>
 									 	<dt>Web</dt>
-									 	<dd></dd>
+									 	<dd>Le Web est largement conçu selon cette contrainte. Des composants spécialisés comme les proxy
+									 	et les firewalls permettent de renforcer une architecture en couche.</dd>
 									 </dl>
 									 
 									 <dl>
 									 	<dt>JAX-RS</dt>
-									 	<dd></dd>
+									 	<dd>Cette contrainte n'a pas de répercussion sur l'API JAX-RS.</dd>
 									 </dl>
 								</dd>
 							</dl>
@@ -379,15 +428,18 @@ public Response getBill(@PathParam("ref") String ref, @Context Request req){
 						<article>
 							<dl>
 								<dt>code-on-demand</dt>
-								<dd>
+								<dd>Il s'agit d'une contrainte optionnelle de l'architecture REST. 
+								Un client peut étendre ses fonctionnalités en téléchargeant du code exécutable.								
 									 <dl>
 									 	<dt>Web</dt>
-									 	<dd></dd>
+									 	<dd>Le code-on-demand est trés largement utilisé dans le Web pour les humains 
+									 	avec en particulier le support de JavaScript pour étendre les fonctionnalités du navigateur Web.</dd>
 									 </dl>
 									 
 									 <dl>
 									 	<dt>JAX-RS</dt>
-									 	<dd></dd>
+									 	<dd>Cette contrainte n'est présente dans l'API JAX-RS. Cependant, elle peut être implémentée facilement
+									 	grâce au <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html" target="_blank">MessageBodyWriter</a>.</dd>
 									 </dl>
 								</dd>
 							</dl>
