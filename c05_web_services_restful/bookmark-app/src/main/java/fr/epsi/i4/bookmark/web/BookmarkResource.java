@@ -24,7 +24,6 @@ public class BookmarkResource {
 	private final String id;
 	
 	public BookmarkResource(BookmarkRepository bookmarkRepository, String id) {
-		super();
 		this.bookmarkRepository = bookmarkRepository;
 		this.id = id;
 	}
