@@ -1,7 +1,9 @@
 package fr.epsi.i4.bookmark;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -49,10 +51,25 @@ public class BookmarkRepository {
 
 	@PostConstruct
 	public void populate() {
+		List<Bookmark> bookmarks = new ArrayList<>();
+		bookmarks.add(new Bookmark("restcookbook", "quelques articles intéressants sur REST", "http://restcookbook.com/"));
+		bookmarks.add(new Bookmark("Richardson Maturity Model", "évaluer le niveau RESTful d'une API", "http://martinfowler.com/articles/richardsonMaturityModel.html"));
+		bookmarks.add(new Bookmark("freegeoip", "Un exemple de web service RESTful", "http://freegeoip.net/"));
+		bookmarks.add(new Bookmark("OpenBeer", "Un exemple de web service RESTful", "http://openbeerdatabase.com/"));
+		bookmarks.add(new Bookmark("API WoW", "Un exemple de web service RESTful", "http://blizzard.github.io/api-wow-docs/"));
+		bookmarks.add(new Bookmark("Annuaire Web services RESTful", "Pour trouvez des web services publics", "http://www.programmableweb.com/apis/directory"));
+		bookmarks.add(new Bookmark("Document Jersey", "La documentation du framework Jersey", "https://jersey.java.net/documentation/latest/"));
+		bookmarks.add(new Bookmark("How to get a cup of coffee", "Starbuck en RESTfule", "http://www.infoq.com/articles/webber-rest-workflow"));
+		bookmarks.add(new Bookmark("HTTP RFC", "Le document décrivant HTTP", "http://www.w3.org/Protocols/rfc2616/rfc2616.html"));
+		bookmarks.add(new Bookmark("Java EE 6", "Un article introductif sur Java EE 6", "http://blog.ippon.fr/2011/03/21/java-ee-6-ici-et-maintenant/"));
+		bookmarks.add(new Bookmark("Spring vs. Java EE 6", "Un article sur l'évolution du Spring Framework par rapport à Java EE", "http://blog.ippon.fr/2010/03/30/les-rendez-vous-manques-de-spring/"));
+		bookmarks.add(new Bookmark("TomEE", "Le site officiel de tomee", "http://tomee.apache.org"));
+		bookmarks.add(new Bookmark("TomEE and Maven", "Post sur l'utilisation de Maven avec TomEE", "http://werpublogs.blogspot.fr/2012/11/tomee-and-maven.html"));
+
 		try {
-			add(UUID.randomUUID().toString(), new Bookmark("restcookbook", "quelques articles intéressants sur REST", "http://restcookbook.com/"));
-			add(UUID.randomUUID().toString(), new Bookmark("tomee", "Le site officiel de tomee", "http://tomee.apache.org"));
-			add(UUID.randomUUID().toString(), new Bookmark("API REST WoW", "un exemple d'API rest", "http://blizzard.github.io/api-wow-docs/"));
+			for (Bookmark bookmark : bookmarks) {
+				add(UUID.randomUUID().toString(), bookmark);
+			}
 		} catch (InvalidBookmarkException e) {
 		}
 	}
