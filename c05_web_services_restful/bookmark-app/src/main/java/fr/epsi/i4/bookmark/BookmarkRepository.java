@@ -1,6 +1,6 @@
 package fr.epsi.i4.bookmark;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -11,7 +11,13 @@ import javax.ejb.Singleton;
 @Singleton
 public class BookmarkRepository {
 
-	private final Map<String, Bookmark> map = new HashMap<>();
+	private final Map<String, Bookmark> map = new LinkedHashMap<String, Bookmark>() {
+		private static final long serialVersionUID = -4842188442391736903L;
+
+		protected boolean removeEldestEntry(Map.Entry<String,Bookmark> eldest) {
+			return this.size() > 100;
+		};
+	};
 	private String latestId;
 
 	public synchronized void add(String id, Bookmark bookmark) throws InvalidBookmarkException {

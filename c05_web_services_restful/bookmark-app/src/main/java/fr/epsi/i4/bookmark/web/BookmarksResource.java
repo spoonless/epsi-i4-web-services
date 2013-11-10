@@ -30,7 +30,7 @@ public class BookmarksResource {
 
 	@Context
 	private UriInfo uriInfo;
-
+	
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response add(Bookmark bookmark) {
@@ -79,7 +79,7 @@ public class BookmarksResource {
 			bookmarks.addBookmarkLink(uri);
 		}
 		if (!bookmarks.getLinks().isEmpty()) {
-			bookmarks.addLink(new Link(uriBuilder.build("latest"), "latest"));
+			bookmarks.addNavigationLink(new Link(uriBuilder.build("latest"), "latest"));
 		}
 
 		return bookmarks;
