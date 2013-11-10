@@ -5,12 +5,14 @@ import java.util.UUID;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -69,20 +71,32 @@ public class BookmarksResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Bookmarks getAll() {
-		Bookmarks bookmarks = new Bookmarks();
+	public BookmarksResponse get(@QueryParam("startIndex") @DefaultValue("0") int startIndex, @QueryParam("itemCount") @DefaultValue("10") int itemCount) {
+		if (startIndex < 0) {
+			throwBadRequest("startIndex query parameter must be zero or a positive integer!");
+		}
+		if (itemCount <= 0) {
+			throwBadRequest("itemCount query parameter must be positive!");
+		}
+		
+		BookmarksResponse bookmarksResponse = new BookmarksResponse();
+		bookmarksResponse.setStartIndex(startIndex);
+		bookmarksResponse.setItemCount(itemCount);
 
 		UriBuilder uriBuilder = getUriBuilderFromId("{id}");
 
-		for (String id : bookmarkRepository.getIds()) {
+		for (String id : bookmarkRepository.getIds(startIndex, itemCount)) {
 			URI uri = uriBuilder.build(id);
-			bookmarks.addBookmarkLink(uri);
-		}
-		if (!bookmarks.getLinks().isEmpty()) {
-			bookmarks.addNavigationLink(new Link(uriBuilder.build("latest"), "latest"));
+			bookmarksResponse.addBookmarkLink(uri);
 		}
 
-		return bookmarks;
+		bookmarksResponse.addNavigationLinks(uriInfo.getRequestUriBuilder());
+
+		return bookmarksResponse;
+	}
+
+	private void throwBadRequest(String message) {
+		throw new WebApplicationException(Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(message).build());
 	}
 
 	private UriBuilder getUriBuilderFromId(String id) {

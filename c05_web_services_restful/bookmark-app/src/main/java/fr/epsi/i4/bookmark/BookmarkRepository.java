@@ -1,8 +1,8 @@
 package fr.epsi.i4.bookmark;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -38,8 +38,13 @@ public class BookmarkRepository {
 		map.remove(id);
 	}
 
-	public synchronized Set<String> getIds() {
-		return map.keySet();
+	public synchronized String[] getIds(int startIndex, int itemCount) {
+		String[] emptyArray = new String[0];
+		if (startIndex >= map.size()) {
+			return emptyArray;
+		}
+		String[] keys = map.keySet().toArray(emptyArray);
+		return Arrays.copyOfRange(keys, startIndex, Math.min(startIndex + itemCount, keys.length));
 	}
 
 	@PostConstruct
