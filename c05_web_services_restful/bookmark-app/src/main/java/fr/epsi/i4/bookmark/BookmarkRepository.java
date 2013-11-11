@@ -16,7 +16,6 @@ public class BookmarkRepository {
 			return this.size() > 100;
 		};
 	};
-	private String latestId;
 	
 	public BookmarkRepository() {
 		populate();
@@ -25,11 +24,11 @@ public class BookmarkRepository {
 	public synchronized void add(String id, Bookmark bookmark) throws InvalidBookmarkException {
 		bookmark.validate();
 		map.put(id, bookmark);
-		latestId = id;
 	}
 
 	public synchronized String getLatestId() {
-		return latestId;
+		String[] keys = map.keySet().toArray(new String[map.size()]);
+		return keys.length == 0 ? null : keys[keys.length -1];
 	}
 
 	public synchronized Bookmark get(String id) {
