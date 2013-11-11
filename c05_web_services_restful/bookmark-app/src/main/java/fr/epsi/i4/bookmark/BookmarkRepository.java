@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-
-@Singleton
 public class BookmarkRepository {
 
 	private final Map<String, Bookmark> map = new LinkedHashMap<String, Bookmark>() {
@@ -21,6 +17,10 @@ public class BookmarkRepository {
 		};
 	};
 	private String latestId;
+	
+	public BookmarkRepository() {
+		populate();
+	}
 
 	public synchronized void add(String id, Bookmark bookmark) throws InvalidBookmarkException {
 		bookmark.validate();
@@ -49,8 +49,7 @@ public class BookmarkRepository {
 		return Arrays.copyOfRange(keys, startIndex, Math.min(startIndex + itemCount, keys.length));
 	}
 
-	@PostConstruct
-	public void populate() {
+	private void populate() {
 		List<Bookmark> bookmarks = new ArrayList<>();
 		bookmarks.add(new Bookmark("restcookbook", "quelques articles intéressants sur REST", "http://restcookbook.com/"));
 		bookmarks.add(new Bookmark("Richardson Maturity Model", "évaluer le niveau RESTful d'une API", "http://martinfowler.com/articles/richardsonMaturityModel.html"));

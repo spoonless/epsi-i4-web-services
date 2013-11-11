@@ -3,7 +3,6 @@ package fr.epsi.i4.bookmark.web;
 import java.net.URI;
 import java.util.UUID;
 
-import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -27,8 +26,7 @@ import fr.epsi.i4.bookmark.BookmarkRepository;
 @Path("bookmarks")
 public class BookmarksResource {
 
-	@EJB
-	private BookmarkRepository bookmarkRepository;
+	private BookmarkRepository bookmarkRepository = new BookmarkRepository();
 
 	@Context
 	private UriInfo uriInfo;
@@ -60,12 +58,6 @@ public class BookmarksResource {
 	
 	@Path("{id}")
 	public BookmarkResource createBookmarkResource(@PathParam("id") String id) {
-		if ("latest".equals(id)) {
-			id = bookmarkRepository.getLatestId();
-			if (id == null) {
-				throw new WebApplicationException(Status.NOT_FOUND);
-			}
-		}
 		return new BookmarkResource(bookmarkRepository, id);
 	}
 
