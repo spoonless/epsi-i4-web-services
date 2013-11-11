@@ -230,16 +230,15 @@ Content-length: 350
 								<dt><a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/Produces.html" target="_blank">@Produces</a></dt>
 								<dd>Indique les types MIME du corps de la réponse que peut produire une méthode</dd>
 							</dl>
-							<p>JAX-RS inclut un <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html" target="_blank">binding</a>
-							entre les classes Java et les types MIME application/xml, application/json grâce aux annotations JAXB.</p>
 						</article>
 					</section>
 					<section>
 						<article>
+							<p>JAX-RS inclut un <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html" target="_blank">binding</a>
+							entre les classes Java et les types MIME application/xml, application/json grâce aux annotations JAXB.</p>
 							<figure>
 								<figcaption>Utilisation des annotations @Consumes et @Produces :</figcaption>
-								<pre><code class="java">
-  @PUT
+								<pre><code class="java">  @PUT
   @Path("{id}")
   @Consumes({ "application/json", "application/xml" })
   public void merge(@PathParam("id") String id, MyRepresentation rep) {
@@ -251,16 +250,109 @@ Content-length: 350
   @Produces({ "application/json", "application/xml" })
   public MyRepresentation get(@PathParam("id") String id) {
     // ...
-  }
-								</code></pre>
+  }</code></pre>
 							</figure>
 							<figure>
 								<figcaption>Utilisation du binding JAXB sur la représentation</figcaption>
 
-								<pre><code class="java">
-@XmlRootElement
+								<pre><code class="java">@XmlRootElement
 public class MyRepresentation {
   // ...
+}</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Le type MIME application/x-www-form-urlencoded (formulaire HTML) est supporté grâce à l'annotation 
+							<a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/FormParam.html" target="_blank">@FormParam</a>
+							qui permet de passer un élément du formulaire comme paramètre à la méthode Java.</p>
+							<figure>
+								<figcaption>Utilisation des annotations @Consumes et @FormParam :</figcaption>
+								<pre><code class="java">  @PUT
+  @Path("{id}")
+  @Consumes("application/x-www-form-urlencoded")
+  public void merge(@PathParam("id") String id, 
+                    @FormParam("param1") String param1, 
+                    @FormParam("param2") int param2) {
+    // ...
+  }</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Pour le support des autres types MIME, JAX-RS peut être étendu en fournissant une implémentation des interfaces :</p>
+							<dl>
+								<dt><a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyReader.html" target="_blank">MessageBodyReader&lt;T&gt;</a></dt>
+								<dd>Une interface définissant les méthodes pour la conversion du flux d'entrée de la requête vers une classe Java.</dd>
+								<dt><a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html" target="_blank">MessageBodyWriter&lt;T&gt;</a></dt>
+								<dd>Une interface définissant les méthodes pour la conversion d'une classe Java dans le flux de sortie de la réponse.</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Une implémentation d'un MessageBodyReader&lt;T&gt; ou d'un MessageBodyWriter&lt;T&gt; est limitée au type Java T et aux types MIME spécifiés
+							avec les annotations 
+							<a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/Consumes.html" target="_blank">@Consumes</a>
+							et 
+							<a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/Produces.html" target="_blank">@Produces</a>.</p>
+							<p>Une implémentation d'un MessageBodyReader&lt;T&gt; ou d'un MessageBodyWriter&lt;T&gt; DOIT être annotée avec
+							<a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/Provider.html" target="_blank">@Provider</a>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>La structure d'une implémentation d'un MessageBodyWriter&lt;T&gt;</figcaption>
+								<pre><code class="java">
+@Provider
+@Produces("image/png")
+public class ImageBodyWriter implements MessageBodyWriter&lt;MyRepresentation&gt;{
+
+  public long getSize(String s, Class&lt;?&gt; rawType, Type genericType, 
+                      Annotation[] annotations, MediaType mediaType) {
+    // ...
+  }
+
+  public boolean isWriteable(Class&lt;?&gt; rawType, Type genericType, 
+                             Annotation[] annotations, MediaType mediaType){
+    // ...
+  }
+
+  public void writeTo(MyRepresentation s, Class&lt;?&gt; rawType, 
+                      Type genericType, Annotation[] annotations, 
+                      MediaType mediaType, 
+                      MultivaluedMap&lt;String, Object&gt; httpHeaders, 
+                      OutputStream entityStream) throws IOException {
+    // ...
+  }
+
+}
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les classes annotées avec 
+							<a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/Provider.html" target="_blank">@Provider</a>
+							sont ensuite rendu disponible à JAX-RS par la classe représentant l'application
+							(c'est-à-dire la classe qui implemente <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Application.html" target="_blank">Application</a>).</p>
+							<figure>
+								<figcaption>Déclaration d'un provider dans une application :</figcaption>
+								<pre><code class="java">
+@ApplicationPath("api")
+public class MyApplication extends Application {
+
+  @Override
+  public Set&lt;Class&lt;?&gt;&gt; getClasses() {
+    Set&lt;Class&lt;?&gt;&gt; classes = new HashSet&lt;Class&lt;?&gt;&gt;();
+    classes.add(ImageBodyWriter.class);
+    return classes;
+  }
+
 }
 								</code></pre>
 							</figure>
@@ -358,7 +450,7 @@ public class MyRepresentation {
 								</p>
 									<dl>
 										<dt>Web</dt>
-										<dd>Le Web dispose de multiple composants pour la mise en cache (navigateurs Web, proxies...). De plus HTTP supporte
+										<dd>Le Web dispose de multiples composants pour la mise en cache (navigateurs Web, proxies...). De plus HTTP supporte
 										la définition des stratégies de cache et les requêtes conditionnelles grâce aux en-têtes 
 										<a href="http://fr.wikipedia.org/wiki/Cache-Control" target="_blank">Cache-control</a>, <a href="http://en.wikipedia.org/wiki/HTTP_ETag" target="_blank">ETag</a>, <a href="http://en.wikipedia.org/wiki/HTTP_ETag" target="_blank">If-None-Match</a>, If-Modified-Since.
 										</dd>
@@ -578,6 +670,63 @@ de paiement a déjà été effectuée avec succès.</code></pre>
 				</section>
 				<section>
 					<h2>REST = Representational State Transfer</h2>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Références REST et services Web RESTful</header>
+							<dl>
+								<dt>REST cookbook</dt>
+								<dd><a class="explicit" target="_blank" href="http://restcookbook.com/">http://restcookbook.com/</a></dd>
+							</dl>
+							<dl>
+								<dt>Une étude de cas très complète (commander un café en REST)</dt>
+								<dd><a class="explicit" target="_blank" href="http://www.infoq.com/articles/webber-rest-workflow">http://www.infoq.com/articles/webber-rest-workflow</a></dd>
+							</dl>
+							<dl>
+								<dt>Le modèle de maturité de Richardson des web services RESTful</dt>
+								<dd><a class="explicit" target="_blank" href="http://martinfowler.com/articles/richardsonMaturityModel.html">http://martinfowler.com/articles/richardsonMaturityModel.html</a></dd>
+							</dl>
+							<dl>
+								<dt>La thèse de Roy Fielding incluant la présentation de REST</dt>
+								<dd><a class="explicit" target="_blank" href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm</a></dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Références JAX-RS</header>
+							<dl>
+								<dt>La spécification JAX-RS 2.0 en téléchargement</dt>
+								<dd><a class="explicit" target="_blank" href="http://download.oracle.com/otndocs/jcp/jaxrs-2_0-fr-eval-spec/index.html">http://download.oracle.com/otndocs/jcp/jaxrs-2_0-fr-eval-spec/index.html</a></dd>
+							</dl>
+							<dl>
+								<dt>Tutoriels Java EE pour JAX-RS</dt>
+								<dd><a class="explicit" target="_blank" href="http://docs.oracle.com/javaee/6/tutorial/doc/giepu.html">http://docs.oracle.com/javaee/6/tutorial/doc/giepu.html</a></dd>
+							</dl>
+							<dl>
+								<dt>Résumé des principales annotations JAX-RS</dt>
+								<dd><a class="explicit" target="_blank" href="http://www.techferry.com/articles/RESTful-web-services-JAX-RS-annotations.html">http://www.techferry.com/articles/RESTful-web-services-JAX-RS-annotations.html</a></dd>
+							</dl>
+							<dl>
+								<dt>La document de Jersey (implémentation de référence de JAX-RS)</dt>
+								<dd><a class="explicit" target="_blank" href="https://jersey.java.net/documentation/latest/">https://jersey.java.net/documentation/latest/</a></dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Livres</header>
+							<dl>
+								<dt>RESTful Web Services</dt>
+								<dd>Leonard Richardson &amp; Sam Ruby - O'Reilly 2007</dd>
+							</dl>
+							<dl>
+								<dt>Java EE 7 Essentials</dt>
+								<dd>Arun Gupta - O'Reilly 2013</dd>
+							</dl>
+						</article>
+					</section>
 				</section>
 			</div>
 
