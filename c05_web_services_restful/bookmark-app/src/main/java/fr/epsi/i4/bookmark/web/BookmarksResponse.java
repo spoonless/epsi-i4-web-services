@@ -56,7 +56,7 @@ public class BookmarksResponse {
 	}
 	
 	public void addNavigationLinks(UriBuilder uriBuilder) {
-		UriBuilder navUriBuilder = uriBuilder.replaceQueryParam("startIndex", "{startIndex}");
+		UriBuilder navUriBuilder = uriBuilder.clone().replaceQueryParam("startIndex", "{startIndex}");
 		if (this.startIndex > 0) {
 			int previousIndex = Math.max(0, this.startIndex - this.itemCount);
 			this.navigationLinks.add(new Link(navUriBuilder.build(previousIndex),"previousPage"));
@@ -64,6 +64,6 @@ public class BookmarksResponse {
 		if (!this.links.isEmpty() && this.links.size() == this.itemCount) {
 			this.navigationLinks.add(new Link(navUriBuilder.build(this.startIndex + this.itemCount),"nextPage"));
 		}
-		this.navigationLinks.add(new Link(uriBuilder.replaceQuery("").path("latest").build(), "latest"));
+		this.navigationLinks.add(new Link(uriBuilder.path("latest").replaceQuery("").build(), "latest"));
 	}
 }
