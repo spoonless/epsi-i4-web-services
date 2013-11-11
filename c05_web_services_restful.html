@@ -39,7 +39,7 @@
 							<p>Une implémentation qui se conforme à REST est dite <em>RESTful</em>.</p>
 							<p>En 2000, Roy Fielding a formalisé l'architecture REST dans le chapitre 5 de sa <a target="_blank" href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">thèse</a>.</p>
 							<p>En 2007, Leonard Richardson et Sam Ruby présentent ROA (Resource Oriented Architecture) dans leur ouvrage <em>RESTful Web Services</em>.
-							ROA va devenir le modèle d'application de REST pour les Web services.</p>
+							ROA est devenu le modèle d'application de REST pour les Web services.</p>
 						</article>
 					</section>
 					<section>
@@ -266,15 +266,15 @@ public class MyRepresentation {
 						<article>
 							<p>Le type MIME application/x-www-form-urlencoded (formulaire HTML) est supporté grâce à l'annotation 
 							<a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/FormParam.html" target="_blank">@FormParam</a>
-							qui permet de passer un élément du formulaire comme paramètre à la méthode Java.</p>
+							qui permet de passer une valeur d'un élément du formulaire comme paramètre à la méthode Java.</p>
 							<figure>
 								<figcaption>Utilisation des annotations @Consumes et @FormParam :</figcaption>
 								<pre><code class="java">  @PUT
   @Path("{id}")
   @Consumes("application/x-www-form-urlencoded")
   public void merge(@PathParam("id") String id, 
-                    @FormParam("param1") String param1, 
-                    @FormParam("param2") int param2) {
+                    @FormParam("name") String name, 
+                    @FormParam("age") int age) {
     // ...
   }</code></pre>
 							</figure>
@@ -338,13 +338,13 @@ public class ImageBodyWriter implements MessageBodyWriter&lt;MyRepresentation&gt
 						<article>
 							<p>Les classes annotées avec 
 							<a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/Provider.html" target="_blank">@Provider</a>
-							sont ensuite rendu disponible à JAX-RS par la classe représentant l'application
-							(c'est-à-dire la classe qui implemente <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Application.html" target="_blank">Application</a>).</p>
+							sont ensuite rendues disponibles à JAX-RS par la classe représentant l'application
+							(c'est-à-dire la classe qui étend <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Application.html" target="_blank">Application</a>).</p>
 							<figure>
 								<figcaption>Déclaration d'un provider dans une application :</figcaption>
 								<pre><code class="java">
 @ApplicationPath("api")
-public class MyApplication extends Application {
+public class MyApplication extends javax.ws.rs.core.Application {
 
   @Override
   public Set&lt;Class&lt;?&gt;&gt; getClasses() {
@@ -401,7 +401,7 @@ public class MyApplication extends Application {
 							<dl>
 								<dt>interface uniforme (uniform interface)</dt>
 								<dd>
-									<p>Les composants d'une architecture REST doivent utiliser une interface uniforme.
+									<p>Les composants d'une architecture REST doivent tous utiliser la même interface uniforme et restreinte.
 									Limiter l'interface permet de conserver une architecture simplifiée (plus simple à comprendre et plus simple à faire évoluer).
 									</p>
 									<dl>
@@ -424,7 +424,7 @@ public class MyApplication extends Application {
 								<dt>sans état (stateless)</dt>
 								<dd>
 									<p>Une requête doit contenir l'ensemble de l'information nécessaire à son traitement.
-									Chaque requête est donc "sans mémoire" (indépendantes de l'ordre des requêtes précédentes).
+									Chaque requête est donc "sans mémoire" (indépendante de l'ordre des requêtes précédentes).
 									Les informations de session sont conservées uniquement par l'application cliente.</p>
 									<p>Le respect de cette contrainte permet de construire des architectures plus sûres et plus scalables.</p>
 
@@ -435,7 +435,9 @@ public class MyApplication extends Application {
 									 
 									 <dl>
 									 	<dt>JAX-RS</dt>
-									 	<dd>JAX-RS est une API sans état. Il est néanmoins possible de développer des applications Web Java EE avec état (stateful).</dd>
+									 	<dd>JAX-RS est une API sans état. 
+									 	Elle n'inclue pas de mécanisme permettant d'implémenter une session cliente côté serveur. 
+									 	Il est néanmoins possible de développer des applications Web Java EE avec état (stateful).</dd>
 									 </dl>
 								</dd>
 							</dl>
@@ -446,7 +448,7 @@ public class MyApplication extends Application {
 							<dl>
 								<dt>mise en cache</dt>
 								<dd><p>La mise en cache est nécessaire pour améliorer l'efficacité des échanges réseaux. Cela implique que la représentation
-								d'une ressource doit pouvoir indiquée si elle peut être mise en cache par le client ou un système intermédiare.
+								d'une ressource doit pouvoir indiquée si elle peut être mise en cache par le client ou un système intermédiaire.
 								</p>
 									<dl>
 										<dt>Web</dt>
@@ -498,7 +500,7 @@ public Response getBill(@PathParam("ref") String ref, @Context Request req){
 						<article>
 							<dl>
 								<dt>layered system</dt>
-								<dd>Une architecture REST doit être composée en couches hiérarchiques.
+								<dd>Une architecture REST doit être stratifiée en couches hiérarchiques.
 								Un composant ne peut dialoguer qu'avec ses voisins immédiats, c'est-à-dire les composants
 								appartenant aux couches adjacentes. Cette contrainte permet d'éviter un système centralisé et favorise
 								les techniques de mise en cache et de load balancing. 
@@ -530,7 +532,7 @@ public Response getBill(@PathParam("ref") String ref, @Context Request req){
 									 
 									 <dl>
 									 	<dt>JAX-RS</dt>
-									 	<dd>Cette contrainte n'est présente dans l'API JAX-RS. Cependant, elle peut être implémentée facilement
+									 	<dd>Cette contrainte n'est présente pas dans l'API JAX-RS. Cependant, elle peut être implémentée facilement
 									 	grâce au <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html" target="_blank">MessageBodyWriter</a>.</dd>
 									 </dl>
 								</dd>
@@ -539,14 +541,79 @@ public Response getBill(@PathParam("ref") String ref, @Context Request req){
 					</section>
 				</section>
 				<section>
-					<article>
-						<header>HATEOAS</header>
-						<p>Dans sa thèse, Roy Fielding cite une contrainte de l'interface uniforme :</p>
-						<blockquote>
-							<span>hypermedia as the engine of application state</span>
-						</blockquote>
-						<p>Cette contrainte est couramment abrégée en HATEOAS. Mais que signifie-t-elle ?</p>
-					</article>
+					<section>
+						<article>
+							<header>HATEOAS</header>
+							<p>Dans sa thèse, Roy Fielding cite une contrainte spécifique à l'interface uniforme :</p>
+							<blockquote>
+								<span>hypermedia as the engine of application state</span>
+							</blockquote>
+							<p>Cette contrainte est couramment abrégée en HATEOAS. Mais que signifie-t-elle ?</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Un service Web RESTful n'est pas qu'un ensemble d'URI permettant de manipuler
+							des représentations de ressources. Les représentations de ressources sont 
+							des <em>hypermédia</em> : elles contiennent également des liens (URI) vers d'autres
+							ressources.</p>
+							<p>Leonard Richardson utilise le terme <em>connexité</em> (plutôt que HATEOAS) pour décrire
+							cette particularité des services Web RESTful.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>L'implémentation de la connexité peut se faire :</p>
+							<ul>
+								<li>dans l'en-tête de la réponse grâce à l'en-tête <em>Link</em>.</li>
+								<li>dans la représentation de la ressource elle-même.</li>
+							</ul>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>L'en-tête <a target="_blank" href="http://tools.ietf.org/html/rfc5988">Link</a> 
+							permet de spécifier une URI et des paramètres spécifiant le lien.</p>
+							<pre><code>
+  Link: [URI]; [paramètres]
+							</code></pre>
+							<p>Le paramètre <em>rel</em> permet de définir le type de relation.</p>
+							<p>Le paramètre <em>title</em> permet de définir le titre du lien pour afficher à un utilisateur.</p>
+							<figure>
+								<figcaption>Un exemple de lien</figcaption>
+								<pre><code>
+  Link: http://epsi.fr/i04/webservices; rel="cours"; title="Web services"
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>La spécification d'un lien dans la représentation dépend du format des données.
+							Certains formats proposent des façons plus ou moins normalisées de spécifier des liens.</p>
+							<ul>
+								<li>HTML dispose des balises &lt;link&gt; &lt;a&gt; &lt;form&gt;</li>
+								<li>ATOM dispose de la balise &lt;link&gt;</li>
+								<li>XML dispose de l'extension <a target="_blank" href="http://www.yoyodesign.org/doc/w3c/xlink/index.html">XLink</a></li>
+								<li>JSON dispose de l'extension <a target="_blank" href="http://stateless.co/hal_specification.html">HAL</a> (Hypertext Application Language)</li>
+							</ul>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les avantages de la connexité :</p>
+							<ul>
+								<li>Le service Web s'auto-décrit et nécessite une documentation minimale</li>
+								<li>Le client n'a pas besoin de connaître les règles de construction des URI. 
+								Il est plus robuste pour supporter les éventuelles évolutions du service.</li>
+								<li>L'implémentation de services sans état est rendue plus simple : 
+								l'état du client se traduit par les liens suivis plutôt que par une session stockée sur le serveur.</li>
+							</ul>
+						</article>
+					</section>
+				</section>
+				<section>
+					<h2>REST = Representational State Transfer</h2>
 				</section>
 				<section>
 					<section>
@@ -650,26 +717,25 @@ Location: http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689/aut
 						</figure>
 					</section>
 					<section>
-						<figure>
-							<figcaption>Modification d'une facture après autorisation</figcaption>
-							<pre><code class="http">PUT /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
+						<article>
+							<figure>
+								<figcaption>Modification d'une facture après autorisation</figcaption>
+								<pre><code class="http">PUT /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
 Host: facture-en-ligne.fr
 Content-type: application/x-www-form-urlencoded; charset=utf-8
 [...]
 
 montant=2312&amp;client=MonClient</code></pre>
-							<pre><code class="http">HTTP/1.1 409 CONFLICT
+								<pre><code class="http">HTTP/1.1 409 CONFLICT
 Content-type: plain/text; charset=utf-8
 [...]
 
 La facture fact-2013005689 ne peut pas être modifiée car une autorisation 
 de paiement a déjà été effectuée avec succès.</code></pre>
-						</figure>
-						<p>En fonction de l'état des resources, certaines opérations peuvent ne plus être possibles et entraîner un rejet pour conflit.</p>
+							</figure>
+							<p>En fonction de l'état des resources, certaines opérations peuvent ne plus être possibles et entraîner un rejet pour conflit.</p>
+						</article>
 					</section>
-				</section>
-				<section>
-					<h2>REST = Representational State Transfer</h2>
 				</section>
 				<section>
 					<section>

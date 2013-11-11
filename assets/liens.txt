@@ -51,4 +51,5 @@ HTTP
 http://www.jmarshall.com/easy/http/
 https://devcenter.heroku.com/articles/increasing-application-performance-with-http-cache-headers
 https://devcenter.heroku.com/articles/jax-rs-http-caching
+http://tools.ietf.org/html/rfc5988
 
