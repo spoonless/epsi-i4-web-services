@@ -31,6 +31,10 @@ public class BookmarkResource {
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void merge(Bookmark bookmark) {
+		if (bookmark == null) {
+			throw new WebApplicationException(Status.BAD_REQUEST);
+		}
+
 		try {
 			bookmarkRepository.add(id, bookmark);
 		} catch (InvalidBookmarkException e) {
