@@ -643,21 +643,6 @@ montant=2100&amp;client=MonClient</code></pre>
 					</section>
 					<section>
 						<figure>
-							<figcaption>Modification d'une facture</figcaption>
-							<pre><code class="http">PUT /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
-Host: facture-en-ligne.fr
-Content-type: application/x-www-form-urlencoded; charset=utf-8
-[...]
-
-montant=2300&amp;client=MonClient</code></pre>
-							<pre><code class="http">HTTP/1.1 200 OK
-[...]
-
-</code></pre>
-						</figure>
-					</section>
-					<section>
-						<figure>
 							<figcaption>Consultation d'une facture (XML avec négociation de contenu)</figcaption>
 							<pre><code class="http">GET /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
 Host: facture-en-ligne.fr
@@ -667,6 +652,8 @@ Accept: application/xml
 </code></pre>
 							<pre><code class="http">HTTP/1.1 200 OK
 Content-type: application/xml; charset=utf-8
+Link: http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689; rel="modification"
+Link: http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689/autorisation; rel="autorisation"
 [...]
 
 &lt;?xml version="1.0" ?&gt;
@@ -675,6 +662,8 @@ Content-type: application/xml; charset=utf-8
   &lt;client&gt;MonClient&lt;/client&gt;
   &lt;montant&gt;2300&lt;/montant&gt;
   &lt;date&gt;2013-11-01T18:30:10Z&lt;/date&gt;
+  &lt;link href="http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689" method="PUT" rel="modification"/&gt;
+  &lt;link href="http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689/autorisation" method="POST" rel="autorisation"/&gt;
 &lt;/facture&gt;</code></pre>
 						</figure>
 					</section>
@@ -689,12 +678,23 @@ Accept: application/json
 </code></pre>
 							<pre><code class="http">HTTP/1.1 200 OK
 Content-type: application/json; charset=utf-8
+Link: http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689; rel="modification"
+Link: http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689/autorisation; rel="autorisation"
 [...]
 
 {'reference':'fact-2013005689', 
  'montant':2300, 
  'client':'MonClient', 
- 'date':'2013-11-01T18:30:10Z'}</code></pre>
+ 'date':'2013-11-01T18:30:10Z',
+ 'link': [
+   {'href':'http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689',
+     'method':'PUT',
+     'rel':'modification'},
+   {'href':'http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689/autorisation',
+     'method':'POST',
+     'rel':'autorisation'}
+  ]
+ }</code></pre>
 						</figure>
 					</section>
 					<section>
@@ -711,6 +711,21 @@ Content-type: application/json
  'cardSecurityNumber':'123'}</code></pre>
 							<pre><code class="http">HTTP/1.1 201 CREATED
 Location: http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689/autorisation/3F2504E0
+[...]
+
+</code></pre>
+						</figure>
+					</section>
+					<section>
+						<figure>
+							<figcaption>Modification d'une facture</figcaption>
+							<pre><code class="http">PUT /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
+Host: facture-en-ligne.fr
+Content-type: application/x-www-form-urlencoded; charset=utf-8
+[...]
+
+montant=2300&amp;client=MonClient</code></pre>
+							<pre><code class="http">HTTP/1.1 200 OK
 [...]
 
 </code></pre>
@@ -734,6 +749,39 @@ La facture fact-2013005689 ne peut pas être modifiée car une autorisation
 de paiement a déjà été effectuée avec succès.</code></pre>
 							</figure>
 							<p>En fonction de l'état des resources, certaines opérations peuvent ne plus être possibles et entraîner un rejet pour conflit.</p>
+						</article>
+					</section>
+					<section>
+						<figure>
+							<figcaption>Consultation d'une facture après autorisation</figcaption>
+							<pre><code class="http">GET /utilisateur/moi/facture/fact-2013005689 HTTP/1.1
+Host: facture-en-ligne.fr
+Accept: application/xml
+[...]
+
+</code></pre>
+							<pre><code class="http">HTTP/1.1 200 OK
+Content-type: application/xml; charset=utf-8
+Link: http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689/capture; rel="capture"
+[...]
+
+&lt;?xml version="1.0" ?&gt;
+&lt;facture&gt;
+  &lt;reference&gt;fact-2013005689&lt;/reference&gt;
+  &lt;client&gt;MonClient&lt;/client&gt;
+  &lt;montant&gt;2300&lt;/montant&gt;
+  &lt;date&gt;2013-11-01T18:30:10Z&lt;/date&gt;
+  &lt;link href="http://facture-en-ligne.fr/utilisateur/moi/facture/fact-2013005689/capture" method="POST" rel="capture"/&gt;
+&lt;/facture&gt;</code></pre>
+						</figure>
+					</section>
+					<section>
+						<article>
+							<p>Après la création de l'autorisation, la représentation de la facture ne contient plus les liens
+							de modification et d'autorisation. Par contre, le lien pour poster une capture (c'est-à-dire
+							la validation du paiement) est présent.</p>
+							<p>Ceci est une illustration de la connexité entre les ressources. Elle
+							permet de décrire un workflow et guide le client dans l'utilisation du service.</p>
 						</article>
 					</section>
 				</section>
