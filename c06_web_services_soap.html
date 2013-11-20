@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="fr">
+
+	<head>
+		<meta charset="utf-8">
+		<title>I4 Web Services</title>
+		<meta name="author" content="David Gayerie">
+
+		<link rel="stylesheet" href="assets/cours.css">
+		<link rel="stylesheet" href="assets/cours-paper.css" media="print">
+
+		<!--[if lt IE 9]>
+		<script src="assets/reveal.js-2.5.0/lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<nav>
+				<script>
+					if( /^https?:/.test(window.location)) {
+						document.write('<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" class="download">Télécharger</a>');
+					}
+				</script>
+			</nav>
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section class="title">
+					<h1>Web Services SOAP</h1>
+					<p class="copyright">EPSI I4 Web Services / <a class="explicit" href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a> - 2013-2014</p>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>L'interopérabilité</header>
+							<!-- Finir en disant que SOAP est une technique basée sur XML (et pas une architecture comme REST) -->
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>&Ecirc;tes-vous XML addict ?</header>
+							<p>XML = Extensible Markup Language</p>
+							<p>XML est un langage de balisage générique.</p> 
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Un document XML est <strong>bien formé</strong> (well-formed) s'il respecte la recommandation W3.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Ce document XML est-il bien formé ?</p>
+							<pre><code class="xml">
+&lt;cours&gt;
+  &lt;intitulé&gt;Web services&lt;/intitulé&gt;
+  &lt;enseignant&gt;D. Gayerie&lt;/enseignant&gt;
+&lt;/cours&gt;
+							</code></pre>
+							<p class="fragment">Réponse : oui</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Ce document XML est-il bien formé ?</p>
+							<pre><code class="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;cours&gt;
+  &lt;code id="I4WS"&gt;
+  &lt;intitulé&gt;Web services&lt;/intitulé&gt;
+  &lt;enseignant&gt;D. Gayerie&lt;/enseignant&gt;
+&lt;/cours&gt;
+							</code></pre>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Réponse : non</p>
+							<p>La balise code doit être fermée :</p>
+							<pre><code class="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;cours&gt;
+  &lt;code id="I4WS"/&gt;
+  &lt;intitulé&gt;Web services&lt;/intitulé&gt;
+  &lt;enseignant&gt;D. Gayerie&lt;/enseignant&gt;
+&lt;/cours&gt;
+							</code></pre>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Ce document XML est-il bien formé ?</p>
+							<pre><code class="xml">
+&lt;cours&gt;
+  &lt;intitulé&gt;Génie logiciel&lt;/intitulé&gt;
+&lt;/cours&gt;
+&lt;cours&gt;
+  &lt;intitulé&gt;Web services&lt;/intitulé&gt;
+&lt;/cours&gt;
+							</code></pre>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Réponse : non</p>
+							<p>Le document doit contenir un seul élément racine :</p>
+							<pre><code class="xml">
+&lt;programme&gt;
+  &lt;cours&gt;
+    &lt;intitulé&gt;Génie logiciel&lt;/intitulé&gt;
+  &lt;/cours&gt;
+  &lt;cours&gt;
+    &lt;intitulé&gt;Web services&lt;/intitulé&gt;
+  &lt;/cours&gt;
+&lt;/programme&gt;
+							</code></pre>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Ce document XML est-il bien formé ?</p>
+							<pre><code class="xml">
+&lt;programme&gt;
+  &lt;cours code=I4GL&gt;
+    &lt;intitulé&gt;Génie logiciel&lt;/intitulé&gt;
+  &lt;/cours&gt;
+  &lt;cours code=I4WS&gt;
+    &lt;intitulé&gt;Web services&lt;/intitulé&gt;
+  &lt;/cours&gt;
+&lt;/programme&gt;
+							</code></pre>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Réponse : non</p>
+							<p>Les attributs d'un élément doivent être entre guillemets :</p>
+							<pre><code class="xml">
+&lt;programme&gt;
+  &lt;cours code="I4GL"&gt;
+    &lt;intitulé&gt;Génie logiciel&lt;/intitulé&gt;
+  &lt;/cours&gt;
+  &lt;cours code="I4WS"&gt;
+    &lt;intitulé&gt;Web services&lt;/intitulé&gt;
+  &lt;/cours&gt;
+&lt;/programme&gt;
+							</code></pre>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Ce document XML est-il bien formé ?</p>
+							<pre><code class="xml">
+&lt;test&gt;
+  &lt;question&gt;Ce document est-il valide ?&lt;/question&gt;
+  &lt;exemple&gt;
+  &lt;![CDATA[
+  &lt;document&gt;&lt;/DOCUMENT&gt;
+  ]]&gt;
+  &lt;/exemple&gt;
+&lt;/test&gt;
+							</code></pre>
+							<div class="fragment">
+								<p>Réponse : oui</p>
+								<p>La balise spéciale CDATA permet de délimiter une zone traitée comme du texte.</p>
+							</div>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Ce document XML est-il bien formé ?</p>
+							<pre><code class="xml">
+&lt;test&gt;
+  &lt;question&gt;Cette expression est-elle vraie ?&lt;/question&gt;
+  &lt;expression&gt;2 &lt; 3&lt;/expression&gt;
+&lt;/test&gt;
+							</code></pre>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Réponse : non</p>
+							<p>Les caractères &amp; ' &quot; &lt; &gt; doivent être échappés respectivement par &amp;amp; &amp;apos; &amp;quot; &amp;lt; &amp;gt;</p>
+							<pre><code class="xml">
+&lt;test&gt;
+  &lt;question&gt;Cette expression est-elle vraie ?&lt;/question&gt;
+  &lt;expression&gt;2 &amp;lt; 3&lt;/expression&gt;
+&lt;/test&gt;
+							</code></pre>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>SOAP &amp; WSDL</header>
+							<!-- Présenter JAX-WS dans cette section -->
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>WSDL : le langage de description</header>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>SOAP : le langage d'échange</header>
+							<!-- Faire deux exercices de développement : développement orienté code et développement orienté contrat  -->
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Les extensions SOAP</header>
+						</article>
+					</section>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="assets/reveal.js-2.5.0/lib/js/head.min.js"></script>
+		<script src="assets/reveal.js-2.5.0/js/reveal.min.js"></script>
+
+		<script>
+		// Full list of configuration options available here:
+		// https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+			transition: "linear",
+
+			// Optional libraries used to extend on reveal.js
+			dependencies: [
+				{ src: 'assets/reveal.js-2.5.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+				{ src: 'assets/reveal.js-2.5.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+				{ src: 'assets/reveal.js-2.5.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+				{ src: 'assets/reveal.js-2.5.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+			]
+		});
+		</script>
+
+	</body>
+</html>

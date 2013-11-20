@@ -19,7 +19,7 @@ http://blog.paumard.org/cours/jsf/jsf-en-ligne.html
 http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/index.html
 http://java.dzone.com/articles/java-ee-7-deployment
 
-Web services
+Web services RESTful
 
 http://martinfowler.com/articles/richardsonMaturityModel.html
 http://freegeoip.net/
@@ -53,3 +53,12 @@ https://devcenter.heroku.com/articles/increasing-application-performance-with-ht
 https://devcenter.heroku.com/articles/jax-rs-http-caching
 http://tools.ietf.org/html/rfc5988
 
+Web Services SOAP
+
+http://en.wikipedia.org/wiki/SOAP
+http://wiki.apache.org/ws/StackComparison
+http://www.w3.org/TR/soap/
+http://www.w3schools.com/webservices/default.asp
+http://www.w3schools.com/xml/
+
+http://www.w3schools.com/xml/xml_validator.asp
