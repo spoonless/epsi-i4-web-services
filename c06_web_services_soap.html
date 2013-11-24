@@ -34,15 +34,109 @@
 				<section>
 					<section>
 						<article>
-							<header>L'interopérabilité</header>
+							<header>La quête de l'interopérabilité</header>
 							<!-- Finir en disant que SOAP est une technique basée sur XML (et pas une architecture comme REST) -->
+							<p>Comment échanger des informations entre deux processus alors que :</p>
+							<ul>
+								<li>les programmes sont écrits dans des langages différents</li>
+								<li>les processus s'exécutent sur des machines différentes</li>
+								<li>les machines appartiennent à des réseaux différents</li>
+							</ul>
+							<p>Avant l'an 2000, on trouve des solutions telles que Sun RPC, CORBA, DCOM, RMI.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>&Agrave; partir des années 2000, le succés des réseaux IP, de HTTP 
+							et de XML apportent une nouvelle perspective : définir
+							un protocole d'échange de messages XML <i>via</i> HTTP entre deux processus.</p>
+							<p>Ce protocole originellement défini par Microsoft puis maintenu par le W3 s'appelle <strong>SOAP</strong>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Depuis SOAP a été enrichi de nombreuses spécifications et l'ensemble de ces technologies sont désignées sous le terme <strong>WS-*</strong>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>Exemple de message SOAP</figcaption>
+								<pre><code class="xml">&lt;soapenv:Envelope 
+   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+   xmlns:m="http://www.mymeteo.com/webservices/samples"&gt;
+   &lt;soapenv:Header&gt;
+   &lt;/soapenv:Header&gt;
+   &lt;soapenv:Body&gt;
+      &lt;m:meteo&gt;
+         &lt;m:temperature&gt;12&lt;/m:temperature&gt;
+         &lt;m:unite&gt;celsius&lt;/m:unite&gt;
+         &lt;m:ville&gt;Bordeaux&lt;/m:ville&gt;
+      &lt;/m:meteo&gt;
+   &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;</code></pre>
+							</figure>
 						</article>
 					</section>
 				</section>
 				<section>
 					<section>
 						<article>
-							<header>&Ecirc;tes-vous XML addict ?</header>
+							<header>Un premier service Web SOAP avec JAX-WS</header>
+							<p>JAX-WS est l'API Java EE pour l'implémentation de services Web SOAP.</p>
+							<p>JAX-WS utilise JAXB pour le binding Java/XML.</p> 
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>Un premier service Web SOAP</figcaption>
+								<pre><code class="java">
+import javax.ejb.Stateless;
+import javax.jws.WebParam;
+import javax.jws.WebService;
+
+//L'annotation Stateless est nécessaire pour TomEE
+@Stateless 
+@WebService
+public class HelloService {
+	
+  public String sayHello(@WebParam(name="who") String name) {
+    return "Hello " + name;
+  }
+
+}
+								</code></pre>
+							</figure>
+							<p>Cette classe correspond au SEI (Service Endpoint Implementation).</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>Une requête au Web service</figcaption>
+								<pre><code class="xml">
+&lt;soapenv:Envelope 
+   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+   xmlns:i4="http://i4.epsi.fr/"&gt;
+   &lt;soapenv:Header/&gt;
+   &lt;soapenv:Body&gt;
+      &lt;i4:sayHello&gt;
+         &lt;who&gt;david&lt;/who&gt;
+      &lt;/i4:sayHello&gt;
+   &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;
+								</code></pre>
+							</figure>
+							<p>Le message doit être envoyé avec la méthode HTTP POST à l'URL du service
+							(appelée aussi <strong>endpoint</strong>)</p>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Parlez-vous XML&nbsp;?</header>
 							<p>XML = Extensible Markup Language</p>
 							<p>XML est un langage de balisage générique.</p> 
 						</article>
@@ -80,7 +174,7 @@
 					<section>
 						<article>
 							<p>Réponse : non</p>
-							<p>La balise code doit être fermée :</p>
+							<p>L'élément code doit être fermée :</p>
 							<pre><code class="xml">
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;cours&gt;
@@ -193,19 +287,136 @@
 							</code></pre>
 						</article>
 					</section>
-				</section>
-				<section>
 					<section>
 						<article>
-							<header>SOAP &amp; WSDL</header>
-							<!-- Présenter JAX-WS dans cette section -->
+							<p>Un élément d'un document XML peut être associé à un espace de nom.
+							Un espace de nom XML (<strong>XML namespace</strong>) est identifié par une URI. Un espace de nom
+							est déclaré grâce à l'attribut <strong>xmlns</strong>.
+							</p>
 						</article>
 					</section>
-				</section>
-				<section>
 					<section>
 						<article>
-							<header>WSDL : le langage de description</header>
+							<figure>
+								<figcaption>Déclaration d'un espace de nom XML</figcaption>
+								<pre><code class="xml">&lt;programme xmlns="http://epsi.fr/syllabus"&gt;
+  &lt;cours code="I4GL"&gt;
+    &lt;intitulé&gt;Génie logiciel&lt;/intitulé&gt;
+  &lt;/cours&gt;
+  &lt;cours code="I4WS"&gt;
+    &lt;intitulé&gt;Web services&lt;/intitulé&gt;
+  &lt;/cours&gt;
+&lt;/programme&gt;</code></pre>
+							</figure>
+							<p>Un espace de nom XML s'applique à l'élément portant l'attribut 
+							xmlns <strong>et</strong> à tous les éléments fils.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Il est possible de mélanger dans un même document XML des éléments appartenant
+							à des espaces de noms différents.</p>
+							<figure>
+								<figcaption>Document XML contenant plusieurs espaces de nom</figcaption>
+								<pre><code class="xml">&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Exemple MathML&lt;/h1&gt;
+    &lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;
+      &lt;mrow&gt;
+        &lt;mroot&gt;
+          &lt;mrow&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;/mrow&gt;
+          &lt;mrow&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mrow&gt;
+        &lt;/mroot&gt;
+      &lt;/mrow&gt;
+    &lt;/math&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Afin de résoudre les cas ambigus, un espace de nom peut-être identifié par un préfixe.</p>
+							<figure>
+								<figcaption>Document XML contenant plusieurs espaces de nom avec un préfixe</figcaption>
+								<pre><code class="xml">&lt;h:html xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:ma="http://www.w3.org/1998/Math/MathML"&gt;
+  &lt;h:body&gt;
+    &lt;h:h1&gt;Exemple MathML&lt;/h:h1&gt;
+    &lt;ma:math&gt;
+      &lt;ma:mrow&gt;
+        &lt;ma:mroot&gt;
+          &lt;ma:mrow&gt;&lt;ma:mi&gt;b&lt;/ma:mi&gt;&lt;/ma:mrow&gt;
+          &lt;ma:mrow&gt;&lt;ma:mn&gt;3&lt;/ma:mn&gt;&lt;/ma:mrow&gt;
+        &lt;/ma:mroot&gt;
+      &lt;/ma:mrow&gt;
+    &lt;/ma:math&gt;
+  &lt;/h:body&gt;
+&lt;/h:html&gt;</code></pre>
+							</figure>
+							<p>L'espace de nom sans préfixe est appelé l'espace de nom par défaut (<strong>default XML namespace</strong>).</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Un élément XML est défini par :</p>
+							<dl>
+								<dt>Son nom</dt>
+								<dd>Le nom apparaît dans la balise du document.<br>Exemple : body</dd>
+								<dt>Son espace de nom</dt>
+								<dd>L'espace de nom est donné par l'attribut xmlns de l'élément ou d'un des éléments parents.<br>Exemple : http://www.w3.org/1999/xhtml</dd>
+								<dt>Son nom qualifié (qualified name ou QName)</dt>
+								<dd>L'association de l'espace de nom et du nom de l'élement. Il s'agit en fait du nom complet de l'élement.<br>
+								Exemple : {http://www.w3.org/1999/xhtml}:body</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Un document XML est <strong>valide</strong> (valid) si le nom et l'ordre des balises
+							sont conformes à un document de validation.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Un <strong>schéma XML</strong> (XSD) permet d'écrire un document de validation au format XML.</p>
+							<figure>
+								<figcaption>Exemple de schéma XML</figcaption>
+								<pre><code class="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://epsi.fr/syllabus" 
+        targetNamespace="http://epsi.fr/syllabus"
+        elementFormDefault="qualified"&gt;
+  &lt;element name="programme"&gt;
+    &lt;complexType&gt;
+      &lt;sequence&gt;
+        &lt;element name="cours" type="tns:typeCours" 
+         maxOccurs="unbounded" minOccurs="0"/&gt;
+      &lt;/sequence&gt;
+    &lt;/complexType&gt;
+  &lt;/element&gt;
+  &lt;complexType name="typeCours"&gt;
+    &lt;sequence&gt;
+      &lt;element name="intitulé" type="string" 
+       maxOccurs="1" minOccurs="1"/&gt;
+    &lt;/sequence&gt;
+    &lt;attribute name="code" type="string"/&gt;
+  &lt;/complexType&gt;
+&lt;/schema&gt;</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Pour aller plus loin...</header>
+							<dl>
+								<dt>XML</dt>
+								<dd><a href="http://www.w3schools.com/xml/" class="explicit" target="_blank">http://www.w3schools.com/xml/</a></dd>
+								<dt>XML namespace</dt>
+								<dd><a href="http://www.w3schools.com/xml/xml_namespaces.asp" class="explicit" target="_blank">http://www.w3schools.com/xml/xml_namespaces.asp</a></dd>
+								<dt>XML schema</dt>
+								<dd><a href="http://www.w3schools.com/schema/" class="explicit" target="_blank">http://www.w3schools.com/schema/</a></dd>
+							</dl>
 						</article>
 					</section>
 				</section>
@@ -213,7 +424,65 @@
 					<section>
 						<article>
 							<header>SOAP : le langage d'échange</header>
+							<!-- Présenter le format SOAP ainsi que le protocole de gestion des erreurs (SOAP Fault) et les envoi asynchrone  -->
+							<p>SOAP est un simple format de message définit par un schéma XML.</p>
+							<p>Ce schéma XML est disponible à l'URL de son namespace XML : 
+							<a href="http://schemas.xmlsoap.org/soap/envelope/" class="explicit" target="_blank">http://schemas.xmlsoap.org/soap/envelope/</a></p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>Structure d'un message SOAP</figcaption>
+								<pre><code class="xml">&lt;!-- l'enveloppe du message --&gt; 
+&lt;soapenv:Envelope 
+   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+
+  &lt;!-- l'en-tête du message --&gt;
+  &lt;soapenv:Header&gt;
+    &lt;!-- les éventuelles méta-informations --&gt;
+  &lt;/soapenv:Header&gt;
+
+  &lt;!-- le corps de la requête --&gt;
+  &lt;soapenv:Body&gt;
+    &lt;!-- le message (payload) --&gt;
+  &lt;/soapenv:Body&gt;
+
+&lt;/soapenv:Envelope&gt;</code></pre>
+							</figure>
+							<p>Le format d'un message est le même pour la requête et pour la réponse.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>SOAP définit un format pour un type de réponse particulière : une SOAP fault.</p>
+							<p>Une SOAP fault signale un problème lors du traitement de la requête.</p>
+							<figure>
+								<figcaption>Une réponse contenant une SOAP fault</figcaption>
+								<pre><code class="xml">&lt;soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+   &lt;soap:Body&gt;
+      &lt;soap:Fault&gt;
+         &lt;faultcode&gt;soap:Server&lt;/faultcode&gt;
+         &lt;faultstring&gt;Internal server error&lt;/faultstring&gt;
+      &lt;/soap:Fault&gt;
+   &lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt;</code></pre>
+							</figure>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>SOAP &amp; WSDL</header>
 							<!-- Faire deux exercices de développement : développement orienté code et développement orienté contrat  -->
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Consommer des services Web SOAP avec JAX-WS</header>
 						</article>
 					</section>
 				</section>
@@ -222,6 +491,11 @@
 						<article>
 							<header>Les extensions SOAP</header>
 						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>WS-* ou RESTful ?</h2>
 					</section>
 				</section>
 			</div>
