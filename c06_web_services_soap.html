@@ -470,12 +470,169 @@ public class HelloService {
 							</figure>
 						</article>
 					</section>
+					<!-- Parler du oneway -->
 				</section>
 				<section>
 					<section>
 						<article>
-							<header>SOAP &amp; WSDL</header>
-							<!-- Faire deux exercices de développement : développement orienté code et développement orienté contrat  -->
+							<header>WSDL</header>
+							<p>La condition pour utiliser un service Web SOAP est de connaître les opérations
+							disponibles et le format des requêtes et des réponses.</p>
+							<p>WSDL (Web Service Description Language) est un langage XML permettant la
+							description complète d'un service Web SOAP.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>La plupart des <em>stacks</em> SOAP donne accès au WSDL
+							(en le générant dynamiquement si nécessaire).</p>
+							<p>Pour les serveurs d'application Java EE, le WSDL est disponible à la même URL que le service 
+							en ajoutant <strong>wsdl</strong> comme paramètre.</p>
+							<p>Exemple : <a href="http://localhost:8080/hello-service/webservices/HelloService?wsdl" class="explicit" target="_blank">http://localhost:8080/hello-service/webservices/HelloService?wsdl</a></p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>Structure d'un WSDL</figcaption>
+								<pre><code class="xml">&lt;wsdl:definitions 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+  xmlns:tns="http://epsi/" 
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+  xmlns:ns1="http://schemas.xmlsoap.org/soap/http" 
+  name="HelloServiceService" targetNamespace="http://epsi/"&gt;</code></pre>
+
+  								<figcaption>Les types de données au format XML schema</figcaption>
+								<pre><code class="xml">  &lt;wsdl:types&gt;
+  &lt;/wsdl:types&gt;</code></pre>
+
+  								<figcaption>Description des messages</figcaption>
+								<pre><code class="xml">  &lt;wsdl:message name="sayHelloResponse"&gt;
+    &lt;wsdl:part element="tns:sayHelloResponse" name="result"/&gt;
+    &lt;wsdl:part element="tns:serverTime" name="serverTime"/&gt;
+  &lt;/wsdl:message&gt;
+  &lt;wsdl:message name="sayHello"&gt;
+    &lt;wsdl:part element="tns:sayHello" name="parameters"/&gt;
+  &lt;/wsdl:message&gt;</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+  								<figcaption>Description des interfaces (indépendant de SOAP)</figcaption>
+								<pre><code class="xml">  &lt;wsdl:portType name="HelloService"&gt;
+    &lt;wsdl:operation name="sayHello"&gt;
+      &lt;wsdl:input message="tns:sayHello" name="sayHello"/&gt;
+      &lt;wsdl:output message="tns:sayHelloResponse" name="sayHelloResponse"/&gt;
+    &lt;/wsdl:operation&gt;
+  &lt;/wsdl:portType&gt;</code></pre>
+
+  								<figcaption>Liaison des interfaces avec le protocole SOAP</figcaption>
+								<pre><code class="xml">  &lt;wsdl:binding name="HelloServiceServiceSoapBinding" 
+                type="tns:HelloService"&gt;
+    &lt;soap:binding style="document" 
+                  transport="http://schemas.xmlsoap.org/soap/http"/&gt;
+    &lt;wsdl:operation name="sayHello"&gt;
+      &lt;soap:operation soapAction="" style="document"/&gt;
+      &lt;wsdl:input name="sayHello"&gt;
+        &lt;soap:body use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output name="sayHelloResponse"&gt;
+	&lt;soap:header message="tns:sayHelloResponse" 
+	             part="serverTime" use="literal"/&gt;
+        &lt;soap:body parts="result" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+  &lt;/wsdl:binding&gt;</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+  								<figcaption>Localisation du service</figcaption>
+								<pre><code class="xml">  &lt;wsdl:service name="HelloServiceService"&gt;
+    &lt;wsdl:port binding="tns:HelloServiceServiceSoapBinding" 
+               name="HelloServicePort"&gt;
+      &lt;soap:address location="http://localhost:8080/hello-service/webservices/HelloService"/&gt;
+    &lt;/wsdl:port&gt;
+  &lt;/wsdl:service&gt;</code></pre>
+
+								<pre><code class="xml">&lt;/wsdl:definitions&gt;</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Pour aller plus loin...</header>
+							<dl>
+								<dt>WSDL</dt>
+								<dd><a href="http://www.w3schools.com/webservices/ws_wsdl_intro.asp" class="explicit" target="_blank">http://www.w3schools.com/webservices/ws_wsdl_intro.asp</a></dd>
+ 							</dl>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Développer un service Web SOAP</header>
+							<p>On distingue deux approches pour développer un service Web WS-* :</p>
+							<dl>
+								<dt>Contract first</dt>
+								<dd>On définit le contrat du service en spécifiant le WSDL et on utilise des outils pour générer le code.</dd>
+								<dt>Contract last</dt>
+								<dd>On développe le service et on utilise des outils pour générer le WSDL.</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les outils Java</p>
+							<dl>
+								<dt>Java &#8594; WSDL (Contract last)</dt>
+								<dd>On peut demander au serveur de générer le WSDL après le déploiement du service en passant <em>wsdl</em> comme paramètre de l'URL.<br>
+								L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsgen.html" target="_blank">wsgen</a></strong> 
+								livré avec le JDK peut générer un fichier WSDL à partir d'une classe compilée.</dd>
+								<dt>WSDL &#8594; Java (Contract first)</dt>
+								<dd>L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsimport.html" target="_blank">wsimport</a></strong> livré avec le JDK.</dd>
+							</dl>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Pour utiliser <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsimport.html" target="_blank" class="explicit">wsimport</a></strong> :</p>
+							<figure>
+								<figcaption>Générer les classes compilées</figcaption>
+								<pre><code class="bash">wsimport http://localhost:8080/hello-service/webservices/HelloService?wsdl</code></pre>
+								<figcaption>Générer uniquement les sources</figcaption>
+								<pre><code class="bash">wsimport -Xnocompile http://localhost:8080/hello-service/webservices/HelloService?wsdl</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Une fois la SEI (Service Endpoint Interface) générée par wsimport, 
+							il suffit de fournir une implémentation de cette interface</p>
+							<figure>
+								<figcaption>Exemple de l'implémentation d'une SEI</figcaption>
+								<pre><code class="java">
+// Nécessaire uniquement avec TomEE. 
+// L'attribut name spécifie la terminaison de l'URL d'accès au service.
+@Stateless(name="HelloService")
+// L'attribut endpointInterface désigne l'interface annotée avec JAX-WS.
+@WebService(endpointInterface="epsi.HelloService")
+public class HelloServiceImpl implements epsi.HelloService {
+
+  @Override
+  public SayHelloResponse sayHello(SayHello parameters) {
+    // ...
+  }
+
+}
+								</code></pre>
+							</figure>
 						</article>
 					</section>
 				</section>
@@ -483,13 +640,79 @@ public class HelloService {
 					<section>
 						<article>
 							<header>Consommer des services Web SOAP avec JAX-WS</header>
+							<p>Une application cliente d'un service Web SOAP utilise un <strong>stub</strong>.
+							Un stub est une classe générée qui masque la complexité des échanges de messages
+							avec le serveur.
+							</p>
 						</article>
 					</section>
-				</section>
-				<section>
 					<section>
 						<article>
-							<header>Les extensions SOAP</header>
+							<p>Il est possible de créer un client à partir du code généré par <strong>wsimport</strong>.</p>
+							<figure>
+								<figcaption>Exemple d'accès à la SEI pour un client</figcaption>
+								<pre><code class="java">
+// L'URL du WSDL (peut-être un fichier sur disque)
+URL wsdlDocumentLocation = new URL("file:HelloService.wsdl");
+
+// Le qualified name du service spécifié par les attributs 
+// targetNamespace et name de la balise racine dans le  
+QName serviceName = new QName("http://epsi/","HelloServiceService");
+
+Service service = HelloServiceService.create(wsdlDocumentLocation, 
+                                             serviceName);
+
+// La SEI offrant les méthodes du service Web
+HelloService helloService = service.getPort(HelloService.class);
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Le code précédent pose un problème : le client utilise l'URL du service 
+							spécifié dans la section <em>wsdl:service</em> du WSDL. Il est souvent
+							utile de pouvoir changer dynamiquement l'URL du endpoint</p>
+							<figure>
+								<figcaption>Modification de l'URL du endpoint du service</figcaption>
+								<pre><code class="java">
+URL wsdlDocumentLocation = new URL("file:HelloService.wsdl");
+QName serviceName = new QName("http://epsi/","HelloServiceService");
+
+Service service = HelloServiceService.create(wsdlDocumentLocation, 
+                                             serviceName);
+
+HelloService helloService = service.getPort(HelloService.class);
+
+BindingProvider bp = (BindingProvider) helloService;
+// endpointUrl est un variable donnant l'URL du endpoint
+bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, 
+                           endpointUrl);
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Pour une application Java EE, le stub client est une ressource
+							que l'on peut injecte avec l'annotation 
+							<strong><a href="http://docs.oracle.com/javaee/6/api/javax/xml/ws/WebServiceRef.html" target="_blank">@WebServiceRef</a></strong>.</p>
+							<pre><code class="java">
+import javax.ejb.Stateless;
+import javax.xml.ws.WebServiceRef;
+
+import epsi.HelloServiceService
+
+@Stateless
+public class MyWebServiceClient {
+
+  @WebServiceRef
+  HelloServiceService helloService;
+  
+  // ...
+}
+							</code></pre>
+							<p>Attention, le stub client n'est pas <strong>thread-safe</strong> !</p>
 						</article>
 					</section>
 				</section>
