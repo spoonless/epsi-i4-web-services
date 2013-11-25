@@ -48,7 +48,7 @@
 					<section>
 						<article>
 							<p>&Agrave; partir des années 2000, le succés des réseaux IP, de HTTP 
-							et de XML apportent une nouvelle perspective : définir
+							et de XML apporte une nouvelle perspective : définir
 							un protocole d'échange de messages XML <i>via</i> HTTP entre deux processus.</p>
 							<p>Ce protocole originellement défini par Microsoft puis maintenu par le W3 s'appelle <strong>SOAP</strong>.</p>
 						</article>
@@ -56,6 +56,7 @@
 					<section>
 						<article>
 							<p>Depuis SOAP a été enrichi de nombreuses spécifications et l'ensemble de ces technologies sont désignées sous le terme <strong>WS-*</strong>.</p>
+							<p>WS-* est un ensemble de technologies, il ne s'agit ni d'un modèle de conception ni d'un modèle d'architecture.</p>
 						</article>
 					</section>
 					<section>
@@ -108,7 +109,7 @@ public class HelloService {
 }
 								</code></pre>
 							</figure>
-							<p>Cette classe correspond au SEI (Service Endpoint Implementation).</p>
+							<p>Cette classe est appelée la <strong>SEI</strong> (Service Endpoint Implementation).</p>
 						</article>
 					</section>
 					<section>
@@ -143,7 +144,8 @@ public class HelloService {
 					</section>
 					<section>
 						<article>
-							<p>Un document XML est <strong>bien formé</strong> (well-formed) s'il respecte la recommandation W3.</p>
+							<p>Un document XML est <strong>bien formé</strong> (well-formed) s'il respecte 
+							la <a href="http://www.w3.org/TR/xml/" target="_blank">recommandation W3</a>.</p>
 						</article>
 					</section>
 					<section>
@@ -174,7 +176,7 @@ public class HelloService {
 					<section>
 						<article>
 							<p>Réponse : non</p>
-							<p>L'élément code doit être fermée :</p>
+							<p>L'élément code doit être fermé :</p>
 							<pre><code class="xml">
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;cours&gt;
@@ -336,7 +338,7 @@ public class HelloService {
 					</section>
 					<section>
 						<article>
-							<p>Afin de résoudre les cas ambigus, un espace de nom peut-être identifié par un préfixe.</p>
+							<p>Afin de résoudre les cas ambigus, un espace de nom peut être identifié par un préfixe.</p>
 							<figure>
 								<figcaption>Document XML contenant plusieurs espaces de nom avec un préfixe</figcaption>
 								<pre><code class="xml">&lt;h:html xmlns:h="http://www.w3.org/1999/xhtml"
@@ -364,7 +366,7 @@ public class HelloService {
 								<dt>Son nom</dt>
 								<dd>Le nom apparaît dans la balise du document.<br>Exemple : body</dd>
 								<dt>Son espace de nom</dt>
-								<dd>L'espace de nom est donné par l'attribut xmlns de l'élément ou d'un des éléments parents.<br>Exemple : http://www.w3.org/1999/xhtml</dd>
+								<dd>L'espace de nom est donné par l'attribut xmlns de l'élément, un préfixe ou est hérité de l'élément parent.<br>Exemple : http://www.w3.org/1999/xhtml</dd>
 								<dt>Son nom qualifié (qualified name ou QName)</dt>
 								<dd>L'association de l'espace de nom et du nom de l'élement. Il s'agit en fait du nom complet de l'élement.<br>
 								Exemple : {http://www.w3.org/1999/xhtml}:body</dd>
@@ -373,7 +375,7 @@ public class HelloService {
 					</section>
 					<section>
 						<article>
-							<p>Un document XML est <strong>valide</strong> (valid) si le nom et l'ordre des balises
+							<p>Un document XML est <strong>valide</strong> (valid) si le QName et l'ordre des éléments
 							sont conformes à un document de validation.</p>
 						</article>
 					</section>
@@ -426,7 +428,7 @@ public class HelloService {
 							<header>SOAP : le langage d'échange</header>
 							<!-- Présenter le format SOAP ainsi que le protocole de gestion des erreurs (SOAP Fault) et les envoi asynchrone  -->
 							<p>SOAP est un simple format de message définit par un schéma XML.</p>
-							<p>Ce schéma XML est disponible à l'URL de son namespace XML : 
+							<p>Ce schéma XML est disponible à l'adresse de son namespace XML :<br> 
 							<a href="http://schemas.xmlsoap.org/soap/envelope/" class="explicit" target="_blank">http://schemas.xmlsoap.org/soap/envelope/</a></p>
 						</article>
 					</section>
@@ -470,7 +472,59 @@ public class HelloService {
 							</figure>
 						</article>
 					</section>
+					<section>
+						<article>
+							<p>Avec JAX-WS, la SEI peut récupérer les informations provenant du corps de la requête
+							mais aussi des en-têtes.</p>
+							<p>L'annotation <a href="http://docs.oracle.com/javaee/6/api/javax/jws/WebParam.html" target="_blank">@WebParam</a> possède les attributs suivants :</p>
+							<dl>
+								<dt>name</dt>
+								<dd>le nom de l'élement XML</dd>
+								<dt>targetNamespace</dt>
+								<dd>l'espace de nom de l'élement XML</dd>
+								<dt>header</dt>
+								<dd>un booléan indiquant si l'élement XML doit être extrait de l'en-tête ou s'il s'agit du corps
+								du message.</dd>
+							</dl>
+							
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Avec JAX-WS, la SEI peut déclarer des méthodes ayant plusieurs valeurs de retour : le corps de la réponse mais aussi les en-têtes de la réponse.</p>
+							<p>L'annotation <a href="http://docs.oracle.com/javaee/6/api/javax/jws/WebParam.html" target="_blank" class="explicit">@WebParam</a> possède l'attribut suivant :</p>
+							<dl>
+								<dt>mode</dt>
+								<dd>Il s'agit d'une énumération pouvant prendre les valeurs IN, OUT ou INOUT.
+								Pour les valeurs OUT et INOUT, le type du paramètre est obligatoirement de type
+								<a href="http://docs.oracle.com/javaee/6/api/javax/xml/ws/Holder.html" target="_blank">javax.xml.ws.Holder&lt;T&gt;</a>.
+								</dd>
+							</dl>
+							<pre><code class="java">
+public Comments sayHello(@WebParam Article article, 
+     @WebParam(header=true) editorCredentials,
+     @WebParam(header=true, mode=Mode.OUT) Holder&lt;ServerInfo&gt; serverInfo) {
+}
+                         	</code></pre>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Avec JAX-WS, les exceptions lancées par une méthode d'une SEI sont automatiquement
+							transformées en SOAP fault.</p>
+						</article>
+					</section>
 					<!-- Parler du oneway -->
+					<section>
+						<article>
+							<p>JAX-WS définit une annotation particulière : <a href="http://docs.oracle.com/javaee/6/api/javax/jws/Oneway.html" target="_blank">@Oneway</a>.
+							Cette annotation ne peut être utilisée que sur des méthodes n'ayant aucune valeur de retour 
+							(la méthode retourne void, elle ne déclare aucun paramètre OUT ou INOUT et elle ne lance aucune exception).
+							</p>
+							<p>Une méthode @Oneway permet de réaliser un traitement asynchrone : une réponse SOAP est retournée
+							au client pendant que la méthode est exécutée.</p>
+						</article>
+					</section>
 				</section>
 				<section>
 					<section>
@@ -478,7 +532,7 @@ public class HelloService {
 							<header>WSDL</header>
 							<p>La condition pour utiliser un service Web SOAP est de connaître les opérations
 							disponibles et le format des requêtes et des réponses.</p>
-							<p>WSDL (Web Service Description Language) est un langage XML permettant la
+							<p><strong>WSDL (Web Service Description Language)</strong> est un langage XML permettant la
 							description complète d'un service Web SOAP.</p>
 						</article>
 					</section>
@@ -505,6 +559,7 @@ public class HelloService {
 
   								<figcaption>Les types de données au format XML schema</figcaption>
 								<pre><code class="xml">  &lt;wsdl:types&gt;
+    &lt;!-- on trouve ici le schéma XML décrivrant le contenu des messages --&gt;
   &lt;/wsdl:types&gt;</code></pre>
 
   								<figcaption>Description des messages</figcaption>
@@ -614,7 +669,7 @@ public class HelloService {
 					<section>
 						<article>
 							<p>Une fois la SEI (Service Endpoint Interface) générée par wsimport, 
-							il suffit de fournir une implémentation de cette interface</p>
+							il suffit de fournir une implémentation de cette interface.</p>
 							<figure>
 								<figcaption>Exemple de l'implémentation d'une SEI</figcaption>
 								<pre><code class="java">
@@ -656,9 +711,10 @@ public class HelloServiceImpl implements epsi.HelloService {
 URL wsdlDocumentLocation = new URL("file:HelloService.wsdl");
 
 // Le qualified name du service spécifié par les attributs 
-// targetNamespace et name de la balise racine dans le  
+// targetNamespace et name de la balise racine dans le WSDL
 QName serviceName = new QName("http://epsi/","HelloServiceService");
 
+// HelloServiceService est une classe générée par wsimport
 Service service = HelloServiceService.create(wsdlDocumentLocation, 
                                              serviceName);
 
@@ -672,7 +728,7 @@ HelloService helloService = service.getPort(HelloService.class);
 						<article>
 							<p>Le code précédent pose un problème : le client utilise l'URL du service 
 							spécifié dans la section <em>wsdl:service</em> du WSDL. Il est souvent
-							utile de pouvoir changer dynamiquement l'URL du endpoint</p>
+							utile de pouvoir changer dynamiquement l'URL du endpoint.</p>
 							<figure>
 								<figcaption>Modification de l'URL du endpoint du service</figcaption>
 								<pre><code class="java">
@@ -684,6 +740,7 @@ Service service = HelloServiceService.create(wsdlDocumentLocation,
 
 HelloService helloService = service.getPort(HelloService.class);
 
+// Un service implémente l'interface javax.xml.ws.BindingProvider
 BindingProvider bp = (BindingProvider) helloService;
 // endpointUrl est un variable donnant l'URL du endpoint
 bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, 
@@ -695,7 +752,7 @@ bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 					<section>
 						<article>
 							<p>Pour une application Java EE, le stub client est une ressource
-							que l'on peut injecte avec l'annotation 
+							que l'on peut injecter avec l'annotation 
 							<strong><a href="http://docs.oracle.com/javaee/6/api/javax/xml/ws/WebServiceRef.html" target="_blank">@WebServiceRef</a></strong>.</p>
 							<pre><code class="java">
 import javax.ejb.Stateless;
