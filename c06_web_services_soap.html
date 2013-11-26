@@ -21,6 +21,7 @@
 				<script>
 					if( /^https?:/.test(window.location)) {
 						document.write('<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" class="download">Télécharger</a>');
+						document.write('<a href="' + window.location.toString().replace(".html", ".pdf") + '" class="pdf">PDF</a>');
 					}
 				</script>
 			</nav>
@@ -772,7 +773,7 @@ public class MyWebServiceClient {
 						</article>
 					</section>
 				</section>
-				<section>
+				<section class="not-printable">
 					<section>
 						<h2>WS-* ou RESTful ?</h2>
 					</section>

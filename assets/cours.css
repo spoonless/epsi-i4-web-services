@@ -67,6 +67,15 @@ a.download {
 	background-size:1.3em;
 	background-repeat: no-repeat;
 	padding-left: 1.4em;
+	margin-left:0.5em;
+}
+
+a.pdf {
+	background-image: url('images/pdf.png');
+	background-size:1.3em;
+	background-repeat: no-repeat;
+	padding-left: 1.4em;
+	margin-left:0.5em;
 }
 
 .reveal figure{

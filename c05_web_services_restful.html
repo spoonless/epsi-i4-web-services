@@ -21,6 +21,7 @@
 				<script>
 					if( /^https?:/.test(window.location)) {
 						document.write('<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" class="download">Télécharger</a>');
+						document.write('<a href="' + window.location.toString().replace(".html", ".pdf") + '" class="pdf">PDF</a>');
 					}
 				</script>
 			</nav>
@@ -612,7 +613,7 @@ public Response getBill(@PathParam("ref") String ref, @Context Request req){
 						</article>
 					</section>
 				</section>
-				<section>
+				<section class="not-printable">
 					<h2>REST = Representational State Transfer</h2>
 				</section>
 				<section>

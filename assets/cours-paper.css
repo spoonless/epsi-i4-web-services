@@ -49,8 +49,11 @@
 }
 
 .reveal article > header {
-	margin-top: 5cm;
 	text-align: right;
+}
+
+.reveal section:first-of-type > article > header {
+	margin-top: 5cm;
 	margin-bottom: 2cm;
 	font-size: 2em;
 }
