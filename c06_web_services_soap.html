@@ -35,7 +35,6 @@
 					<section>
 						<article>
 							<header>La quête de l'interopérabilité</header>
-							<!-- Finir en disant que SOAP est une technique basée sur XML (et pas une architecture comme REST) -->
 							<p>Comment échanger des informations entre deux processus alors que :</p>
 							<ul>
 								<li>les programmes sont écrits dans des langages différents</li>
@@ -502,8 +501,9 @@ public class HelloService {
 							</dl>
 							<pre><code class="java">
 public Comments sayHello(@WebParam Article article, 
-     @WebParam(header=true) editorCredentials,
+     @WebParam(header=true) EditorCredentials editorCredentials,
      @WebParam(header=true, mode=Mode.OUT) Holder&lt;ServerInfo&gt; serverInfo) {
+     // ...
 }
                          	</code></pre>
 						</article>
@@ -514,7 +514,6 @@ public Comments sayHello(@WebParam Article article,
 							transformées en SOAP fault.</p>
 						</article>
 					</section>
-					<!-- Parler du oneway -->
 					<section>
 						<article>
 							<p>JAX-WS définit une annotation particulière : <a href="http://docs.oracle.com/javaee/6/api/javax/jws/Oneway.html" target="_blank">@Oneway</a>.
@@ -559,7 +558,7 @@ public Comments sayHello(@WebParam Article article,
 
   								<figcaption>Les types de données au format XML schema</figcaption>
 								<pre><code class="xml">  &lt;wsdl:types&gt;
-    &lt;!-- on trouve ici le schéma XML décrivrant le contenu des messages --&gt;
+    &lt;!-- on trouve ici le schéma XML décrivant le contenu des messages --&gt;
   &lt;/wsdl:types&gt;</code></pre>
 
   								<figcaption>Description des messages</figcaption>
@@ -576,7 +575,7 @@ public Comments sayHello(@WebParam Article article,
 					<section>
 						<article>
 							<figure>
-  								<figcaption>Description des interfaces (indépendant de SOAP)</figcaption>
+  								<figcaption>Description des interfaces (indépendantes de SOAP)</figcaption>
 								<pre><code class="xml">  &lt;wsdl:portType name="HelloService"&gt;
     &lt;wsdl:operation name="sayHello"&gt;
       &lt;wsdl:input message="tns:sayHello" name="sayHello"/&gt;
@@ -742,7 +741,7 @@ HelloService helloService = service.getPort(HelloService.class);
 
 // Un service implémente l'interface javax.xml.ws.BindingProvider
 BindingProvider bp = (BindingProvider) helloService;
-// endpointUrl est un variable donnant l'URL du endpoint
+// endpointUrl est une variable donnant l'URL du endpoint
 bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, 
                            endpointUrl);
 								</code></pre>
@@ -758,13 +757,13 @@ bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 import javax.ejb.Stateless;
 import javax.xml.ws.WebServiceRef;
 
-import epsi.HelloServiceService
+import epsi.HelloService
 
 @Stateless
 public class MyWebServiceClient {
 
   @WebServiceRef
-  HelloServiceService helloService;
+  private HelloService helloService;
   
   // ...
 }
