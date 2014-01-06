@@ -15,6 +15,7 @@
 	</head>
 
 	<body>
+
 		<div class="reveal">
 			<nav>
 				<script>
@@ -27,33 +28,28 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section class="title">
-					<h1 class="small">Java EE - Web Services</h1>
+					<img alt="Java logo" src="assets/images/java-logo.png">
+					<h2>JPA : la persistance</h2>
 					<p class="copyright">EPSI I4 Web Services / <a class="explicit" href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a> - 2013-2014</p>
-					<ul>
-						<li><a href="c02_notions_complementaires_java.html" target="_blank">Notions complémentaires en Java</a></li>
-						<li>Les Web services
-							<ul>
-								<li><a href="c04_web_services_introduction.html" target="_blank">Introduction aux Web Services</a></li>
-								<li><a href="c05_web_services_restful.html" target="_blank">Web Services RESTful (JAX-RS)</a></li>
-								<li><a href="c06_web_services_soap.html" target="_blank">Web Services SOAP (JAX-WS)</a></li>
-							</ul>
-						</li>
-						<li><a href="c03_introduction_javaee.html" target="_blank">Introduction à Java Enterprise Edition (Java EE)</a></li>
-						<li>Conteneur Web
-							<ul>
-								<li>Les servlets</li>
-							</ul>
-						</li>
-						<li>Conteneur EJB
-							<ul>
-								<li><a href="c08_javaee_ejb.html" target="_blank">Enterprise Java Beans (EJB)</a></li>
-								<li><a href="c09_javaee_jpa.html" target="_blank">Entity bean : la persistance (JPA)</a></li>
-							</ul>
-						</li>
-					</ul>
+				</section>
+				<section>
+					<article>
+						<header>Cours en ligne</header>
+						<dl>
+							<dt>Cours de José Paumard sur JPA</dt>
+							<dd><a class="explicit" target="_blank" href="http://blog.paumard.org/cours/jpa/">http://blog.paumard.org/cours/jpa/</a></dd>
+						</dl>
+						<dl>
+							<dt>Wikibook sur JPA</dt>
+							<dd><a class="explicit" target="_blank" href="http://en.wikibooks.org/wiki/Java_Persistence">http://en.wikibooks.org/wiki/Java_Persistence</a></dd>
+						</dl>
+						<dl>
+							<dt>Wikibook sur JPA : le JPQL (Java Persistence Query Language)</dt>
+							<dd><a class="explicit" target="_blank" href="http://en.wikibooks.org/wiki/Java_Persistence/JPQL">http://en.wikibooks.org/wiki/Java_Persistence/JPQL</a></dd>
+						</dl>
+					</article>
 				</section>
 			</div>
-
 		</div>
 
 		<script src="assets/reveal.js-2.5.0/lib/js/head.min.js"></script>
@@ -67,6 +63,7 @@
 			progress: true,
 			history: true,
 			center: true,
+			transition: "linear",
 
 			// Optional libraries used to extend on reveal.js
 			dependencies: [
