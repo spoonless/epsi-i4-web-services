@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fr">
+
+	<head>
+		<meta charset="utf-8">
+		<title>I4 Web Services</title>
+		<meta name="author" content="David Gayerie">
+
+		<link rel="stylesheet" href="assets/cours.css">
+		<link rel="stylesheet" href="assets/cours-paper.css" media="print">
+
+		<!--[if lt IE 9]>
+		<script src="assets/reveal.js-2.5.0/lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<nav>
+				<script>
+					if( /^https?:/.test(window.location)) {
+						document.write('<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" class="download">Télécharger</a>');
+					}
+				</script>
+			</nav>
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section class="title">
+					<h1>Servlet &amp; application Web</h1>
+					<p class="copyright">EPSI I4 Web Services / <a class="explicit" href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a> - 2013-2014</p>
+				</section>
+				<section>
+					<section>
+						<article>
+							<p>L'API <strong>servlet</strong> est définie par la <a href="http://jcp.org/aboutJava/communityprocess/final/jsr315/index.html">JSR 315</a>.</p>
+							<p>Une servlet est un composant Web. Elle permet de générer du contenu Web dynamique.</p>
+							<p>Une servlet est packagée dans une <strong>application Web</strong> pour être déployée dans un conteneur Web Java EE.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>Une servlet avec support de HTTP</figcaption>
+								<pre><code class="java">
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet(urlPatterns="/pattern")
+public class MyServlet extends HttpServlet {
+
+  @Override
+  protected void service(HttpServletRequest req, HttpServletResponse resp) 
+                             throws ServletException, IOException {
+  }
+
+}
+								</code></pre>
+							</figure>
+							<p>Plutôt que de surcharger la méthode <code>service</code>, on peut surcharger
+							la ou les méthodes HTTP souhaitées : <code>doGet</code>, <code>doPost</code>, <code>doPut</code>, <code>doDelete</code>, <code>doHead</code>, <code>doOptions</code>, <code>doTrace</code>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Pour l'annotation <code>@WebServlet</code>, l'attribut <code>urlPatterns</code> est une chaîne de caractères ou 
+							un tableau de chaînes de caractères spécifiant les chemins d'URI pour lesquels une servlet est accessible. 
+							Il est possible d'utiliser le caractère générique <strong>*</strong> uniquement en début ou en fin de pattern.</p>
+							<p>Exemple : </p>
+							<ul>
+								<li><code>@WebServlet(urlPatterns="/hello")</code></li>
+								<li><code>@WebServlet(urlPatterns={"*.do", "*.asp"})</code></li>
+								<li><code>@WebServlet(urlPatterns="/endpoint/*")</code></li>
+							</ul>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Une instance de <code>HttpServletRequest</code> permet de récupérer les informations
+							de la requête : la méthode HTTP, les en-têtes, les cookies, les paramètres de la requête (GET ou POST), ...</p>
+							<p>Il est également possible de récupérer le corps de la requête sous la forme d'un flux d'entrée avec :</p>
+							<ul>
+								<li><code>HttpServletRequest.getInputStream()</code></li>
+								<li><code>HttpServletRequest.getReader()</code></li>
+							</ul>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Une instance de <code>HttpServletResponse</code> permet de positionner code HTTP de réponse (200 par défaut) ainsi que les en-têtes de réponse.</p>
+							<p>Il est également possible de générer le corps de la réponse à travers un flux de sortie avec :</p>
+							<ul>
+								<li><code>HttpServletResponse.getOutputStream()</code></li>
+								<li><code>HttpServletResponse.getWriter()</code></li>
+							</ul>
+							<p>Une réponse peut aussi être générée grâce à un <code>RequestDispatcher</code>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p><strong>Exercice :</strong> Implémenter une servlet calculant la factorielle d'un nombre en répondant à une requête GET du type :</p>
+							<p><a href="http://localhost:8080/factorielle-servlet/factorielle?entier=3" class="explicit">http://localhost:8080/factorielle-servlet/factorielle?entier=3</a></p>
+							<p>La réponse au format text/plain sera de la forme : </p>
+							<p>La factorielle de 3 est 6.</p>
+							<p><strong>Astuce :</strong> vous pouvez consulter la documentation de HttpServlet, HttpServletRequest et HttpServletResponse</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Une servlet est un composant Java EE déployé dans un conteneur Web.
+							Le conteneur a la responsabilité de gérer le cycle de vie de ce composant <i>via</i> des méthodes spécifiques&nbsp;:</p>
+							<figure>
+								<figcaption>Les méthodes du cycle de vie d'une Servlet</figcaption>
+								<pre><code class="java">
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+
+@WebServlet(urlPatterns="/pattern")
+public class MyServlet extends HttpServlet {
+
+  // appelée par le conteneur juste après la création de la servlet
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+  }
+
+  // appelée par le conteneur juste avant de "supprimer" la servlet
+  @Override
+  public void destroy() {
+  }
+}
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p><strong>Attention :</strong> un conteneur Web est libre de créer autant 
+							d'instance d'une servlet qu'il le souhaite
+							pour traiter les requêtes entrantes. Ainsi :</p>
+							<ul>
+								<li>Une même instance d'une servlet peut traiter deux requêtes simultanées</li>
+								<li>Deux instances différentes d'une servlet peuvent traiter les requêtes successives d'un même client.</li>
+							</ul>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Application Web Java EE</header>
+							<p>Une application Web est définie par une arborescence de fichiers.</p>
+							<figure>
+								<figcaption>Arborescence d'une application Web</figcaption>
+								<pre><code class="java">
+META-INF/             Répertoire des meta-informations
+META-INF/MANIFEST.MF  Le fichier manifest décrivant l'application
+WEB-INF/              Le répertoire privé de l'application Web
+WEB-INF/classes/      Les fichiers class de l'application
+WEB-INF/lib/          Le répertoire contenant les bibliothèques 
+                      (fichiers jar)
+WEB-INF/web.xml       Le descripteur de déploiement (optionnel)
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+					<section>
+						<article>
+							<p>Les autres répertoires et fichiers présents dans l'arborescence de l'application sont accessibles publiquement.<br>
+							Exemple : un fichier index.html à la racine de l'application constitue le fichier d'accueil de l'application.</p>
+							<figure>
+								<figcaption>Exemple d'application Web</figcaption>
+								<pre><code class="java">
+META-INF/
+META-INF/MANIFEST.MF
+WEB-INF/
+WEB-INF/web.xml
+images/
+images/logo.png
+index.html
+								</code></pre>
+							</figure>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Le descripteur de déploiement : web.xml</header>
+							<p>Pour une application Web Java EE, le descripteur de déploiement se nomme <strong>web.xml</strong> et se situe
+							dans le répertoire <strong>WEB-INF</strong>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<figure>
+								<figcaption>Structure minimale du web.xml</figcaption>
+								<pre><code class="xml">
+&lt;web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0"&gt;
+
+&lt;/web-app&gt;
+								</code></pre>
+							</figure>
+						
+						</article>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="assets/reveal.js-2.5.0/lib/js/head.min.js"></script>
+		<script src="assets/reveal.js-2.5.0/js/reveal.min.js"></script>
+
+		<script>
+		// Full list of configuration options available here:
+		// https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+			transition: "linear",
+
+			// Optional libraries used to extend on reveal.js
+			dependencies: [
+				{ src: 'assets/reveal.js-2.5.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+				{ src: 'assets/reveal.js-2.5.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+				{ src: 'assets/reveal.js-2.5.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+				{ src: 'assets/reveal.js-2.5.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+			]
+		});
+		</script>
+
+	</body>
+</html>
