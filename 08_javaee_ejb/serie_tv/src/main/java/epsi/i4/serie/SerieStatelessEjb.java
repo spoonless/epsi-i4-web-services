@@ -19,13 +19,17 @@ public class SerieStatelessEjb {
 	public void create(Serie serie) {
 		entityManager.persist(serie);
 	}
+	
+	public void update(Serie serie) {
+		entityManager.merge(serie);
+	}
 
 	public void delete(Serie serie) {
 		entityManager.createQuery("delete from Serie s where s.id = :id")
 		             .setParameter("id", serie.getId())
 		             .executeUpdate();
 	}
-
+	
 	public Serie get(long id) {
 		return entityManager.find(Serie.class, id);
 	}

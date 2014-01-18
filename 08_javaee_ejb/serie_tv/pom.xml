@@ -6,12 +6,12 @@
 	<artifactId>serie_tv</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	
+
 	<name>Serie TV</name>
 	<description>
 	Un exemple d'utilisation des EJB et de JPA
 	</description>
-	
+
 	<developers>
 		<developer>
 			<name>David Gayerie</name>
@@ -27,13 +27,6 @@
 
 	<dependencies>
 		<dependency>
-			<!-- L'API Java EE 6 -->
-			<groupId>org.apache.openejb</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>6.0-5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<!-- JUnit pour l'implémentation des tests -->
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -41,28 +34,15 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.28</version>
+		</dependency>
+		<dependency>
 			<!-- L'ensemble des dépendances de TomEE pour l'exécution des tests -->
 			<groupId>org.apache.openejb</groupId>
 			<artifactId>tomee-jaxrs</artifactId>
 			<version>1.5.2</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<!-- le plugin pour démarrer TomEE depuis la ligne de commande avec maven :
-					mvn package tomee:start
-				 -->
-				<groupId>org.apache.openejb.maven</groupId>
-				<artifactId>tomee-maven-plugin</artifactId>
-				<version>1.0.1</version>
-				<configuration>
-					<tomeeVersion>1.5.2</tomeeVersion>
-					<tomeeClassifier>plus</tomeeClassifier>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

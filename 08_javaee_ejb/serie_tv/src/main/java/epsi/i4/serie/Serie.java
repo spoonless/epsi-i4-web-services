@@ -13,7 +13,7 @@ public class Serie {
 	private Long id;
 	private String name;
 	private int creationYear;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -37,5 +37,4 @@ public class Serie {
 	public void setCreationYear(int creationYear) {
 		this.creationYear = creationYear;
 	}
-
 }
