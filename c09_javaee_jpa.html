@@ -33,6 +33,78 @@
 					<p class="copyright">EPSI I4 Web Services / <a class="explicit" href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a> - 2013-2014</p>
 				</section>
 				<section>
+					<section>
+						<article>
+							<header>Java Persistence API</header>
+							<p>Java Persistence API (JPA) est une spécification de Java EE pour créer une correspondance
+							entre un modèle objet et un modèle relationnel.</p>
+						</article>
+					</section>
+				</section>
+				<section>
+					<section>
+						<article>
+							<header>Utilisation de JPA par l'exemple</header>
+							<p>Différents exercices serviront à illustrer les fonctionnalités de base de JPA et des EJB.</p>
+							<p>Les exercices partent tous de la base de code disponible sur GitHub à cette URI :</p>
+							<p><a href="https://github.com/spoonless/epsi-i4-javaee-sample" class="explicit" target="_blank">https://github.com/spoonless/epsi-i4-javaee-sample.git</a></p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Exercice 1 : Gestion de la transaction par un EJB</header>
+							<p>Dans le code, la classe <strong>epsi.i4.serie.SerieStatelessEjb</strong> utilise l'annotation <strong>@TransactionManagement</strong>
+							pour signaler que les transactions doivent être prises en charge par le conteneur.</p>
+							<ol>
+							
+							<li>Que ce passe-t-il si vous changez cette annotation par <br/><strong>@TransactionManagement(TransactionManagementType.BEAN)</strong></li>
+							<li>Implémentez pour la méthode <strong>SerieStatelessEjb.create</strong> une transaction gérée par l'EJB. 
+							Cf. la gestion de la transaction par le bean dans <a href="c08_javaee_ejb.html#/3/4" class="explicit" target="_blank">le chapitre sur les EJB</a>.</li>
+							</ol>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Exercice 2 : Utilisation de JPQL</header>
+							<p>Implémentez la méthode suivante :</p>
+							<pre><code class="java">
+public class SerieStatelessEjb {
+  //...
+
+  public Serie getByName(String name) {
+    //...
+  }
+ 
+  //...
+}
+							</code></pre>
+							<p>Cette méthode retourne une série ayant un nom donné. 
+							Pour implémenter cette méthode, il faudra utiliser le langage de requête de JPA : 
+							<a target="_blank" href="http://en.wikibooks.org/wiki/Java_Persistence/JPQL">JPQL</a>.</p>
+						</article>
+					</section>
+					<section>
+						<article>
+							<header>Exercice 3 : Gestion d'une association</header>
+							<p>Ajoutez dans une série TV une liste de saisons :</p>
+							<pre><code class="java">public class Serie {
+  //...
+
+  @OneToMany(cascade=CascadeType.ALL)
+  @JoinColumn(name="serie_id")
+  private List&lt;Saison&gt; saisons = new ArrayList&lt;&gt;();
+ 
+  //...
+}</code></pre>
+							<p>Ecrivez des tests pour</p>
+							<ol>
+								<li>sauvegarder une série avec ses saisons</li>
+								<li>charger la liste des saisons d'une série</li>
+							</ol>
+						</article>
+					</section>
+				</section>
+				<section>
 					<article>
 						<header>Cours en ligne</header>
 						<dl>
