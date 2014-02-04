@@ -45,6 +45,11 @@ https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
 http://cxf.apache.org/docs/jax-rs-cors.html
 
 http://www.crummy.com/writing/speaking/2008-QCon/act3.html
+http://liris.cnrs.fr/~pchampin/2012/tiwe5-rest.pdf
+
+Lien sur une présentation très intéressante
+http://home.ccil.org/~cowan/restws.pdf
+https://project.inria.fr/Services_Web/links/
 
 HTTP
 
