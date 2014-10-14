@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Le protocole HTTP</title>
+	<meta name="author" content="David Gayerie">
+	<link href="css/article.css" rel="stylesheet" media="screen">
+	<link href="css/print-article.css" rel="stylesheet" media="print">
+	<link href="highlight/styles/zenburn.css" rel="stylesheet">
+	
+	<script src="highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="js/toc.js"></script>
+</head>
+<body>
+	<div id="titleBar">
+		<a href="index.html" title="Retourner au sommaire"><img src="assets/go-home.png"></a>
+ 		<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" title="Télécharger tout le cours"><img src="assets/download.png"></a>
+		Web Services - EPSI I4 2014/2015 - <a href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a>
+	</div>
+	<article>
+		<h1><script>document.write(document.title)</script></h1>
+		<section id="toc"></section>
+		
+		<section>
+		<p>L'<b>Hypertext Transfer Protocol</b> (HTTP) est un protocole de la <a href="http://en.wikipedia.org/wiki/Application_layer">couche application</a>. 
+		Il est le fondement de l'échange de données pour le World Wide Web.
+		Comme tous les protocoles applicatifs d'Internet, HTTP est orienté texte.</p>
+
+		<p>HTTP version 1.1 est défini par un ensemble de RFC (Requests For Comments) maintenu par un groupe de travail de l'IETF (Internet Engineering Task Force)&nbsp;:</p>
+		<ul>
+		    <li><a href="http://tools.ietf.org/html/rfc7230">RFC 7230</a> - HTTP/1.1: Message Syntax and Routing - Description de la structure des messages échangés et des procédures de connexion</li>
+		    <li><a href="http://tools.ietf.org/html/rfc7231">RFC 7231</a> - HTTP/1.1: Semantics and Content - Description des méthodes, des codes d'état et des en-têtes</li>
+		    <li><a href="http://tools.ietf.org/html/rfc7232">RFC 7232</a> - HTTP/1.1: Conditional Requests - Le support des requêtes conditionnelles</li>
+		    <li><a href="http://tools.ietf.org/html/rfc7233">RFC 7233</a> - HTTP/1.1: Range Requests - Le support de requête pour obtenir un contenu partiel</li>
+		    <li><a href="http://tools.ietf.org/html/rfc7234">RFC 7234</a> - HTTP/1.1: Caching - La gestion du cache client et des caches des éléments intermédiaires</li>
+		    <li><a href="http://tools.ietf.org/html/rfc7235">RFC 7235</a> - HTTP/1.1: Authentication - La gestion de l'authentification HTTP</li>
+		</ul>
+		
+		<aside>
+			<p>Depuis 1999, le protocole HTTP était défini par la "célèbre" <a href="http://tools.ietf.org/html/rfc2616">RFC 2616</a>. En juin 2014, une reécriture a été
+			publiée afin de clarifier certains points et d'améliorer la structure globale de la spécification en la scindant en 6 RFC distinctes.</p>
+		</aside>
+		</section>
+		
+		<section>
+			<h2>Structure des messages</h2>
+			<p>HTTP est un protocole <strong>sans état</strong> dans un environnement <strong>client/serveur</strong>. Le client émet une requête qui contient les informations suffisantes pour permettre
+			au serveur de fournir une réponse.</p>
+			
+			<figure>
+				<figcaption>Une requête HTTP GET</figcaption>
+				<pre><code class="http">GET /Programmes/Formation-informatique HTTP/1.1
+Host: www.epsi.fr
+				</code></pre>
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur</figcaption>
+				<pre><code class="http">HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 420
+
+&lt;html&gt;
+...
+&lt;/html&gt;</code></pre>
+			</figure>
+			
+			<p>Une requête HTTP débute par une ligne de requête (request line) terminée par un saut de ligne (<a href="http://fr.wikipedia.org/wiki/Carriage_Return_Line_Feed">CRLF</a>).
+			On trouve ensuite une liste d'en-têtes et une ligne vide qui marque la fin des en-têtes. Si la requête a un contenu (une charge utile ou <em>payload</em>), il est ensuite transmis.</p>
+			<figure>
+				<figcaption>Structure d'une requête HTTP</figcaption>
+				<pre><code class="http">[méthode] [ressource cible] HTTP/1.1
+[Nom de l'en-tête]: [Valeur de l'en-tête]
+...
+[ligne vide]
+[charge utile]</code></pre>
+			</figure>
+
+			<p>Une réponse HTTP débute par une ligne de réponse (response line) terminée par un saut de ligne (<a href="http://fr.wikipedia.org/wiki/Carriage_Return_Line_Feed">CRLF</a>).
+			Celle-ci donne la version du protocole de réponse et ensuite le code de statut du traitement de la requête. 
+			On trouve ensuite une liste d'en-têtes et une ligne vide qui marque la fin des en-têtes. Si la réponse a un contenu (une charge utile ou <em>payload</em>), il est ensuite transmis.</p>
+			<figure>
+				<figcaption>Structure d'une réponse HTTP</figcaption>
+				<pre><code class="http">HTTP/1.1 [code statut] [message]
+[Nom de l'en-tête]: [Valeur de l'en-tête]
+...
+[ligne vide]
+[charge utile]</code></pre>
+			</figure>
+			
+			<aside>
+				<p>En HTTP 1.1, seul l'en-tête <em>Host</em> est obligatoire.</p>
+			</aside>
+		</section>
+	</article>
+	
+	<article class="exercice">
+		<h2>Exercice&nbsp;: écrivons HTTP</h2>
+		<p>Récupérez le contenu de la page Web <a href="http://www.epsi.fr/Programmes/Formation-informatique">http://www.epsi.fr/Programmes/Formation-informatique</a> ... <strong>avec telnet</strong>&nbsp;!
+		Pour rappel, le protocole HTTP est associé au port 80.</p>
+		<p>Essayez ensuite avec l'URI <a href="http://www.google.com">http://www.google.com</a>. Quelle est la différence dans la réponse du serveur ?</p>
+	</article>
+	
+	<article>
+		<section>
+			<h2>Les codes de statut</h2>
+			<p>Dans la ligne de réponse, le serveur transmet le <a href="http://tools.ietf.org/html/rfc7231#section-6">code de statut</a> du traitement de la requête. 
+			Il s'agit d'un nombre sur 3 chiffres. Les codes de statut HTTP sont regroupés par familles identifiées par le chiffre des centaines.</p>
+			
+			<ul>
+				<li><strong>1xx&nbsp; réponse informationnelle.</strong> La requête a été reçue et son traitement est en cours.</li>
+				<li><strong>2xx&nbsp; succès.</strong> La requête a été reçue avec succès, comprise et acceptée par le serveur.</li>
+				<li><strong>3xx&nbsp; redirection.</strong> Une action supplémentaire a besoin d'être faite par le client pour terminer la requête.</li>
+				<li><strong>4xx&nbsp; erreur du client.</strong> La requête est syntaxiquement incorrecte ou ne peut pas être prise en compte. La requête ne doit pas être émise à nouveau telle quelle.</li>
+				<li><strong>5xx&nbsp; erreur du serveur.</strong> La serveur a échoué dans la prise en compte de la requête bien que cette dernière soit valide.</li>
+			</ul>
+			
+			<p>Parmi les codes existants, certains sont plus remarquables et doivent être connus&nbsp;:</p>
+			
+			<table>
+				<col width="10%">
+				<col width="10%">
+				<col width="20%">
+				<col width="*">
+				<thead>
+					<tr>
+						<th>Famille</th>
+						<th>Code</th>
+						<th>Libellé</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td rowspan="3">2XX</td>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.3.1">200</a></td>
+						<td>OK</td>
+						<td>Le traitement de la requête est un succès et la réponse contient un payload correspondant au résultat du traitement.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.3.2">201</a></td>
+						<td>Created</td>
+						<td>La requête est un succès et sa prise en compte a entrainé la création d'une ou plusieurs ressources.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.3.5">204</a></td>
+						<td>No Content</td>
+						<td>La requête est un succès et la réponse ne nécessite pas de payload.</td>
+					</tr>
+	
+					<tr>
+						<td rowspan="4">3XX</td>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.4.2">301</a></td>
+						<td>Moved Permanently</td>
+						<td>Indique que le serveur connaît la ressource à laquelle le client désire accéder 
+						mais qu'elle n'est plus disponible à l'URI spécifiée. 
+						L'en-tête de réponse <code>Location</code> permet au serveur d'indiquer la nouvelle 
+						URI à laquelle le client pourra accéder à la ressource.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.4.4">303</a></td>
+						<td>See Other</td>
+						<td>La requête a été exécutée mais la réponse doit être consultée à une autre URI. 
+						L'en-tête de réponse <code>Location</code> permet au serveur d'indiquer l'URI vers laquelle le client peut exécuter un <strong>GET</strong> pour accéder au résultat.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.4.7">307</a></td>
+						<td>Temporary redirect</td>
+						<td>La requête n'a pas été traitée par le serveur et le client doit refaire la même requête vers une URI différente. 
+						L'en-tête de réponse <code>Location</code> permet au serveur d'indiquer la nouvelle URI à laquelle le client pourra renvoyer sa requête.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7232#section-4.1">304</a></td>
+						<td>Not Modified</td>
+						<td>Code d'état utilisé lors d'une requête conditionnelle pour spécifier au client que la ressource n'a pas été modifiée depuis son dernier accès.</td>
+					</tr>
+	
+					<tr>
+						<td rowspan="6">4XX</td>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.1">400</a></td>
+						<td>Bad Request</td>
+						<td>La requête n'a pas pu être traitée car elle est syntaxiquement incorrecte.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.4">404</a></td>
+						<td>Not Found</td>
+						<td>Le serveur ne dispose pas de représentation pour la ressource cible.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.5">405</a></td>
+						<td>Method Not Allowed</td>
+						<td>La ressource cible est connue du serveur mais le client ne peut pas utiliser la méthode spécifiée dans la requête.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.8">409</a></td>
+						<td>Conflict</td>
+						<td>La requête ne peut pas être traitée sans entrer en conflit avec l'état courant d'une ressource sur le serveur.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7232#section-4.2">412</a></td>
+						<td>Precondition failed</td>
+						<td>Lors d'une requête conditionnelle, indique que la requête n'a pas pu être traitée car une de ses préconditions n'est pas satisfaite.</td>
+					</tr>
+					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.13">415</a></td>
+						<td>Unsupported Media Type</td>
+						<td>Indique qu'il n'existe pas de représentation au format demandé par le client pour la ressource cible (échec de la négociation de contenu).</td>
+					</tr>
+	
+					<tr>
+						<td rowspan="1">5XX</td>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.6.1">500</a></td>
+						<td>Internal Server Error</td>
+						<td>Une erreur inattendue a empêché le serveur de traiter la requête.</td>
+					</tr>
+				</tbody>
+			</table>
+		</section>
+		
+		<section>
+			<h2>Les méthodes HTTP</h2>
+			<p>Les <a href="http://tools.ietf.org/html/rfc7231#section-4">méthodes HTTP</a> désignent le type d'opération que le client désire réaliser.</p>
+			
+			<dl>
+				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.1">GET</a></dt>
+				<dd>Demande au serveur une représentation de la ressource cible.</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.2">HEAD</a></dt>
+				<dd>Comme un GET sauf que la réponse ne contient jamais de corps. Cette méthode est utile pour obtenir des informations sans envoyer ni recevoir de charge utile.</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.4">PUT</a></dt>
+				<dd>Crée ou met à jour la ressource identifiée par l'URI.</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc5789#section-2">PATCH</a></dt>
+				<dd>Applique des modifications partielles à la ressource cible. PATCH ne fait pas partie de la liste initiale des méthodes HTTP. Elle a été
+				ajoutée en 2010 par la <a href="http://tools.ietf.org/html/rfc5789">RFC 5789</a>.</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.5">DELETE</a></dt>
+				<dd>Détruit la ressource cible.</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.3">POST</a></dt>
+				<dd>La sémantique de la méthode POST est probablement la plus compliquée à saisir car cette méthode est utilisable dans différentes situations pour&nbsp;:
+					<ul>
+						<li>Fournir un bloc de données (formulaire) à un processus de traitement</li>
+						<li>Poster un message dans un système de centralisation d'articles</li>
+						<li>Créer une nouvelle resource qui sera identifiée par le serveur</li>
+						<li>Ajouter des informations à la représentation d'une ressource</li>
+					</ul>
+				</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.7">OPTIONS</a></dt>
+				<dd>Permet d'obtenir les options de communication (par exemple : les méthodes autorisées pour l'URI). Le serveur doit retourner ces informations dans les en-têtes de réponse.
+				Ainsi l'en-tête de réponse <a href="http://tools.ietf.org/html/rfc7231#section-7.4.1"><code>Allow</code></a> liste les méthodes HTTP autorisées pour cette URI.</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.8">TRACE</a></dt>
+				<dd>Permet de simuler un écho de la requête. Cette méthode n'est pas utilisée pour la réalisation de services Web car elle est surtout utile pour tester la configuration du réseau.</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.6">CONNECT</a></dt>
+				<dd>&Eacute;tabli un tunnel à travers un proxy. Cette méthode n'est pas utilisée pour la réalisation de services Web.</dd>
+			</dl>
+			
+			<h3>Propriétés des méthodes HTTP</h3>
+			
+			<p>Les méthodes HTTP peuvent être classées selon trois propriétés : la <strong>sûreté</strong>, <strong>l'idempotence</strong> et <strong>le support du cache</strong> (cacheable).</p>
+			
+			<dl>
+				<dt>Sûreté (safety)</dt>
+				<dd>Une méthode est sûre si elle n'entraîne aucune modification d'état sur le serveur. 
+				Une méthode sûre peut être utilisée entre 0 et N fois d'affilée sans que cela affecte le serveur. 
+				<strong>Les méthodes GET, HEAD et OPTIONS doivent être sûres</strong>.</dd>
+				
+				<dt>Idempotence (idempotent)</dt>
+				<dd>
+				Une méthode est idempotente si l'effet obtenu est le même qu'elle soit exécutée 1 ou N fois. 
+				<strong>Les méthodes GET, HEAD, OPTIONS, PUT et DELETE doivent être idempotentes.</strong>
+				</dd>
+
+				<dt>Support du cache (cacheable)</dt>
+				<dd>Une méthode <em>cacheable</em> indique que sa réponse peut être stockée par le client ou un proxy pour une utilisation ultérieure.
+				Attention, il ne s'agit en rien d'une règle obligatoire et la gestion du cache en HTTP est régie par la
+				<a href="http://tools.ietf.org/html/rfc7234">RFC 7234</a>. HTTP définit les méthodes GET, HEAD et POST comme
+				étant <em>cacheables</em>.
+				</dd>
+			</dl>
+
+			<table>
+				<col width="15%"/>
+				<col width="15%"/>
+				<col width="15%"/>
+				<col width="15%"/>
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>Sûre</th>
+						<th>Idempotente</th>
+						<th>Cacheable</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>GET</th>
+						<td><b>oui</b></td>
+						<td><b>oui</b></td>
+						<td><b>oui</b></td>
+					</tr>
+					<tr>
+						<th>HEAD</th>
+						<td><b>oui</b></td>
+						<td><b>oui</b></td>
+						<td><b>oui</b></td>
+					</tr>
+					<tr>
+						<th>PUT</th>
+						<td>non</td>
+						<td><b>oui</b></td>
+						<td>non</td>
+					</tr>
+					<tr>
+						<th>PATCH</th>
+						<td>non</td>
+						<td>non</td>
+						<td>non</td>
+					</tr>
+					<tr>
+						<th>DELETE</th>
+						<td>non</td>
+						<td><b>oui</b></td>
+						<td>non</td>
+					</tr>
+					<tr>
+						<th>POST</th>
+						<td>non</td>
+						<td>non</td>
+						<td><b>oui</b></td>
+					</tr>
+					<tr>
+						<th>OPTIONS</th>
+						<td><b>oui</b></td>
+						<td><b>oui</b></td>
+						<td>non</td>
+					</tr>
+				</tbody>
+			</table>
+		</section>
+		
+		<section>
+			<h2>Les en-têtes HTTP</h2>
+			
+			<p>Les en-têtes de requête et de réponse permettent de spécifier des paramètres pour la requête ou la réponse.
+			Ils servent à fournir des données pour le support d'un ensemble de fonctionnalités de HTTP&nbsp;:</p>
+			
+			<ul>
+				<li>Gestion du cycle de vie de la connexion client/serveur</li>
+				<li>Compression de la charge utile</li>
+				<li>Gestion de la taille et du contenu des entités de requête et de réponse</li>
+				<li>Négociation de contenu</li>
+				<li>Requêtes conditionnelles</li>
+				<li>Gestion des stratégies de cache</li>
+				<li>...</li>
+			</ul>
+
+			<aside class="tip">
+				Le nom des en-têtes est insensible à la casse.<br>
+				Les en-têtes peuvent être envoyés dans n'importe quel ordre.
+			</aside>
+			
+			<p>A titre d'exemple, on citera&nbsp;:</p>
+			
+			<dl>
+				<dt><a href="http://tools.ietf.org/html/rfc7230#section-5.4">Host</a> (requête)</dt>
+				<dd>L'en-tête <code>Host</code> est le seul obligatoire en HTTP 1.1 pour un requête. Il contient le nom et le port du serveur.
+				Sa présence permet notamment la gestion de serveurs HTTP virtuels sur un même port.
+				<figure>
+					<figcaption>Une requête HTTP avec l'en-tête <code>Host</code></figcaption>
+					<pre><code class="http">GET / HTTP/1.1
+Host: www.monserveur.fr:9090
+					</code></pre>
+				</figure>
+				
+				</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> (requête et réponse)</dt>
+				<dd>Si une requête ou une réponse contient une charge utile, il est nécessaire pour le destinataire d'identifier le format du contenu.
+				L'en-tête HTTP <code>Content-Type</code> fournit cette information sous la forme d'un <a href="http://fr.wikipedia.org/wiki/Type_MIME">type MIME</a>.
+				<p>Une liste (non exhaustive) des types MIME les plus courants est&nbsp;:</p>
+				<table>
+					<tbody>
+						<tr>
+							<td>text/plain</td>
+							<td>Un fichier texte</td>
+						</tr>
+						<tr>
+							<td>text/plain;charset=utf-8</td>
+							<td>Un fichier texte encodé en UTF-8</td>
+						</tr>
+						<tr>
+							<td>text/html</td>
+							<td>Un fichier HTML</td>
+						</tr>
+						<tr>
+							<td>text/xml</td>
+							<td>Un fichier XML</td>
+						</tr>
+						<tr>
+							<td>text/json</td>
+							<td>Un fichier JSON</td>
+						</tr>
+						<tr>
+							<td>image/jpeg</td>
+							<td>Une image au format jpeg</td>
+						</tr>
+						<tr>
+							<td>application/x-www-form-urlencoded</td>
+							<td>Le format de données pour la soumission d'un formulaire HTML</td>
+						</tr>
+					</tbody>
+				</table>
+				<figure>
+					<figcaption>Une requête HTTP avec l'en-tête <code>Content-Type</code></figcaption>
+					<pre><code class="http">POST /utilisateur HTTP/1.1
+Host: www.monserveur.fr:9090
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+nom=David&amp;prenom=Gayerie&amp;taille=174
+
+</code></pre>
+				</figure>
+
+				</dd>
+
+				<dt><a href="http://tools.ietf.org/html/rfc7230#section-3.3.2">Content-Length</a> (requête et réponse)</dt>
+				<dd>Si une requête ou une réponse contient une charge utile, il est nécessaire pour le destinataire d'en connaître la taille
+				afin de connaître la fin du message HTTP. L'en-tête <code>Content-Length</code> donne la taille en octet de la charge utile.
+				<figure>
+					<figcaption>Une requête HTTP avec l'en-tête <code>Content-Length</code></figcaption>
+					<pre><code class="http">POST /utilisateur HTTP/1.1
+Host: www.monserveur.fr:9090
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+nom=David&amp;prenom=Gayerie&amp;taille=174
+
+</code></pre>
+				</figure>
+				<figure>
+					<figcaption>Une réponse HTTP avec l'en-tête <code>Content-Length</code></figcaption>
+					<pre><code class="http">HTTP/1.1 200 OK
+Content-Type: text/plain; charset=utf-8
+Content-Length: 17
+
+Hello the world!
+
+</code></pre>
+				</figure>
+
+				<aside>
+					Il est possible de ne pas fournir l'en-tête <code>Content-Length</code> en utilisant la technique de 
+					<a href="http://fr.wikipedia.org/wiki/Chunked_transfer_encoding">l'encodage de transfert en bloc</a> (chunked transfer encoding).
+					Cette technique est très largement utilisée par les serveurs qui génèrent du contenu dynamique pour lequel il serait coûteux de
+					mettre en cache la réponse avant de la transmettre pour connaître sa taille définitive.
+				</aside>
+				
+				</dd>
+			</dl>
+		</section>
+		
+		<section>
+			<h2>Quelques cas d'utilisation</h2>
+			
+			<p>Nous allons introduire de nouveaux en-têtes HTTP <i>via</i> divers cas d'utilisation.</p>
+			
+			<h3>Création d'une ressource dont on connait l'URI</h3>
+			
+			<p>Lorsqu'un client veut créer une ressource sur le serveur, il faut distinguer le cas où le client connaît
+			l'URI finale de la ressource du cas où c'est au serveur de déterminer l'URI finale. Dans le cas où l'utilisateur
+			connaît l'URI, la méthode sera <strong>toujours</strong> un <code>PUT</code>. En cas de succès, le serveur devrait répondre
+			le code 201.</p>
+			
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">PUT /individu/David+Gayerie HTTP/1.1
+Host: exemple.fr
+Content-Type: application/json; charset=utf-8
+Content-Length: 91
+
+{'name' : 'Gayerie', 
+ 'firstname' : 'David', 
+ 'email' : 'david.gayerie.epsi@mailoo.org'}</code></pre>
+
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur en cas de succès</figcaption>
+				<pre><code class="http">HTTP/1.1 201 Created
+				</code></pre>
+			</figure>			
+
+			<h3>Création d'une ressource dont on ne connait pas l'URI</h3>
+			<p>Dans le cas où l'utilisateur ne connaît pas l'URI finale de la ressource, 
+			la méthode sera <strong>toujours</strong> un <code>POST</code>. En cas de succès, le serveur devrait répondre
+			le code 201 et un en-tête <code>Location</code> donnant au client l'URI de la nouvelle ressource.</p>
+
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">POST /individu/ HTTP/1.1
+Host: exemple.fr
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+Content-Length: 65
+
+name=Gayerie&amp;firstname=David&amp;email=david.gayerie.epsi@mailoo.org</code></pre>
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur en cas de succès</figcaption>
+				<pre><code class="http">HTTP/1.1 201 Created
+Location: http://exemple.fr/individu/000001
+
+</code></pre>
+			</figure>
+			
+			<h3>Suppression d'une ressource</h3>
+			
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">DELETE /individu/000001 HTTP/1.1
+Host: exemple.fr
+
+</code></pre>
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur en cas de succès</figcaption>
+				<pre><code class="http">HTTP/1.1 204 No content
+
+</code></pre>
+			</figure>
+			
+			<h3>Le traitement asynchrone d'une requête</h3>
+			
+			<p>Parfois, le serveur ne peut pas traiter complètement une requête dans un temps acceptable. Dans ce cas,
+			il peut retourner le code 202 qui signifie qu'il a bien compris et accepté la requête mais
+			qu'il ne l'a pas encore traitée. L'en-tête <code>Location</code> pointe sur une URI où
+			le client pourra se rendre pour consulter l'état du traitement.</p>
+
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">DELETE /individu/000001 HTTP/1.1
+Host: exemple.fr
+
+</code></pre>
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur lorsque la requête est traitée en asynchrone</figcaption>
+				<pre><code class="http">HTTP/1.1 202 Accepted
+Location: http://exemple.fr/jobs/1948321
+
+</code></pre>
+			</figure>
+		</section>
+	</article>
+</body>
+</html>

@@ -1,65 +1,72 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Web Services</title>
+	<meta name="author" content="David Gayerie">
+	<link href="css/article.css" rel="stylesheet" media="screen">
+	<link href="css/print-article.css" rel="stylesheet" media="print">
+	<link href="highlight/styles/zenburn.css" rel="stylesheet">
+	
+	<script src="highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="js/toc.js"></script>
+</head>
+<body>
+	<div id="titleBar">
+		<a href="index.html" title="Retourner au sommaire"><img src="assets/go-home.png"></a>
+ 		<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" title="Télécharger tout le cours"><img src="assets/download.png"></a>
+		<script>document.write(document.title)</script> - EPSI I4 2014/2015 - <a href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a>
+	</div>
+	<article>
+		<h1><script>document.write(document.title)</script></h1>
+		<section id="toc"></section>
+		
+		<section>
+			<h2>Tentative de définition</h2>
+			
+			<p>Les définitions d'un service Web est problématique. &Agrave; titre d'exemple, voici les définitions données par le W3C et Wikipedia&nbsp;:</p>
+			
+			<figure>
+				<figcaption><a href="http://www.w3.org/TR/2004/NOTE-ws-gloss-20040211/#webservice">Définition du W3C</a></figcaption>
+			    <blockquote cite="http://www.w3.org/TR/2004/NOTE-ws-gloss-20040211/#webservice">
+				    <p>There are many things that might be called "Web services" in the world at large. 
+				    However, for the purpose of this Working Group and this architecture, and <strong>without prejudice toward other definitions</strong>, we will use the following definition:</p>
+	   				<p>A Web service is a software system designed to support <strong>interoperable</strong> machine-to-machine interaction over a network. It has an interface described in a machine-processable format (specifically WSDL). Other systems interact with the Web service in a manner prescribed by its description using SOAP-messages, typically conveyed using HTTP with an XML serialization in conjunction with other Web-related standards.</p> 
+			    </blockquote>
+			</figure>
+			
+			<figure>
+				<figcaption><a href="http://en.wikipedia.org/wiki/Web_service">Définition de Wikipedia</a></figcaption>
+			    <blockquote cite="http://en.wikipedia.org/wiki/Web_service">
+				    <p>A Web Service is a <strong>method of communication</strong> between two electronic devices over a network. It is a software function provided at a network address <strong>over the web</strong> with the service always on as in the concept of utility computing. The W3C defines a Web service generally as:-</p>
+				    <p>a software system designed to support <strong>interoperable</strong> machine-to-machine interaction over a network.</p>
+			    </blockquote>
+			</figure>
+			
+			<p>La définition du W3C est trop restrictive car elle réduit les services Web à un ensemble de technologies (WSDL, SOAP, XML). 
+			Cela est bien normal pour le consortium qui est responsable de la rédaction de la plupart des protocoles cités 
+			mais cela n'est représentatif que d'une fraction des services Web.</p>
+			
+			<p>Pour l'ensemble de ce cours, nous nous bornerons à une définition plus simple mais plus large&nbsp;:</p>
+			<figure>
+			    <blockquote>
+				    <p>Un service Web est un dispositif permettant d'échanger une certaine forme d'information sur le Web. Le Web doit être compris comme un environnement client/serveur
+				    dans lequel les échanges sont réalisés grâce au protocole HTTP.</p>
+			    </blockquote>
+			</figure>
 
-	<head>
-		<meta charset="utf-8">
-		<title>I4 Web Services</title>
-		<meta name="author" content="David Gayerie">
-
-		<link rel="stylesheet" href="assets/cours.css">
-		<link rel="stylesheet" href="assets/cours-paper.css" media="print">
-
-		<!--[if lt IE 9]>
-		<script src="assets/reveal.js-2.5.0/lib/js/html5shiv.js"></script>
-		<![endif]-->
-	</head>
-
-	<body>
-		<div class="reveal">
-			<nav>
-				<script>
-					if( /^https?:/.test(window.location)) {
-						document.write('<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" class="download">Télécharger</a>');
-					}
-				</script>
-			</nav>
-
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<div class="slides">
-				<section>
-					<ul>
-						<li><a href="p01_introduction.html" target="_blank">Projet agile &amp; architecture Web</a></li>
-						<li><a href="talkative.html" target="_blank">Projet Talkative</a></li>
-						<li><a href="c01_sommaire.html" target="_blank">Cours Java EE - Web services</a></li>
-						<li><a href="controle.continu.201312.correction.pdf" target="_blank">Correction du contrôle du 12/2013</a></li>
-					</ul>
-					<p class="copyright">EPSI I4 Web Services / <a class="explicit" href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a> - 2013-2014</p>
-				</section>
-			</div>
-
-		</div>
-
-		<script src="assets/reveal.js-2.5.0/lib/js/head.min.js"></script>
-		<script src="assets/reveal.js-2.5.0/js/reveal.min.js"></script>
-
-		<script>
-		// Full list of configuration options available here:
-		// https://github.com/hakimel/reveal.js#configuration
-		Reveal.initialize({
-			controls: true,
-			progress: true,
-			history: true,
-			center: true,
-
-			// Optional libraries used to extend on reveal.js
-			dependencies: [
-				{ src: 'assets/reveal.js-2.5.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-				{ src: 'assets/reveal.js-2.5.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-				{ src: 'assets/reveal.js-2.5.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-				{ src: 'assets/reveal.js-2.5.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-			]
-		});
-		</script>
-
-	</body>
+		</section>
+		
+		<section>
+			<h2><script>document.write(document.title)</script> : Plan du cours</h2>
+			<ol>
+				<li><a href="01_http.html">Le protocole HTTP</a></li>
+				<li>L'architecture REST</li>
+				<li>Les services Web RESTful</li>
+				<li>Les services Web SOAP (WS-*)</li>
+			</ol>
+		</section>
+	</article>
+</body>
 </html>
