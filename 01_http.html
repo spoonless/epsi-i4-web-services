@@ -95,10 +95,12 @@ Content-Length: 420
 	</article>
 	
 	<article class="exercice">
-		<h2>Exercice&nbsp;: écrivons HTTP</h2>
-		<p>Récupérez le contenu de la page Web <a href="http://www.epsi.fr/Programmes/Formation-informatique">http://www.epsi.fr/Programmes/Formation-informatique</a> ... <strong>avec telnet</strong>&nbsp;!
-		Pour rappel, le protocole HTTP est associé au port 80.</p>
-		<p>Essayez ensuite avec l'URI <a href="http://www.google.com">http://www.google.com</a>. Quelle est la différence dans la réponse du serveur ?</p>
+		<section>
+			<h2>Exercice&nbsp;: écrivons HTTP</h2>
+			<p>Récupérez le contenu de la page Web <a href="http://www.epsi.fr/Programmes/Formation-informatique">http://www.epsi.fr/Programmes/Formation-informatique</a> ... <strong>avec telnet</strong>&nbsp;!
+			Pour rappel, le protocole HTTP est associé au port 80.</p>
+			<p>Essayez ensuite avec l'URI <a href="http://www.google.com">http://www.google.com</a>. Quelle est la différence dans la réponse du serveur ?</p>
+		</section>
 	</article>
 	
 	<article>
@@ -554,6 +556,25 @@ Location: http://exemple.fr/jobs/1948321
 
 </code></pre>
 			</figure>
+		</section>
+	</article>
+	
+	<article class="exercice">
+		<section>
+			<h2>&Egrave;criture d'un client HTTP en Java</h2>
+			
+			<p>JAX-RS est l'API officielle en Java pour écrire des services Web RESTful. Cette API fournit également
+			une classe <code><a href="http://docs.oracle.com/javaee/7/api/javax/ws/rs/client/ClientBuilder.html">ClientBuilder</a></code>
+			permettant d'implémenter un client HTTP.</p>
+			<p>Pour cet exercice, il vous faut développer un client pour deux services WEB&nbsp;:</p>
+			<ul>
+				<li>Le premier <a href="http://freegeoip.net/">freegeip.net</a>	permet de connaître la géolocalisation d'une adresse IP.</li>
+				<li>Le second est l'API Web de World of Warcraft. La documentation est 
+				disponible sur le compte <a href="http://blizzard.github.io/api-wow-docs/">GitHub de Blizzard</a></li>
+			</ul>
+			
+			<p>Pour écrire ces applications clientes, vous pouvez partir du template de projet Maven téléchargeable <a href="https://github.com/spoonless/epsi-i4-web-services/archive/web-services-template-projets.zip">ici</a>.</p>
+			
 		</section>
 	</article>
 </body>
