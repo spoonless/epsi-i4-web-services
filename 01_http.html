@@ -238,7 +238,7 @@ Content-Length: 420
 				ajoutée en 2010 par la <a href="http://tools.ietf.org/html/rfc5789">RFC 5789</a>.</dd>
 
 				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.5">DELETE</a></dt>
-				<dd>Détruit la ressource cible.</dd>
+				<dd>Détruit l'association de l'URI avec la ressource cible.</dd>
 
 				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.3">POST</a></dt>
 				<dd>La sémantique de la méthode POST est probablement la plus compliquée à saisir car cette méthode est utilisable dans différentes situations pour&nbsp;:
@@ -281,7 +281,8 @@ Content-Length: 420
 				<dd>Une méthode <em>cacheable</em> indique que sa réponse peut être stockée par le client ou un proxy pour une utilisation ultérieure.
 				Attention, il ne s'agit en rien d'une règle obligatoire et la gestion du cache en HTTP est régie par la
 				<a href="http://tools.ietf.org/html/rfc7234">RFC 7234</a>. HTTP définit les méthodes GET, HEAD et POST comme
-				étant <em>cacheables</em>.
+				étant <em>cacheables</em>. Les méthodes non <em>cacheables</em> forcent la suppression des données mises en cache
+				pour l'URI lorsqu'elles sont soumises au serveur.
 				</dd>
 			</dl>
 
@@ -519,7 +520,7 @@ Location: http://exemple.fr/individu/000001
 </code></pre>
 			</figure>
 			
-			<h3>Suppression d'une ressource</h3>
+			<h3>Suppression de l'accès à la ressource</h3>
 			
 			<figure>
 				<figcaption>La requête</figcaption>
