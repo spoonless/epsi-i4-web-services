@@ -845,12 +845,128 @@ If-Match: *
 
 </code></pre>
 			</figure>
-			<!-- TODO redirection
 			
-			* Le déplacement de représentation de ressource
-			* POST-GET
 			
-			-->
+			<h3>Les redirections</h3>
+			
+			<p>Les redirections correspondent aux codes statut de la famille 3XX. Elles permettent au serveur de réorienter le client
+			vers une nouvelle URI. &Agrave; la réception d'un code de redirection, le client doit comprendre que pour terminer sa requête, il doit
+			exécuter une nouvelle requête vers une URI fournie dans la réponse par le serveur grâce à l'en-tête 
+			<a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a>.</p>
+			
+			<h3>Evolutivité du service et modification des URI</h3>
+			
+			<p>Le cas le plus simple d'utilisation des redirections est celui où le serveur évolue dans le temps. Des évolutions peuvent
+			entraîner une modification des URI. Plutôt que de retourner simplement une erreur, le serveur propose une redirection
+			pour assurer une continuité du service. Dans ce cas, le serveur peut retourner une code statut <strong>301</strong> (Moved Permanently)
+			avec un en-tête <code>Location</code> donnant la nouvelle URI.</p>
+
+			<figure>
+				<figcaption>Le serveur signale un changement de l'URI du service</figcaption>
+				<pre><code class="http">HTTP/1.1 301 Moved Permanently
+Location: http://mon.nouveau.serveur.fr/ma/ressource/cible
+
+</code></pre>
+			</figure>
+			
+			<h3>URI volatile et canonicalisation d'URI</h3>
+			
+			<p>Nous verrons que dans une architecture REST, une ressource ne doit être identifié que par une seule URI. Pourtant
+			il existe de nombreux cas d'utilisation où l'on désire rendre accessible la representation d'une ressource à partir
+			de différentes URI. Par exemple, imaginons une suite de news, chaque article dispose de sa propre URI mais on peut
+			souhaiter exposer une URI permettant d'accéder au dernier article publié. Cette URI désignera forcément dans le temps
+			des ressources différentes. Elle est volatile. Dans ce cas, le serveur peut retourner pour cette URI le code statut
+			<strong>307</strong> (Temporary redirect) qui demande au client de refaire la même requête vers l'URI donnée en réponse
+			par l'en-tête <code>Location</code>.</p>
+
+			<figure>
+				<figcaption>Requête sur une URI <i>volatile</i></figcaption>
+				<pre><code class="http">GET /articles/latest HTTP/1.1
+Host: www.mynews.fr
+
+</code></pre>
+			</figure>
+
+			<figure>
+				<figcaption>Redirection du serveur</figcaption>
+				<pre><code class="http">HTTP/1.1 307 Temporary redirect
+Location: http://www.mynews.fr/articles/les+nouvelles+du+monde.html
+
+</code></pre>
+			</figure>
+			
+			<aside>Pour une requête <code>GET</code>, la redirection est coûteuse car elle oblige le client
+			à émettre une nouvelle requête vers le serveur. Si le serveur peut répondre directement, il peut renvoyer
+			une code 2XX avec le payload attendu et ajouter l'en-tête de réponse <code>Content-Location</code> qui
+			indique au client la véritable URI pour cette ressource (appelée URI canonique). 
+				<figure>
+					<figcaption>Canonicalisation grâce à l'en-tête <code>Content-Location</code></figcaption>
+					<pre><code class="http">HTTP/1.1 200 OK
+Content-Location: http://www.mynews.fr/articles/les+nouvelles+du+monde.html
+Cache-Control: no-store
+Content-Type: text/plain
+Content-Length: 35
+
+Il n'y pas de nouvelle du monde :(
+
+</code></pre>
+				</figure>
+			</aside>
+			
+			<h3>Séparer le traitement de la requête et le résultat</h3>
+			
+			<p>Nous avons vu précédemment qu'il est possible de réaliser des requêtes asynchrones en HTTP.
+			Mais il existe d'autres cas pour lesquels le serveur ne souhaite pas retourner directement de réponse au client.
+			</p>
+			<p>Dans la navigation Web, un cas répandu est le <a href="http://fr.wikipedia.org/wiki/Post-Redirect-Get">POST/Redirect/GET</a>.
+			Une requête <code>POST</code> étant idempotente, lorsqu'un utilisateur remonte dans son historique de navigation, le navigateur n'a pas
+			d'autre choix que de demander à l'utilisateur s'il désire soumettre à nouveau une requête <code>POST</code>. Il est donc souhaitable
+			de faire disparaître les méthodes non idempotentes de l'historique de navigation. Or un navigateur Web ne conserve pas l'historique 
+			d'une requête dont la réponse est une redirection (ou plus exactement, il lui substitue la requête de redirection). 
+			Il est donc possible de supprimer les requêtes <code>POST</code> de l'historique de navigation
+			en s'assurant que les réponses sont toujours des redirections avec une méthode <code>GET</code> vers une page de résultat&nbsp;: 
+			il s'agit du modèle du POST/Redirect/GET. Pour cela, le développeur de site Web doit s'assurer que le code statut en réponse à une méthode
+			<code>POST</code> est un code <strong>303</strong> (See Other). L'en-tête de réponse <code>Location</code> indique à quelle URI
+			le client doit soumettre la requête <code>GET</code> de redirection.</p>
+			
+			<figure>
+				<figcaption>Une requête <code>POST</code></figcaption>
+				<pre><code class="http">POST /individu/ HTTP/1.1
+Host: exemple.fr
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+Content-Length: 65
+
+name=Gayerie&amp;firstname=David&amp;email=david.gayerie.epsi@mailoo.org</code></pre>
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur avec une redirection</figcaption>
+				<pre><code class="http">HTTP/1.1 303 See Other
+Location: http://exemple.fr/individu/000001
+
+</code></pre>
+			</figure>
+
+			<aside class="tip">
+				<header>302, 303 et 307&nbsp;: quelles différences&nbsp;?</header>
+				<p>HTTP définit trois codes statut de redirection assez proches&nbsp;: 302 (Found), 303 (See Other) et 307 (Temporary Redirect).
+				Il existe cependant une différence majeure entre ces trois codes qui correspond à des cas d'utilisation différents.
+				</p>
+				<dl>
+					<dt>302</dt>
+					<dd>Il s'agit d'un code hérité de HTTP 1.0. Sa signification est ambiguë. C'est d'ailleurs pour cela
+					que les codes 303 et 307 ont fait leur apparition dans HTTP 1.1. Pour une application serveur, il est
+					déconseillé de s'en servir. Pour une application cliente, il est conseillé de le traiter comme un code statut 303</dd>
+
+					<dt>303</dt>
+					<dd>Ce code stipule que la requête <strong>a été traitée</strong> par le serveur. Cependant le client
+					ne peut connaître le résultat que s'il soumet une requête <strong><code>GET</code></strong> à l'URI fournie en réponse dans l'en-tête <code>Location</code>.</dd>
+
+					<dt>307</dt>
+					<dd>Ce code stipule que la requête <strong>n'a pas été traitée</strong> par le serveur. Le client
+					doit donc soumettre à nouveau <strong>la même</strong> requête quelle que soit la méthode à l'URI fournie 
+					en réponse dans l'en-tête <code>Location</code>.</dd>
+				</dl>
+			</aside>
 			
 		</section>
 	</article>
