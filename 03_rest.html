@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>REST</title>
+	<meta name="author" content="David Gayerie">
+	<link href="css/article.css" rel="stylesheet" media="screen">
+	<link href="css/print-article.css" rel="stylesheet" media="print">
+	<link href="highlight/styles/zenburn.css" rel="stylesheet">
+	
+	<script src="highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="js/toc.js"></script>
+</head>
+<body>
+	<div id="titleBar">
+		<a href="index.html" title="Retourner au sommaire"><img src="assets/go-home.png"></a>
+ 		<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" title="Télécharger tout le cours"><img src="assets/download.png"></a>
+		<script>document.write(document.title)</script> - EPSI I4 2014/2015 - <a href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a>
+	</div>
+	<article>
+		<h1><script>document.write(document.title)</script></h1>
+		<section id="toc"></section>
+		<section>
+			<p>REST est un style d'architecture pour les systèmes hypermédia distribués.</p>
+			<p>En 2000, Roy Fielding a formalisé l'architecture REST dans le chapitre 5 de sa <a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">thèse de doctorat</a>.
+			En 2007, Leonard Richardson et Sam Ruby présentent ROA (Resource Oriented Architecture) dans leur ouvrage <em>RESTful Web Services</em>.
+			ROA est devenu depuis le modèle d'application de REST pour les services Web.</p>
+			
+			<p>Le modèle REST a été conçu au moment de l'évolution de HTTP vers sa version 1.1 afin d'assurer les évolutions nécessaires du World Wide Web dans les années 1990.
+			HTTP est ainsi le premier protocole basé sur une architecture REST.</p>
+			<p>Ainsi, <strong>REST est le modèle d'architecture du Web&nbsp;!</strong></p>
+		</section>
+		
+		<section>
+			<h2>La ressource</h2>
+			
+			<p>REST est un style d'architecture <strong>orienté ressource</strong>. Mais qu'est-ce qu'une ressource&nbsp;?</p>
+			
+			<blockquote>
+				<p>"Any information that can be named can be a resource" - Roy Fielding</p>
+			</blockquote>
+			
+			<p>Dans le domaine du Web, la notion d'adressabilité (<i>addressability</i>) vient renforcer le nommage. Une ressource est donc
+			une information qui est adressable, c'est-à-dire qui possède une URI.</p>
+			
+			<aside>
+				<p>Par exemple, ce cours est adressable à partir de l'URI 
+				<script>document.write("<a class='explicit' href='" + window.location + "'>" + window.location + "</a>")</script></p>
+			</aside>
+			
+			<p>Une ressource de Web service peut être accessible à partir de plusieurs URI. 
+			Une bonne pratique consiste à considérer qu'une des URI est l'URI <em>canonique</em>.</p>
+			<p>Par exemple une ressource peut être constituée par la liste des étudiants d'une promo. Elle peut être adressable
+			à partir d'une URI précise mais également d'une URI plus volatile comme celle donnant la liste des étudiants pour l'année en cours.
+			Ces deux URI désignent la même ressource pendant une période&nbsp;:</p>
+			<pre><code class="http">http://epsi.fr/bordeaux/informatique/i4/etudiants/<script>document.write(new Date().getFullYear())</script> (URI canonique)</code></pre>
+			<pre><code class="http">http://epsi.fr/bordeaux/informatique/i4/etudiants/annee-courante</code></pre>
+			
+			<aside>
+				<p>Nous avons vu dans les cas d'utilisation de HTTP, que la canonicalisation pouvait se traduire par une redirection
+				avec un code statut 307 (Temporary Redirect) ou par l'en-tête de réponse <code>Content-Location</code>.</p>
+			</aside>
+			
+			<h3>URI informative ou URI opaque ?</h3>
+			
+			<p>Une bonne pratique consiste à concevoir des URI descriptives et hiérarchiques. Par exemple, si l'on considère cette URI&nbsp;:</p>
+	
+			<pre><code class="http">http://epsi.fr/bordeaux/informatique/i4/etudiants/<script>document.write(new Date().getFullYear())</script></code></pre>
+	
+			<p>La structure de cette URI est porteuse d'information et le lecteur comprend facilement qu'elle suit un modèle du type&nbsp;:</p>
+	
+			<pre><code class="http">http://epsi.fr/{ville}/{spécialité}/{code année}/etudiants/{promotion}</code></pre>
+	
+			<p>Cette bonne pratique ne relève absolument pas d'une contrainte de l'architecture REST. Il s'agit souvent d'une erreur
+			d'interprétation des développeurs de penser que REST repose avant tout sur la conception d'une API basée sur des chemins d'URI. 
+			Une URI est simplement un nom donné à une ressource. Pour notre exemple, l'URI suivante est tout aussi valide&nbsp;:</p>
+	
+			<pre><code class="http">http://epsi.fr/b54adc00-67f9-11d9-9669-0800200c9a66</code></pre>
+			
+			<p>Dans une architecture REST, les URI peuvent être opaques, c'est-à-dire qu'elles ne portent pas nécessairement d'information
+			sur la ressource qu'elles désignent, elles se limitent à la rendre adressable.</p>
+			
+			<h3>Ressource contre RPC</h3>
+			
+			<p>Il existe une autre grande famille de modèles d'architecture pour les échanges entre processus&nbsp;: le <code>RPC</code> (Remote Procedure Call).
+			L'idée générale est de permettre d'invoquer une procédure à travers un réseau pour la faire exécuter sur un serveur et ensuite le client récupère
+			le résultat.</p>
+			<p>Il existe une différence de perspective entre une approche RPC et une approche orientée ressource telle que REST. Avec le RPC, on se focalise sur 
+			un traitement et sur l'appel à une procédure comme on le ferait dans un langage impératif. 
+			Dans une approche orientée ressource, on se focalise sur l'information et on tend à uniformiser les opérations disponibles pour manipuler
+			cette information (les méthodes HTTP <code>GET</code>, <code>PUT</code>, <code>POST</code>, <code>DELETE</code> et <code>PATCH</code> 
+			en sont une très bonne illustration).
+			Si le résultat peut sembler plus restrictif dans un premier temps, il est en fait beaucoup plus simple à implémenter et beaucoup plus
+			facile à généraliser.</p>
+			<p>Ainsi, une URI doit représenter une ressource et non pas une procédure.</p>
+			
+			<aside class="warn">
+				<p>Le jeu d'URI suivant n'est pas correct du point de vue REST&nbsp;:</p>
+				<pre><code class="http">
+http://epsi.fr/bordeaux/informatique/i4/etudiants/inscrire?nom=John&amp;prenom=Doe
+
+http://epsi.fr/bordeaux/informatique/i4/etudiants/desinscrire?id=1337
+
+http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webservices&amp;note=16
+
+</code></pre>
+				<p>Certes il s'agit d'URI informatives pour lesquelles on comprend assez facilement ce qu'elles représentent. Cependant, elles semblent 
+				décrire des opérations et sont donc orientées RPC.</p>
+			</aside>
+		</section>
+			
+		<section>
+			<h2>La représentation</h2>
+			<p>Dans une architecture REST, un client et un serveur n'échangent pas une ressource 
+			mais des représentations, c'est-à-dire <em>un ensemble de données relatives à l'état courant d'une ressource</em>.
+			Ainsi on peut dire que du point de vue du client, la nature d'une ressource est inconnue puiqu'il ne manipule que
+			des URI et des représentations. Ainsi lorsqu'un client veut créer une ressource sur le serveur en utilisant par
+			exemple la méthode <code>PUT</code>, il ne fournit qu'une représentation de ce qu'il souhaite. Cela signifie que le serveur est libre
+			d'utiliser tout ou partie de l'information transmise par le client ou en ajouter de nouvelle dans la ressource créée.
+			Le serveur peut également choisir les formats de représentation disponibles lors de l'accès à la ressource avec la méthode <code>GET</code>.
+			Parmi ces formats, il peut choisir de supporter ou non le format utilisé par le client au moment de la création.</p>
+			<p>Une même ressource Web peut avoir plusieurs représentations : une image JPEG, une page HTML, un document XML, un document JSON...
+			Si le serveur dispose de plusieurs représentations d'une ressource, il retourne celle qui correspond le mieux aux capacités du client.
+			Pour cela le client doit fournir ses préférences. C'est ce que l'on appelle la <strong>négociation de contenu proactive</strong>.
+			Nous avons vu que cette négociation se fait en HTTP grâce à des en-têtes particuliers.</p>
+			
+			<aside>
+				<p>Il faut garder à l'esprit que la négociation de contenu ne se limite pas uniquement au format de données (HTML, XML, JSON...).
+				La négociation peut également portée sur la langue utilisée dans la représentation.
+				</p>
+			</aside>
+			
+			<h2>Les contraintes REST</h2>
+			
+			<h2>Hypermedia</h2>
+
+			<h2>REST&nbsp;: ça veut dire quoi&nbsp;?</h2>
+
+			<h2>Les services Web RESTful</h2>
+			<aside class="warn">
+				<header>Les idées fausses sur les services Web RESTful</header>
+				<ul>
+					<li>il faut avant tout définir des arborescences claires d'URI</li>
+					<li>il s'agit d'exposer des appels de méthodes qui constitueront l'API de mon service</li>
+					<li>il faut utiliser un format d'échange de données cool et/ou à la mode</li>
+					<li>il suffit de développer son application à partir d'un framework <em>estampillé</em> REST</li>
+					<li>il n'est pas nécessaire de comprendre la notion d'<strong>hypermedia</strong>, il suffit de fournir une documentation des URI à ceux qui veulent utiliser mon service.</li>
+				</ul>
+			</aside> 
+			
+		</section>
+	</article>
+	
+	<article>
+		<h2>Références</h2>
+
+		<h3>Sites Web &amp; articles</h3>
+		<dl>
+			<dt>REST cookbook</dt>
+			<dd><a class="explicit" href="http://restcookbook.com/">http://restcookbook.com/</a></dd>
+
+			<dt>Une étude de cas très complète (commander un café en REST)</dt>
+			<dd><a class="explicit" href="http://www.infoq.com/articles/webber-rest-workflow">http://www.infoq.com/articles/webber-rest-workflow</a></dd>
+
+			<dt>Le modèle de maturité de Richardson des services Web RESTful</dt>
+			<dd><a class="explicit" href="http://martinfowler.com/articles/richardsonMaturityModel.html">http://martinfowler.com/articles/richardsonMaturityModel.html</a></dd>
+
+		</dl>
+	
+		<h3>Livres</h3>
+		<dl>
+			<dt><a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">Architectural Styles and the Design of Network-based Software Architectures</a></dt>
+			<dd>Roy Fielding - University of California, Irvine 2000 (La thèse de doctorat incluant la présentation de REST)</dd>
+
+			<dt><a href="http://it-ebooks.info/book/3060/">RESTful Web APIs</a></dt>
+			<dd>Leonard Richardson, Mike Amundsen, Sam Ruby - O'Reilly 2013</dd>
+
+			<dt><a href="http://it-ebooks.info/book/391/">RESTful Web Services</a></dt>
+			<dd>Leonard Richardson &amp; Sam Ruby - O'Reilly 2007</dd>
+			
+			<dt><a href="http://it-ebooks.info/book/393/">REST in Practice</a></dt>
+			<dd>Jim Webber, Savas Parastatidis, Ian Robinson - O'Reilly Media 2010</dd>
+		</dl>
+	</article>
+
+</body>
+</html>
