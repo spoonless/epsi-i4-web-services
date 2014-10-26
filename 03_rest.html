@@ -8,7 +8,7 @@
 	<link href="css/print-article.css" rel="stylesheet" media="print">
 	<link href="highlight/styles/zenburn.css" rel="stylesheet">
 	
-	<script src="highlight/highlight.pack.js"></script>
+	<script src="highlight/highlight.pack.js"></script> 
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script src="js/toc.js"></script>
 </head>
@@ -29,7 +29,9 @@
 			
 			<p>Le modèle REST a été conçu au moment de l'évolution de HTTP vers sa version 1.1 afin d'assurer les évolutions nécessaires du World Wide Web dans les années 1990.
 			HTTP est ainsi le premier protocole basé sur une architecture REST.</p>
-			<p>Ainsi, <strong>REST est le modèle d'architecture du Web&nbsp;!</strong></p>
+			<p><strong>REST est le modèle d'architecture du Web&nbsp;!</strong> Cela ne signifie pas que l'ensemble du Web
+			se conforme au modèle décrit par REST mais cela signifie que HTTP a été conçu selon ce modèle (principalement
+			pour des raisons de scalabilité et de fiabilité).</p>
 		</section>
 		
 		<section>
@@ -41,17 +43,17 @@
 				<p>"Any information that can be named can be a resource" - Roy Fielding</p>
 			</blockquote>
 			
-			<p>Dans le domaine du Web, la notion d'adressabilité (<i>addressability</i>) vient renforcer le nommage. Une ressource est donc
-			une information qui est adressable, c'est-à-dire qui possède une URI.</p>
+			<p>Dans le domaine du Web, la notion d'adressabilité (<i>addressability</i>) vient renforcer celle de nommage. 
+			Une ressource est donc une information qui est adressable à partir d'une URI.</p>
 			
 			<aside>
 				<p>Par exemple, ce cours est adressable à partir de l'URI 
 				<script>document.write("<a class='explicit' href='" + window.location + "'>" + window.location + "</a>")</script></p>
 			</aside>
 			
-			<p>Une ressource de Web service peut être accessible à partir de plusieurs URI. 
+			<p>Une ressource Web peut être accessible à partir de plusieurs URI. 
 			Une bonne pratique consiste à considérer qu'une des URI est l'URI <em>canonique</em>.</p>
-			<p>Par exemple une ressource peut être constituée par la liste des étudiants d'une promo. Elle peut être adressable
+			<p>Par exemple une ressource peut être constituée par la liste des étudiants d'une promotion. Elle peut être adressable
 			à partir d'une URI précise mais également d'une URI plus volatile comme celle donnant la liste des étudiants pour l'année en cours.
 			Ces deux URI désignent la même ressource pendant une période&nbsp;:</p>
 			<pre><code class="http">http://epsi.fr/bordeaux/informatique/i4/etudiants/<script>document.write(new Date().getFullYear())</script> (URI canonique)</code></pre>
@@ -84,15 +86,15 @@
 			<h3>Ressource contre RPC</h3>
 			
 			<p>Il existe une autre grande famille de modèles d'architecture pour les échanges entre processus&nbsp;: le <code>RPC</code> (Remote Procedure Call).
-			L'idée générale est de permettre d'invoquer une procédure à travers un réseau pour la faire exécuter sur un serveur et ensuite le client récupère
-			le résultat.</p>
-			<p>Il existe une différence de perspective entre une approche RPC et une approche orientée ressource telle que REST. Avec le RPC, on se focalise sur 
-			un traitement et sur l'appel à une procédure comme on le ferait dans un langage impératif. 
-			Dans une approche orientée ressource, on se focalise sur l'information et on tend à uniformiser les opérations disponibles pour manipuler
+			L'idée générale est de permettre d'invoquer une procédure à travers un réseau pour la faire exécuter sur un serveur et récupèrer
+			le résultat par le client.</p>
+			<p>Il existe une différence de perspective entre une approche RPC et une approche orientée ressource telle que REST. Avec le RPC,
+			la conception du service se focalise sur un traitement et sur l'appel à une procédure comme on le ferait dans un langage impératif. 
+			Dans une approche orientée ressource, la conception du service se focalise sur l'information et on tend à uniformiser les opérations disponibles pour manipuler
 			cette information (les méthodes HTTP <code>GET</code>, <code>PUT</code>, <code>POST</code>, <code>DELETE</code> et <code>PATCH</code> 
 			en sont une très bonne illustration).
-			Si le résultat peut sembler plus restrictif dans un premier temps, il est en fait beaucoup plus simple à implémenter et beaucoup plus
-			facile à généraliser.</p>
+			Si l'approche orientée ressource peut sembler plus restrictive dans un premier temps, elle est en fait beaucoup 
+			plus simple à implémenter et beaucoup plus facile à généraliser.</p>
 			<p>Ainsi, une URI doit représenter une ressource et non pas une procédure.</p>
 			
 			<aside class="warn">
@@ -105,19 +107,19 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/desinscrire?id=1337
 http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webservices&amp;note=16
 
 </code></pre>
-				<p>Certes il s'agit d'URI informatives pour lesquelles on comprend assez facilement ce qu'elles représentent. Cependant, elles semblent 
-				décrire des opérations et sont donc orientées RPC.</p>
+				<p>Certes il s'agit d'URI informatives pour lesquelles on comprend assez facilement ce qu'elles représentent. 
+				Cependant, elles semblent décrire des opérations et sont donc orientées RPC.</p>
 			</aside>
 		</section>
 			
 		<section>
 			<h2>La représentation</h2>
 			<p>Dans une architecture REST, un client et un serveur n'échangent pas une ressource 
-			mais des représentations, c'est-à-dire <em>un ensemble de données relatives à l'état courant d'une ressource</em>.
-			Ainsi on peut dire que du point de vue du client, la nature d'une ressource est inconnue puiqu'il ne manipule que
-			des URI et des représentations. Ainsi lorsqu'un client veut créer une ressource sur le serveur en utilisant par
-			exemple la méthode <code>PUT</code>, il ne fournit qu'une représentation de ce qu'il souhaite. Cela signifie que le serveur est libre
-			d'utiliser tout ou partie de l'information transmise par le client ou en ajouter de nouvelle dans la ressource créée.
+			mais des représentations, c'est-à-dire <strong>un ensemble de données relatives à l'état courant d'une ressource</strong>.
+			Ainsi, on peut dire que, du point de vue du client, la nature d'une ressource est inconnue puisqu'il ne manipule que
+			des URI et des représentations. Lorsqu'un client veut créer une ressource sur le serveur en utilisant par
+			exemple la méthode <code>PUT</code>, il ne fournira qu'une représentation de ce qu'il souhaite. Le serveur est libre
+			d'utiliser tout ou partie de l'information transmise par le client ou même l'enrichir pour générer la ressource.
 			Le serveur peut également choisir les formats de représentation disponibles lors de l'accès à la ressource avec la méthode <code>GET</code>.
 			Parmi ces formats, il peut choisir de supporter ou non le format utilisé par le client au moment de la création.</p>
 			<p>Une même ressource Web peut avoir plusieurs représentations : une image JPEG, une page HTML, un document XML, un document JSON...
@@ -127,15 +129,183 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			
 			<aside>
 				<p>Il faut garder à l'esprit que la négociation de contenu ne se limite pas uniquement au format de données (HTML, XML, JSON...).
-				La négociation peut également portée sur la langue utilisée dans la représentation.
+				La négociation peut également porter sur la langue utilisée dans la représentation.
 				</p>
 			</aside>
 			
 			<h2>Les contraintes REST</h2>
 			
-			<h2>Hypermedia</h2>
+			<p>Dans le chapitre 5 de sa thèse, Roy Fielding présente les contraintes d'une architecture REST&nbsp;:</p>
+			<ul>
+				<li>client/serveur</li>
+				<li>interface uniforme</li>
+				<li>sans état (stateless)</li>
+				<li>mise en cache (caching)</li>
+				<li>layered system</li>
+				<li>code-on-demand</li>
+			</ul>
+			
+			<h3>Client/Serveur</h3>
+			
+			<p>Cette contrainte ne semble pas en être une tellement nous sommes habitués à interagir
+			avec des réseaux informatiques basés sur ce modèle. Pourtant une approche client/serveur
+			n'a rien de "naturelle" et il s'agit bien de limiter les rôles que peuvent jouer
+			les éléments d'un réseau. Dans cette approche un élément du réseau peut être
+			client et/ou serveur. En tant que serveur, il dispose d'un ensemble d'information qu'il
+			peut transmettre à la demande à d'autres éléments du réseau qui sont appelés ses clients.</p>
+			
+			<aside>
+				<p>Il existe des modèles de réseau qui ne sont pas basés sur le modèle client/serveur. Par exemple,
+				les architectures de <em>micro-services</em> reposent sur un bus de données
+				dans lequel un service peut écrire ou lire de l'information sans avoir connaissance
+				des autres services.</p>
+			</aside>
+			
+			
+			<h3>Interface uniforme</h3>
+			
+			<p>Si chaque élément d'un réseau dispose de sa propre interface, un client
+			devra s'adapter à chaque serveur vers lequel il désire émettre une requête. Pour éviter
+			ce problème, il est nécessaire de définir une interface claire et minimaliste à laquelle
+			chaque serveur doit se conformer. Pour HTTP, cette interface est composée des méthodes
+			(<code>GET</code>, <code>HEAD</code>, <code>PUT</code>, <code>POST</code>, <code>DELETE</code>...),
+			des URI et de la possibilité d'échanger des représentations en y associant des méta-informations
+			(notamment sur le type de données).</p>
+			
+			<aside>
+				<p>La contrainte de l'interface uniforme entraîne <i>de facto</i> le rejet du style RPC (Remote Procedure Call)
+				pour les échanges dans une architecture REST. Contrairement au RPC, une interface uniforme fait 
+				portée la sémantique du service sur le contenu de la représentation et dans l'enchaînement des requêtes.</p>
+			</aside>
+			
+			<h3>Sans état (stateless)</h3>
+			
+			<p>Dans une architecture client/serveur, un serveur ne peut pas mémoriser l'ensemble des échanges
+			qu'il a avec ses clients. Pour qu'un réseau soit scalable, le client et le serveur ne doivent
+			pas dépendre d'autres informations que celles contenues dans la requête. La requête est auto-suffisante
+			pour que le serveur puisse la traiter.</p>
+			<p>Une pratique (trop) courante dans le développement d'application Web est de définir une session côté
+			serveur qui stocke temporairement des informations issues de requêtes précédentes. Ce mécanisme de session est le
+			plus souvent géré grâce à des Cookies. Cette pratique va à l'encontre de la contrainte d'un échange
+			sans état.</p>
+			
+			<aside>
+				<p>Cette contrainte est probablement celle qui perturbe le plus les habitudes des développeurs.
+				Il est tellement plus simple de concevoir des services en utilisant une session utilisateur
+				côté serveur que cette contrainte paraît excessive. Ce que les développeurs oublient,
+				ce sont les complications créées par un service avec état (stateful) en exploitation&nbsp;:
+				gestion de la montée en charge (ajout de serveur et répartition de charge),
+				rigidité dans l'utilisation du service (le client est supposé suivre une succession d'étapes
+				pour <i>remplir sa session</i>), bugs dûs à des données manquantes et/ou des pertes de session.</p>
+			</aside>
+			
+			<h3>Mise en cache (caching)</h3>
+			
+			<p>Un serveur a la responsabilité de fournir au client des informations sur la possibilité
+			de conserver une représentation et de la considérer comme valide pendant un certain laps de temps.
+			Cette contrainte est malheureusement très largement sous-estimée par les développeurs de services Web alors
+			qu'elle permet d'améliorer considérablement les performances d'une application. Il ne faut pas oublier
+			que la mise en cache est un mécanisme qui est largement exploité par les éléments "transparents" d'Internet
+			comme les proxies pour améliorer l'efficacité des échanges.</p>
+			<p>La <a href="http://tools.ietf.org/html/rfc7234">RFC 7234</a> est entièrement consacrée à la mise en cache avec HTTP/1.1.
+			La gestion du cache est assurée par les en-têtes de réponse <a href="http://tools.ietf.org/html/rfc7234#section-5.3"><code>Expires</code></a>
+			et <a href="http://tools.ietf.org/html/rfc7234#section-5.2"><code>Cache-Control</code></a> mais
+			aussi par les en-têtes de validation 
+			<a href="http://tools.ietf.org/html/rfc7232#section-2.2"><code>Last-Modified</code></a> et 
+			<a href="http://tools.ietf.org/html/rfc7232#section-2.3"><code>ETag</code></a> 
+			(ces derniers ont été décrits dans les cas d'utilisation de HTTP).
+			</p>
+			
+			<h3>Layered system</h3>
+			
+			<p>Un réseau doit être stratifié en couches. Un élément du réseau ne peut dialoguer qu'avec 
+			ses voisins immédiats, c'est-à-dire les composants appartenant aux couches adjacentes. Ainsi si un client
+			veut envoyer une requête à un serveur qui n'est pas localisé dans une couche adjacente, il va devoir
+			passer par des intermédiaires. Pour Internet, les intermédiaires sont les <strong>proxies</strong> et les 
+			<strong>gateways</strong>.</p>
+
+			<h3>Code on demand</h3>
+			
+			<p>Il s'agit d'une contrainte optionnelle de l'architecture REST. Un client peut étendre ses fonctionnalités
+			en téléchargeant du code exécutable. Le code-on-demand est trés largement utilisé dans le Web pour les humains 
+			avec notamment le support de JavaScript pour étendre les fonctionnalités du navigateur Web.</p>
+
+			<h2>Hypermédia</h2>
+			
+			<p>Dans sa thèse de 2000, Roy Fielding cite une contrainte d'interface&nbsp;:</p>
+			<blockquote>hypermedia as the engine of application state</blockquote>
+			<p>Cette contrainte est devenue célèbre et est parfois abrégée en <strong>HATEOAS</strong>.
+			Alors que le lecteur s'attend à une explication, Roy Fielding ne revient pas directement et 
+			explicitement sur cette contrainte. Depuis, la notion d'hypermédia est associée à 
+			REST mais est trop rarement explicitée.</p>
+			<p>Un site Web ou un service Web n'est pas qu'un ensemble d'URI permettant d'identifier
+			des ressources et de les manipuler à travers des représentations. Les représentations sont
+			également des hypermédias&nbsp;: elles contiennent des liens vers d'autres ressources.</p>
+			
+			<h3>Les formats hypermédias</h3>
+			<p>Lorsque l'on prend l'exemple du Web, le format hypermédia le plus courant pour une représentation
+			est le HTML. Avec les balises <code>a</code>, <code>form</code> et <code>link</code>, il est possible d'inclure
+			des liens afin de guider le client dans les choix d'interaction autorisés par le serveur.
+			Lorsque l'on dit couramment que l'on <em>navigue</em> ou que l'on <em>surfe</em> sur le Web,
+			on décrit les actions rendues possibles par le fait que HTML est un format hypermédia.</p>
+			
+			<p>Pour l'implémentation de services Web, on préfèrera d'autres langages que HTML&nbsp;:
+			généralement XML et JSON. En effet, ces langages sont plus <em>neutres</em> que HTML
+			qui ajoute une sémantique de structuration documentaire. Cependant, XML et JSON ne sont pas
+			par défaut des langages hypermédias. Il n'existe pas de support natif pour les liens
+			dans ces formats. Soit le client doit s'adapter pour comprendre la manière dont le serveur
+			inclut le support de l'hypermédia, soit il faut avoir recours à des extensions.
+			Pour le XML, le support de l'hypermedia peut se faire grâce à l'extension 
+			<a href="http://www.yoyodesign.org/doc/w3c/xlink/index.html"><strong>XLink</strong></a>
+			et pour le JSON grâce au format <a href="http://stateless.co/hal_specification.html"><strong>HAL</strong></a> 
+			(Hypertext Application Language).</p>
+						
+			<h3>L'en-tête Link</h3>
+			<p>L'en-tête <code>Link</code> (décrit dans la <a href="http://tools.ietf.org/html/rfc5988">RFC 5988</a>)
+			permet au serveur de spécifier un lien et le type de relation. Il se présente sous le format suivant &nbsp;:</p>
+			
+			<pre><code class="http">Link: &lt;URI&gt;;[attributs]</code></pre>
+			
+			<p>Parmi les attributs possibles, on trouve principalement <code>rel</code> qui permet de spécifier
+			le type de la relation et <code>title</code> qui fournit une description textuelle du lien.</p>
+			
+			<pre><code class="http">Link: &lt;<script>document.write(window.location)</script>&gt;;rel="self";title="REST"</code></pre>
+			
+			<aside>
+				<p>Le type de relation indiqué par l'attribut <code>rel</code> est soit un nom défini par le 
+				<a href="http://www.iana.org/assignments/link-relations/link-relations.xhtml">registre du IANA</a>
+				soit une URI.</p>
+			</aside>
+			
+			<p>Avec l'en-tête <code>Link</code>, il est possible d'exprimer des liens entre ressources
+			hors de la représentation (et donc dans des réponses ne contenant pas de <i>payload</i>).
+			Cependant, l'en-tête <code>Link</code> est encore rarement utilisé.</p>
+			
+			
+			<!--  hypermedia comme gestion d'état applicatif -->
+			<h3>Les apports de l'hypermédia</h3>
+			
+			<p>L'hypermédia a pour objectif de déléguer au serveur la responsabilité de guider
+			le client dans ce qu'il est possible de réaliser. Au client de choisir ce qu'il souhaite faire
+			parmi les possibilités qui lui sont proposées.
+			Cette pratique permet au client de ne connaître que le minimum requis pour utiliser le service.
+			L'hypermédia n'est pas une technologie ni une méthode de développement. Il est le résultat de la
+			conception d'un service respectant les contraintes REST.</p>
+			<p>Ainsi, grâce à l'hypermédia, un client ne sera pas dépendant des règles de construction
+			des URI. Il doit connaître un point d'entrée du service mais le serveur doit lui fournir
+			dans les représentations (et/ou grâce à l'en-tête <code>Link</code>) les URI à utiliser
+			pour accéder aux autres ressources. Cette pratique permet un découplage entre l'implémentation du client
+			et les choix d'implémentation et de déploiement du service.</p>
+			<p>En spécifiant au client les liens possibles dans ses réponses, le serveur
+			définit un workflow qui décrit les états successifs du client. Avec l'hypermédia, il devient
+			possible de modéliser des interactions client/serveur complexes par un enchaînement de requête/réponse.
+			On peut donc bien dire, à la suite de Roy Fielding, que l'hypermédia permet de décrire une machine à état
+			d'une application formée par l'intéraction entre un client et un serveur.</p>
 
 			<h2>REST&nbsp;: ça veut dire quoi&nbsp;?</h2>
+			
+			<p>REST est un acronyme pour <strong>Representational State Transfer</strong>.</p>
+			<p>Il s'agit bien d'une architecture dont l'objectif et de transférer des états sous la forme de représentation.</p>
 
 			<h2>Les services Web RESTful</h2>
 			<aside class="warn">
@@ -150,6 +320,38 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			</aside> 
 			
 		</section>
+	</article>
+	
+	<article class="exercice">
+		<h2>Exercice&nbsp;: Réaliser un service Web de paiement de facture</h2>
+		
+		<p>&Eacute;tant donné le workflow suivant décrivant le paiement d'une facture&nbsp;:</p>
+		<figure>
+			<img src="assets/diagramme_activite_paiement_facture.svg" alt="Diagramme d'activité de paiement de facture" />
+		</figure>
+		<p>Les activités sont&nbsp;:</p>
+		<dl>
+			<dt>créer facture</dt>
+			<dd>Créer un document identifiant les coordonnées bancaires du créditeur et le montant à payer.</dd>
+
+			<dt>autoriser paiement</dt>
+			<dd>Le débiteur indique ses informations de paiement (numéro de carte de paiement, date limite de validité
+			de la carte et cryptogramme de sécurité). Le client effectue une demande auprès de l'organisme bancaire pour savoir
+			si la transaction est autorisée. L'organisme bancaire fournit un numéro d'autorisation permettant
+			d'identifier la transaction.</dd>
+
+			<dt>capturer paiement</dt>
+			<dd>Si l'autorisation s'est bien passée, le client réalise une <em>capture</em>, c'est-à-dire qu'il
+			demande à l'organisme bancaire d'enregister le paiement et d'effectuer le transfert du compte du
+			débiteur vers le compte du créditeur.</dd>
+		</dl>
+		
+		<p>Décrivez la réalisation d'un service Web RESTful par des exemples de requêtes/réponses HTTP.</p>
+		<p>Décrivez également des scénarios alternatifs&nbsp;:</p>
+		<ul>
+			<li>L'autorisation échoue car les informations bancaires fournies sont incorrectes</li>
+			<li>L'autorisation échoue car le client ne dispose pas du crédit suffisant sur son compte.</li>
+		</ul>
 	</article>
 	
 	<article>
