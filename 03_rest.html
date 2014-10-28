@@ -274,7 +274,7 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<aside>
 				<p>Le type de relation indiqué par l'attribut <code>rel</code> est soit un nom défini par le 
 				<a href="http://www.iana.org/assignments/link-relations/link-relations.xhtml">registre du IANA</a>
-				soit une URI.</p>
+				soit une URI pour un type propre au serveur.</p>
 			</aside>
 			
 			<p>Avec l'en-tête <code>Link</code>, il est possible d'exprimer des liens entre ressources
@@ -308,6 +308,15 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<p>Il s'agit bien d'une architecture dont l'objectif et de transférer des états sous la forme de représentation.</p>
 
 			<h2>Les services Web RESTful</h2>
+			
+			<p>Les services Web RESTful (appelés également API Web) ne sont fondamentalement pas différents des sites Web traditionnels.
+			Ils obéissent aux mêmes contraintes d'architecture. La différence est une différence d'utilisation. 
+			<p>Dans le cas d'un site Web, le travail du programme client consiste à présenter l'information à un être humain.
+			L'interprétation des données est donc de la responsabilité de l'être humain et c'est bien lui qui va sélectionner 
+			tel ou tel lien hypermédia selon ses objectifs ou ses goûts.</p>
+			<p>Pour un service Web, on attend le plus souvent du logiciel client qu'il sache, non seulement comprendre le format
+			de la représentation, mais également adapter son comportement en fonction du contenu de l'information échangée.</p>
+			
 			<aside class="warn">
 				<header>Les idées fausses sur les services Web RESTful</header>
 				<ul>
@@ -332,7 +341,7 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 		<p>Les activités sont&nbsp;:</p>
 		<dl>
 			<dt>créer facture</dt>
-			<dd>Créer un document identifiant les coordonnées bancaires du créditeur et le montant à payer.</dd>
+			<dd>Création d'un document identifiant les coordonnées bancaires du créditeur et le montant à payer.</dd>
 
 			<dt>autoriser paiement</dt>
 			<dd>Le débiteur indique ses informations de paiement (numéro de carte de paiement, date limite de validité
