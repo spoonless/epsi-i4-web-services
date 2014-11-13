@@ -314,8 +314,44 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<p>Dans le cas d'un site Web, le travail du programme client consiste à présenter l'information à un être humain.
 			L'interprétation des données est donc de la responsabilité de l'être humain et c'est bien lui qui va sélectionner 
 			tel ou tel lien hypermédia selon ses objectifs ou ses goûts.</p>
-			<p>Pour un service Web, on attend le plus souvent du logiciel client qu'il sache, non seulement comprendre le format
-			de la représentation, mais également adapter son comportement en fonction du contenu de l'information échangée.</p>
+			<p>Pour un service Web, on attend le plus souvent du logiciel client qu'il sache, non seulement construire les URI 
+			et invoquer correctement les méthodes HTTP, mais également adapter son comportement en fonction du contenu de l'information échangée.
+			Cette capacité à analyser le contenu des représentations doit être favorisée par le serveur qui à la charge
+			de définir la sémantique de protocole et la sémantique applicative (ces notions sont empruntées à l'ouvrage 
+			<strong>RESTful Web APIs</strong> - O'Reilly 2013).</p>
+			
+			<dl>
+				<dt>Sémantique de protocole</dt>
+				<dd>Il s'agit de la compréhension que l'on peut avoir du service par la connaissance du format des URI et par
+				les méthodes HTTP autorisées sur ces URI. Généralement cette compréhension est suffisante pour un être humain
+				afin de tester un service. Par contre l'implémentation d'un client basé uniquement sur la sémantique
+				de protocole est possible mais reste limitée, notamment pour prendre en compte les évolutions du service. Un navigateur Web est un bon
+				exemple de logiciel qui se limite à la sémantique de protocole en utilisant principalement le support
+				hypermédia du HTML pour présenter à un utilisateur la liste des liens possibles.</dd>
+
+				<dt>Sémantique applicative</dt>
+				<dd>La sémantique applicative porte sur la signification des représentations échangées et sur la signification des liens entre
+				ces représentations. Si une API Web définit un lien entre deux ressources comme étant de type <em>caused by</em>, cela n'a <i>a priori</i>
+				aucune signification pour un logiciel client. La sémantique applicative est généralement décrite dans une documentation en ligne.
+				Des formats de description traitables par une machine commencent à voir le jour et à être utilisés (par exemple le <a href="http://www.w3.org/TR/json-ld/">JSON-LD</a>).</dd>
+			</dl>
+			
+			<p>Concevoir une API Web digne de ce nom nécessite donc de réduire au minimum le niveau de compréhension du client
+			nécessaire pour l'utiliser. Minimiser l'effort nécessaire à la maîtrise de la sémantique de protocole est la tâche la plus simple si l'on
+			prend la peine d'utiliser un format hypermédia de représentation (HTML, <a href="http://stateless.co/hal_specification.html">HAL+JSON</a>, 
+			<a href="http://stateless.co/hal_specification.html">HAL+XML</a>). En ce qui concerne la sémantique applicative, le plus efficace
+			consiste à réutiliser ce qui a déjà été défini par d'autres. &Agrave; ce titre, le recours à des formats proches des <a href="http://microformats.org/wiki/">
+			microformats</a> ou des <a href="http://schema.org/">schémas Web</a> permettent de créer un standard de fait pour la représentation de certaines ressources. Enfin,
+			pour une API Web qui souhaiterait utiliser HTML comme format hypermédia de représentation, il existe trois techniques très simples pour introduire
+			une sémantique applicative en HTML&nbsp;: les <a href="http://microformats.org/wiki/">microformats</a>, 
+			les <a href="http://en.wikipedia.org/wiki/Microdata_%28HTML%29">microdata</a> ou <a href="http://www.w3.org/TR/rdfa-lite/">RDFa</a>.</p>
+			
+			<aside>
+				<p>Il est également possible de définir son propre type de contenu en définissant un nouveau type MIME. Les formats de type <code>application/vnd.xxxx</code> désignent
+				des formats spécifiques qui ne sont pas forcément déclarés dans <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">le registre du IANA</a>.
+				L'avantage de définir son propre type de contenu est que l'on peut définir dans une même effort la sémantique de protocole et la sémantique applicative (en fournissant
+				le format autorisé des représentations).</p>
+			</aside>
 			
 			<aside class="warn">
 				<header>Les idées fausses sur les services Web RESTful</header>
@@ -328,11 +364,25 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 				</ul>
 			</aside> 
 			
+			<!--
+			HTML 5 Web storage : http://www.w3schools.com/html/html5_webstorage.asp
+			MIME list: http://www.iana.org/assignments/media-types/media-types.xhtml
+			http://microformats.org/wiki/hcard
+			microdata
+			http://schema.org/
+			RDFa (http://www.w3.org/TR/rdfa-lite/)
+			Faire la différence entre sémantique de protocole (décrit les URI, le format de construction et les méthodes autorisées) et sémantique applicative
+			(décrit la signification des réprésentations échangées). Normalement il n'est pas nécessaire de fournir une documentation de la sémantique du protocole
+			si ce dernier supporte l'hypermédia.
+			profile = description des liens (rel) + descripteur sémantique
+			http://www.google.com/webmasters/tools/richsnippets
+			http://www.w3.org/TR/json-ld/
+			 -->
 		</section>
 	</article>
 	
 	<article class="exercice">
-		<h2>Exercice&nbsp;: Réaliser un service Web de paiement de facture</h2>
+		<h2>Exercice&nbsp;: Un service de paiement de factures</h2>
 		
 		<p>&Eacute;tant donné le workflow suivant décrivant le paiement d'une facture&nbsp;:</p>
 		<figure>
@@ -355,7 +405,7 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			débiteur vers le compte du créditeur.</dd>
 		</dl>
 		
-		<p>Décrivez la réalisation d'un service Web RESTful par des exemples de requêtes/réponses HTTP.</p>
+		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
 		<p>Décrivez également des scénarios alternatifs&nbsp;:</p>
 		<ul>
 			<li>L'autorisation échoue car les informations bancaires fournies sont incorrectes</li>
@@ -363,6 +413,39 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 		</ul>
 	</article>
 	
+	<article class="exercice">
+		<h2>Exercice&nbsp;: Le service d'achat en ligne</h2>
+		
+		<p>On désire mettre en ligne un catalogue de produits parmi lesquels un client peut constituer un panier d'achat.</p>
+
+		<p>Les cas d'utilisation définis sont&nbsp;:</p>
+		<ul>
+			<li>L'utilisateur consulte la liste des articles du catalogue</li>
+			<li>L'utilisateur consulte le détail d'un produit</li>
+			<li>L'utilisateur ajoute un produit à son panier d'achat</li>
+			<li>L'utilisateur supprimer un produit de son panier d'achat</li>
+			<li>L'utilisateur valide son panier pour le paiement en ligne</li>
+		</ul>
+		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
+		
+	</article>
+	
+	<article class="exercice">
+		<h2>Exercice&nbsp;: Un service de réservation de billet</h2>
+		
+		<p>On désire mettre en ligne un service de réservation de billets de concert. Le service ne gère pas de base de données des utilisateurs&nbsp;: un utilisateur est simplement identifié par un pseudo au moment de la réservation.</p>
+		<p>Les cas d'utilisation définis sont&nbsp;:</p>
+		<ul>
+			<li>L'utilisateur réserve une place pour un concert avec un pseudo</li>
+			<li>L'utilisateur annule sa réservation</li>
+			<li>L'utilisateur confirme sa réservation</li>
+			<li>Le gestionnaire du site consulte la liste des réservations pour un concert</li>
+			<li>Le gestionnaire du site consulte la liste des réservations confirmées pour un concert.</li>
+		</ul>
+		<p><strong>Attention, un utilisateur qui a confirmé sa réservation ne peut plus l'annuler !</strong></p>
+		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
+	</article>
+		
 	<article>
 		<h2>Références</h2>
 
@@ -393,6 +476,16 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<dt><a href="http://restinpractice.com/book/book.html">REST in Practice</a></dt>
 			<dd>Jim Webber, Savas Parastatidis, Ian Robinson - O'Reilly Media 2010</dd>
 		</dl>
+
+		<h3>Applications de démo</h3>
+		<dl>
+			<dt><a href="http://rest-bookmarks.herokuapp.com/">REST bookmarks</a></dt>
+			<dd>Une application de démo de gestion de marque-pages (le code source en Java est disponible sur <a href="https://github.com/spoonless/rest-bookmarks">GitHub</a>)</dd>
+
+			<dt><a href="http://www.youtypeitwepostit.com">You type it, we post it!</a></dt>
+			<dd>Une application de démo issue de l'ouvrage <strong>RESTful Web APIs</strong> (le code source pour Node.js est disponible sur <a href="https://github.com/RESTful-Web-APIs/example-code">GitHub</a>)</dd>
+		</dl>
+		
 	</article>
 
 </body>
