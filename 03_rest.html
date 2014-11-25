@@ -400,6 +400,144 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<li>L'autorisation échoue car les informations bancaires fournies sont incorrectes</li>
 			<li>L'autorisation échoue car le client ne dispose pas du crédit suffisant sur son compte.</li>
 		</ul>
+
+		<h2>Implémentation</h2>
+		<p>Voici un exemple d'implémentation d'après les choix réalisés en cours.</p>
+		
+		<p>Pour la requête de création, nous partons du principe que le service à réaliser n'est pas un système
+		de gestion de factures. Il n'est donc pas nécessaire d'appliquer d'éventuelles règles légales concernant
+		la numérotation des factures. Le client est responsable de fournir l'URI de la ressource de la nouvelle facture
+		lors de la création (utilisation de la méthode <code>PUT</code>).</p>
+
+		<figure>
+			<figcaption>Requête de création d'une facture</figcaption>
+			<pre><code class="http">PUT /factures/1984 HTTP/1.1
+Host: mon-serveur.com
+Content-type: application/xml
+Content-length: 605
+
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;facture
+    xmlns="http://mon-serveur.com/facture"
+    xsi:schemaLocation="http://mon-serveur.com/facture.xsd"&gt;
+    
+    &lt;dateFacture&gt;14/11/2014&lt;/dateFacture&gt;
+
+    &lt;montant monnaie="EUR"&gt;114&lt;/montant&gt;
+
+    &lt;client&gt;
+        &lt;prenom&gt;Jean&lt;/prenom&gt;
+        &lt;nom&gt;Dalbant&lt;/nom&gt;
+    &lt;/client&gt;
+    
+    &lt;adresseFacturation&gt; 
+        &lt;numero&gt;24&lt;/numero&gt;
+        &lt;voie&gt;rue de mon voisin&lt;/voie&gt;
+        &lt;zipcode&gt;31000&lt;/zipcode&gt;
+        &lt;ville&gt;Bordeaux&lt;/ville&gt;
+        &lt;pays&gt;France&lt;/pays&gt;
+    &lt;/adresseFacturation&gt;
+    
+    &lt;crediteur&gt;
+        &lt;iban&gt;BE43068999999501&lt;/iban&gt;
+    &lt;/crediteur&gt;
+&lt;/facture&gt;
+
+</code></pre>
+		</figure>
+		
+		<figure>
+			<figcaption>Réponse pour la création d'une facture</figcaption>
+			<pre><code class="http">HTTP/1.1 201 Created
+Location:  http://www.mon-serveur.com/factures/1984
+Link: &lt;http://www.mon-serveur.com/factures/1984/paiement&gt;; rel="payment"; title="Paiement"
+</code></pre>
+		</figure>
+		
+		<p>Afin d'utiliser une sémantique pré existante pour notre service, nous pouvons choisir de
+		nous baser sur les schémas Web définis sur <a href="http://schema.org">schema.org</a>.
+		Il n'existe pas à proprement parler de schéma pour une facture, mais nous disposons
+		d'une <a href="https://schema.org/PayAction"><code>PayAction</code></a>. Ainsi, une adaptation
+		de ce schéma donnerait&nbsp;:</p>
+		
+		<figure>
+			<figcaption>Requête d'une PayAction</figcaption>
+			<pre><code class="http">PUT /PayAction/1984 HTTP/1.1
+Host: mon-serveur.com
+Content-type: application/xml
+Content-length: 565
+
+&lt;PayAction 
+     xmlns="http://schema.org/PayAction"
+     xsi:schemaLocation="http://mon-serveur.com/xsd/PayAction.xsd"&gt;
+  &lt;purpose&gt;
+    &lt;name&gt;CLI-23234584391&lt;/name&gt;
+    &lt;description&gt;Commande sur le site Internet trouvetout.com&lt;/description&gt;
+    &lt;url&gt;https://trouvetout.com/bill/CLI-23234584391&lt;/url&gt;
+  &lt;/purpose&gt;
+  &lt;price priceCurrency="EUR"&gt;114&lt;/price&gt;
+  &lt;recipient&gt;
+    &lt;name&gt;trouvetout Inc.&lt;/name&gt;
+    &lt;iban&gt;BE43068999999501&lt;/iban&gt;
+  &lt;/recipient&gt;
+  &lt;agent&gt;
+    &lt;honorificPrefix&gt;M.&lt;/honorificPrefix&gt;
+    &lt;givenName&gt;Jean&lt;/givenName&gt;
+    &lt;name&gt;Dalbant&lt;/name&gt;
+  &lt;/agent&gt;
+&lt;/PayAction&gt;
+</code></pre>
+		</figure>
+
+		<figure>
+			<figcaption>Réponse pour une PayAction</figcaption>
+			<pre><code class="http">HTTP/1.1 201 Created
+Location:  http://www.mon-serveur.com/PayAction/1984
+Link: &lt;http://www.mon-serveur.com/PayAction/1984/payment&gt;; rel="payment"; title="Paiement"
+</code></pre>
+		</figure>
+		
+		<p>Pour le paiement, le client doit suivre le lien typé <code>payment</code> fourni dans l'en-tête de la réponse.
+		</p>
+		
+		<figure>
+			<figcaption>Requête de demande d'autorisation</figcaption>
+			<pre><code class="http">POST /PayAction/1984/payment HTTP/1.1
+Host: mon-serveur.com
+Content-type: application/x-www-form-urlencoded; charset=utf-8
+Content-length: 148
+
+cardNumber=1111222233334444&amp;expiryDate=12/<script type="text/javascript">document.write(new Date().getFullYear())</script>&amp;securityCode=123
+</code></pre>
+		</figure>
+		
+		<figure>
+			<figcaption>Réponse pour la demande d'autorisation</figcaption>
+			<pre><code class="http">HTTP/1.1 307 Temporary Redirect
+Location: http://www.mon-serveur.com/PayAction/1984/payment/456938103394
+
+</code></pre>
+		</figure>
+		
+		<p>Une réponse avec le code 307, suggère au client que le paiement ne sera terminé que si il refait la même
+		requête que précédemment à la nouvelle URI donnée par l'en-tête de réponse <code>Location</code>. Dans notre exemple,
+		le serveur fournit une URI qu'il identifiera comme une URI de ressource valide pour une capture.</p>
+		
+		<aside>
+			<p>Il n'est pas obligatoire d'utiliser un code de redirection. On peut même considéré que pour des raisons
+			de sécurité, on ne désire pas que le client envoie deux fois les données bancaires. Dans, ce cas, on
+			peut opter pour une autre cinématique dans laquelle le serveur renvoie à nouveau un lien vers l'URI de capture.</p>
+			<figure>
+				<figcaption>Réponse pour la demande d'autorisation sans redirection</figcaption>
+				<pre><code class="http">HTTP/1.1 200 OK
+Link: &lt;http://www.mon-serveur.com/PayAction/1984/payment/456938103394&gt;;rel="urn:epsi:capture"
+
+</code></pre>
+			</figure>
+			<p>Comme il n'existe pas de type de relation dans le <a href="http://www.iana.org/assignments/link-relations/link-relations.xhtml">registre du IANA</a>
+			pour décrire un lien vers une capture, on utilise une URI pour décrire la relation : urn:epsi:capture</p>
+		</aside>
+
 	</article>
 	
 	<article class="exercice">
@@ -416,6 +554,61 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<li>L'utilisateur valide son panier pour le paiement en ligne</li>
 		</ul>
 		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
+		
+
+		<h2>Implémentation</h2>
+		<p>Voici un exemple d'implémentation d'après les choix réalisés en cours.</p>
+		
+		<p>Pour la consultation de la liste de produits du catalogue, on opte pour une représentation au format HAL+JSON.
+		Cela permet d'introduire facilement un lien vers chaque produit du catalogue&nbsp;:</p>
+		
+		<figure>
+			<figcaption>Requête pour connaître la liste des produits du catalogue</figcaption>
+			<pre><code class="http">GET /products HTTP/1.1
+Host: www.mon-serveur.com
+Accept: application/hal+json
+
+</code></pre>
+		</figure>
+
+		<figure>
+			<figcaption>Réponse contenant la liste des produits du catalogue</figcaption>
+			<pre><code class="http">HTTP/1.1 200 OK
+Content-type: application/hal+json; charset=utf-8
+Content-length: 407
+
+{
+  "_links": {
+    "self": { "href": "/products" },
+    "next": { "href": "/products?page=2" }
+  },
+  "_embedded": {
+    "product": [
+      {
+        "_links": {
+          "self": { "href": "/products/3958302947394" }
+        },
+        "name": "un super produit"
+      },
+      {
+        "_links": {
+          "self": { "href": "/products/495049347238" }
+        },
+        "name": "un autre super produit"
+      }
+    ]
+  }
+}
+</code></pre>
+		</figure>
+		
+		<p>La gestion du panier d'achat est en fait une logique du client. En effet, suivre REST impose de se contraindre à concevoir un service dont les requêtes sont sans état. Si on désire conserver un état
+		du client au fur et à mesure de la navigation, alors cela doit être au client de le faire. Donc l'API Web n'a pas besoin de fournir une ressource pour à un panier d'achat.
+		Si le client désire implémenter une telle logique, il peut tout simplement conserver une liste en mémoire et soumettre au moment de l'achat
+		l'ensemble des articles. Dans ce cas, l'API Web doit se contenter de fournir la possibilité de créer une ressource de commande d'articles par exemple.
+		Dans le cas d'un site HTML, il est tout à fait possible de gérer un panier côté client à l'aide de 
+		<a href="http://www.w3schools.com/html/html5_webstorage.asp">l'API HTML 5 <strong>Local Storage</strong> ou <strong>Session Storage</strong></a>.
+		</p>
 		
 	</article>
 	
