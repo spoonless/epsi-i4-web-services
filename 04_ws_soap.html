@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Les services Web SOAP (WS-*)</title>
+	<meta name="author" content="David Gayerie">
+	<link href="css/article.css" rel="stylesheet" media="screen">
+	<link href="css/print-article.css" rel="stylesheet" media="print">
+	<link href="highlight/styles/zenburn.css" rel="stylesheet">
+	
+	<script src="highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="js/toc.js"></script>
+</head>
+<body>
+	<div id="titleBar">
+		<a href="index.html" title="Retourner au sommaire"><img src="assets/go-home.png"></a>
+ 		<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" title="Télécharger tout le cours"><img src="assets/download.png"></a>
+		<script>document.write(document.title)</script> - EPSI I4 2014/2015 - <a href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a>
+	</div>
+	<article>
+		<h1><script>document.write(document.title)</script></h1>
+		<section id="toc"></section>
+		
+		<section>
+			<h2>La quête de l'interopérabilité</h2>
+			<p>Une problématique courante dans la mise en place de systèmes d'information et de savoir 
+			comment échanger des informations entre plusieurs processus. Cette problématique est souvent résumée par la notion
+			d'<a href="https://fr.wikipedia.org/wiki/Interop%C3%A9rabilit%C3%A9">interopérabilité</a>. D'un point de vue technique,
+			l'interopérabilité est rendue plus complexe par un ou plusieurs facteurs&nbsp;:</p>
+			<ul>
+				<li>les programmes sont écrits dans des langages différents</li>
+				<li>les processus s'exécutent sur des machines différentes</li>
+				<li>les machines appartiennent à des réseaux différents</li>
+			</ul>
+			<p>Avant l'an 2000, on trouve des solutions telles que Sun RPC, CORBA, DCOM, RMI. 
+			&Agrave; partir des années 2000, le succés des réseaux IP, de HTTP 
+			et de XML apporte une nouvelle perspective : définir
+			un protocole d'échange de messages XML <i>via</i> HTTP entre deux processus.</p>
+			<p>Ce protocole originellement défini par Microsoft puis maintenu par le W3 s'appelle <strong>SOAP</strong>.
+			Depuis SOAP a été enrichi de nombreuses spécifications et l'ensemble de ces technologies sont désignées sous le terme <strong>WS-*</strong>.</p>
+			
+			
+			<aside class="warn">
+				WS-* est un ensemble de technologies, il ne s'agit ni d'un modèle de conception ni d'un modèle d'architecture.
+			</aside>
+		</section>
+		<section>
+			<h2>SOAP&nbsp;: structure des messages</h2>
+			<p><a href="http://www.w3.org/TR/soap/">SOAP</a> est une recommandation pour l'échange de messages au format XML entre un expéditeur (SOAP sender)
+			et un destinataire (SOAP receiver). La structure des messages SOAP est identique qu'elle provienne de l'expéditeur (requête) ou du destinataire (réponse).
+			Un message est constitué par une enveloppe (<strong>SOAP envelope</strong>) qui peut contenir un en-tête (<strong>SOAP header</strong>) et ensuite une
+			charge utile (<strong>SOAP body</strong>). 
+			<p>
+			<figure>
+				<figcaption>Exemple de message SOAP</figcaption>
+				<pre><code class="xml">&lt;soapenv:Envelope 
+   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+   xmlns:m="http://www.mymeteo.com/webservices/samples"&gt;
+   &lt;soapenv:Header&gt;
+   &lt;/soapenv:Header&gt;
+   &lt;soapenv:Body&gt;
+      &lt;m:meteo&gt;
+         &lt;m:temperature&gt;12&lt;/m:temperature&gt;
+         &lt;m:unite&gt;celsius&lt;/m:unite&gt;
+         &lt;m:ville&gt;Bordeaux&lt;/m:ville&gt;
+      &lt;/m:meteo&gt;
+   &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;</code></pre>
+			</figure>
+		</section>
+	</article>
+</body>
+</html>
