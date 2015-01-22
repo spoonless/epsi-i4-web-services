@@ -289,7 +289,7 @@
 	
 	<article>
 		<section>
-			<h2>Implémenter des services Web avec JAX-WS</h2>
+			<h2 id="jaxws">Implémenter des services Web avec JAX-WS</h2>
 			<p>Depuis Java 6, l'environnement d'exécution Java inclut JAX-WS qui est l'API permettant d'implémenter des services
 			Web et JAXB (Java API for XML Binding) permettant d'associer une classe Java à une représentation XML.</p>
 			
@@ -490,7 +490,7 @@ public String sayHello(
 			<h2>Déployer un service Web dans un serveur d'application Java EE</h2>
 
 			<p>Pour déployer un service Web développé avec JAX-WS, soit vous disposez d'un serveur d'application
-			Java EE (comme Glassfish ou TomEE), soit vous ne disposer que d'un conteneur de Servlet (comme Tomcat ou Jetty).</p>
+			Java EE (comme Glassfish ou TomEE), soit vous ne disposez que d'un conteneur de Servlet (comme Tomcat ou Jetty).</p>
 			
 			<p>
 			Pour un déploiement dans un serveur d'application Java EE, il suffit d'embarquer votre implémentation dans
@@ -507,7 +507,7 @@ public String sayHello(
 		</section>
 
 		<section>
-			<h2>Les outils Java de génération</h2>
+			<h2 id="java_gentools">Les outils Java de génération</h2>
 			<dl>
 				<dt>Java &#8594; WSDL (Contract last)</dt>
 				<dd>L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsgen.html">wsgen</a></strong> 
@@ -583,7 +583,34 @@ System.out.println(helloService.sayHello("world"));
 </code></pre>
 			</figure>
 		</section>
+	</article>
 
+	<article class="exercice">
+		<section>
+			<h2>Excercice&nbsp;: &Eacute;crire à un programme client d'un service Web</h2>
+			<p>&Eacute;crivez une client pour le service Web SOAP disponible à cette adresse&nbsp;: <a class="explicit" href="http://ws-meteo.herokuapp.com/">http://ws-meteo.herokuapp.com/</a>.</p>
+			<p>Par exemple, vous pouvez écrire un programme qui accepte le nom d'une ville en paramètre et qui affiche la température obtenue pour cette ville après un appel au service Web.</p>
+			
+			<aside class="tip">
+				<p>En Java, pensez à utiliser <a href="#java_gentools"><strong>wsimport</strong></a> pour générer le stub client.</p>
+			</aside>
+
+		</section>
+	</article>
+	
+	<article class="exercice">
+		<section>
+			<h2>Excercice&nbsp;: &Eacute;crire un service Web</h2>
+			
+			<p>Reprenez l'implémentation de la SEI donnée en exemple <a href="#jaxws">plus haut</a> et créez une application Web Java EE incorporant ce service. Déployez ensuite cette application dans un serveur
+			d'application comme <a href="https://tomee.apache.org/">TomEE Plus</a>. Vérifiez que le service fonctionne en utilisant par exemple <a href="http://sourceforge.net/projects/soapui/">SoapUI</a>.</p>
+			
+			<p>Vous pouvez ensuite écrire un programme Java client de votre service.</p>
+
+		</section>
+	</article>
+
+	<article>
 		<section>
 			<h2>Pour aller plus loin</h2>
 			<dl>
