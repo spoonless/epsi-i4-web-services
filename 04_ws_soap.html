@@ -178,7 +178,8 @@
 
   &lt;!-- Les types de données au format XML schema --&gt;
   &lt;types&gt;
-    &lt;xs:schema version="1.0" targetNamespace="http://www.mymeteo.com/meteo"&gt;
+    &lt;xs:schema version="1.0" targetNamespace="http://www.mymeteo.com/meteo"
+               elementFormDefault="qualified"&gt;
       &lt;xs:complexType name="temperature"&gt;
         &lt;xs:sequence&gt;
           &lt;xs:element name="valeur" type="xs:double"/&gt;
