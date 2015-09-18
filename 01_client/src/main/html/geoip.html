@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Geo IP</title>
+<style type="text/css">
+
+body {
+	font-family: sans-serif;
+}
+
+h1 {
+	font-weight: bold;
+	font-size: 130%;
+}
+
+label {
+	font-style: italic;
+}
+
+dt {
+	font-weight: bold;
+	font-size: 120%;
+}
+</style>
+</head>
+<body>
+<h1>Exemple d'accès à l'API Web <a href="http://freegeoip.net">GeoIP</a></h1>
+
+<form onsubmit="return searchDomain(this.domain.value)">
+	<label for="domain">Saisissez un nom de domaine :</label>
+	<input id="domain" name="domain" type="text">
+	<button type="submit">Valider</button>
+</form>
+
+<div id="reply"></div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+	function searchDomain(domain) {
+		$('#reply').html("");
+ 		$.getJSON("http://freegeoip.net/json/" + domain, function(data) {
+ 			$('#reply').html(
+ 				"<dl>" +
+ 					"<dt>" + domain + "</dt>" +
+ 					"<dd>" +
+ 						"<label>IP :</label> " + data.ip + "<br>" +
+ 						"<label>Pays :</label> " + data.country_name + "<br>" +
+ 						"<label>Coordonnées :</label> longitude " + data.longitude + ", latitude " + data.latitude + "<br>" +
+ 					"</dd>" +
+ 				"</dl>"
+ 			);  			
+ 		});
+ 		return false;
+	}
+</script>
+</body>
+</html>
