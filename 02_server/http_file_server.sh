@@ -1,15 +1,20 @@
 #!/bin/bash -e
 
-######################################################
+##########################################################
 # Un serveur de fichiers HTTP très simple
 #
 # Ce serveur distribue les fichiers disponibles dans
 # le répertoire Public de l'utilisateur et ne
 # supporte que la méthode HTTP GET.
-######################################################
+#
+# Le serveur peut être lancé avec ncat sur le port 8080
+#
+#  ncat -k -l 8080 --sh-exec "$(pwd)/http_file_server.sh"
+#
+#########################################################
 
 read STATUS_LINE
->&2 echo "Receiving request $STATUS_LINE"
+>&2 echo "$(date -uR) - $STATUS_LINE"
 
 read -a REQUEST <<< "$STATUS_LINE"
 
@@ -50,3 +55,4 @@ echo "Content-type:$MIME_TYPE"
 echo "Content-length: $(stat -c%s $RESOURCE)"
 echo
 cat $RESOURCE
+
