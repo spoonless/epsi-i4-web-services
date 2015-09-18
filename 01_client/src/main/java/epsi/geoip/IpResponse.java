@@ -10,7 +10,7 @@ public class IpResponse {
 	private Double latitude;
 	private Double longitude;
 
-	@XmlElement(name = "Ip")
+	@XmlElement(name = "IP")
 	public String getIp() {
 		return ip;
 	}

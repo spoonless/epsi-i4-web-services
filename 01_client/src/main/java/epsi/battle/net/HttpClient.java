@@ -7,10 +7,10 @@ import javax.ws.rs.client.WebTarget;
 import org.glassfish.jersey.filter.LoggingFilter;
 
 /**
- * Exemple d'utilisation du servide REST World of Warcraft
+ * Exemple d'utilisation de l'API Web de World of Warcraft
  * (http://blizzard.github.io/api-wow-docs/)
  */
-public class RestClient {
+public class HttpClient {
 
 	public static void main(String[] args) {
 		Client client = ClientBuilder.newClient();
