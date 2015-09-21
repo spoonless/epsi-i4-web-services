@@ -28,9 +28,9 @@
 		<section id="toc"></section>
 		
 		<section>
-			<h2>Tentative de définition</h2>
+			<h2>Web Service et Web API</h2>
 			
-			<p>La définition d'un service Web est problématique. &Agrave; titre d'exemple, voici les définitions données par le W3C et Wikipedia&nbsp;:</p>
+			<p>Voici la définition du terme "Web service" donnée respectivement par le W3C et Wikipedia&nbsp;:</p>
 			
 			<figure>
 				<figcaption><a href="http://www.w3.org/TR/2004/NOTE-ws-gloss-20040211/#webservice">Définition du W3C</a></figcaption>
@@ -49,30 +49,48 @@
 			    </blockquote>
 			</figure>
 			
-			<p>La définition du W3C est trop restrictive car elle réduit les services Web à un ensemble de technologies (WSDL, SOAP, XML). 
-			Cela est bien normal pour le consortium qui est responsable de la rédaction de la plupart des protocoles cités 
-			mais cela n'est représentatif que d'une fraction des services Web.</p>
+			<p>La définition du W3C restreint la notion de service Web à un ensemble de technologies (WSDL, SOAP, HTTP et XML). 
+			Cela est bien normal pour le consortium qui est responsable de la rédaction de la plupart des protocoles cités. 
+			L'article de Wikipédia donne une définition plus ouverte, allant jusqu'à distinguer des grands types de services Web.</p>
 			
-			<p>Pour l'ensemble de ce cours, nous nous bornerons à une définition plus simple mais plus large&nbsp;:</p>
-			<figure>
-			    <blockquote>
-				    <p>Un service Web est un dispositif permettant d'échanger une certaine forme d'information sur le Web. Le Web doit être compris comme un environnement client/serveur
-				    dans lequel les échanges sont réalisés grâce au protocole HTTP.</p>
-			    </blockquote>
-			</figure>
-
+			<p>Pour l'ensemble de ce cours, nous opterons pour une distinction entre <a href="https://en.wikipedia.org/wiki/Web_API">Web API</a> et Web service qui s'impose de plus en plus dans la littérature.
+			Une <strong>API Web</strong> (parfois nommée RESTful Web Services) est une interface programmatique basée sur HTTP permettant à une client et à un serveur 
+			d'interagir suivant un système de requête/réponse. Un <strong>service Web</strong> est un protocole de communication basé sur les standards W3 tels que XML, SOAP et WSDL.
+			</p>
 		</section>
 		
 		<section>
-			<h2><script>document.write(document.title)</script> : Plan du cours</h2>
+			<h2>Plan du cours</h2>
+			
+			<h3>API Web</h3>
 			<ol>
-				<li><a href="01_http.html">Le protocole HTTP</a></li>
-				<li><a href="02_http_cas_d_utilisation.html">HTTP&nbsp;: les cas d'utilisation</a></li>
-				<li><a href="03_rest.html">L'architecture REST</a></li>
-				<li><a href="04_ws_soap.html">Les services Web SOAP (WS-*)</a></li>
+				<li>Approfondissement de HTTP
+					<ol>
+						<li><a href="01_http.html">Le protocole HTTP</a></li>
+						<li>Quelques cas d'utilisation</li>
+						<li>Les requêtes conditionnelles</li>
+						<li>La négociation de contenu</li>
+						<li>Les liens</li>
+						<li>La gestion du cache</li>
+					</ol>
+				</li>
+				<li>REST
+					<ol>
+						<li>L'architecture orientée ressource</li>
+						<li>Les contraintes REST</li>
+						<li>L'hypermedia</li>
+						<li>Sémantique de protocole et sémantique applicative</li>
+					</ol>
+				</li>
 			</ol>
 			
-			<p>Compléments au cours&nbsp;:</p>
+			<h3>Service Web (WS-*)</h3>
+			<ol>
+				<li>SOAP</li>
+				<li>WSDL</li>
+			</ol>
+			
+			<h3>Compléments au cours</h3>
 			<ul>
 				<li><a href="a1_xml.html">XML</a></li>
 			</ul>
