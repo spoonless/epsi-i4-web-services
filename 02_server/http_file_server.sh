@@ -64,6 +64,7 @@ fi
 echo "HTTP/1.1 200 OK"
 echo "Content-type:$MIME_TYPE"
 echo "Content-length: $(stat -c%s $RESOURCE)"
+echo "Date: $(date -uR)"
 echo
 cat $RESOURCE
 
