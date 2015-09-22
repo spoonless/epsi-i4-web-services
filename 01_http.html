@@ -178,6 +178,17 @@ Host: www.epsi.fr
 			l'en-tête <code>Accept</code> avec la valeur <code>text/html</code>. Le corps de la réponse est sauvegardé dans /dev/null, c'est-à-dire nulle part, afin 
 			que le terminal n'affiche que la ligne de statut et les en-têtes de la réponse.</p>
 			
+			<figure>
+				<figcaption>Utilisation avancée de cURL</figcaption>
+				<pre><code class="bash">curl -v -X POST -H "Content-type: application/json" 
+     --data-binary '{"cours": "Web Service", "promo": "I4"}' http://api.epsi.fr/cours</code></pre>
+			</figure>
+
+			<p>L'exemple ci-dessus permet d'exécuter une méthode POST sur une API Web hypothétique en envoyant un document JSON. cURL calculera automatiquement
+			pour nous la taille du message à envoyer. Il n'est donc pas nécessaire de préciser l'en-tête <code>Content-length</code>.</p>
+			
+			<hr>
+
 			<p>Reprenez les URL de l'exercice précédent pour vous familiariser avec cURL : http://www.epsi.fr/Programmes/Formation-informatique et http://www.google.com.
 			Essayez ensuite d'utiliser la méthode HEAD puis la méthode POST plutôt que la méthode GET dans vos requêtes. Quelles différences constatez-vous ?</p>
 		</section>

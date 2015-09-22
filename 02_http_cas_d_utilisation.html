@@ -25,9 +25,58 @@
 		<section id="toc"></section>
 
 		<section>
-			<p>&Agrave; travers différents cas d'utilisation, nous allons exploiter différents codes statut et introduire de nouveaux en-têtes HTTP.</p>
+			<p>&Agrave; travers différents cas d'utilisation, nous allons clarifier le rôle des méthodes HTTP et exploiter différents codes statut.</p>
 			
-			<h2>Création d'une ressource dont on connait l'URI</h2>
+			<h2>Obtenir la représentation d'une ressource</h2>
+			<p>Lorsqu'un client désire obtenir la représentation d'une ressource auprès d'un serveur, il utilise <strong>toujours</strong>
+			la méthode <code>GET</code>. En cas du succès, le serveur doit répondre le code 200 ainsi que la représentation de la ressource.</p>
+
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">GET /web+service HTTP/1.1
+Host: www.dictionary.info
+
+</code></pre>
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur en cas de succès</figcaption>
+				<pre><code class="http">HTTP/1.1 200 OK
+Content-type: text/plain; charset=utf-8
+Content-language: en
+Content-length: 226
+
+A Web Service is a method of communication between two electronic devices over a network.
+It is a software function provided at a network address over the web with the service always on 
+as in the concept of utility computing.</code></pre>
+			</figure>
+
+			<h2>Obtenir uniquement les meta-informations d'une ressource</h2>
+			<p>Un client peut souhaiter obtenir des meta-informations sur une ressource. Par exemple, il souhaite vérifier qu'une ressource existe
+			sans nécessairement obtenir sa représentation. Dans ce cas, il doit utiliser la méthode <code>HEAD</code>. Cette méthode se comporte
+			comme la méthode <code>GET</code> mais sans retourner le corps du message</p>
+
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">HEAD /web+service HTTP/1.1
+Host: www.dictionary.info
+
+</code></pre>
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur en cas de succès</figcaption>
+				<pre><code class="http">HTTP/1.1 200 OK
+Content-type: text/plain; charset=utf-8
+Content-language: en
+Content-length: 226
+
+</code></pre>
+			</figure>
+			
+			<aside>
+				<p>Pour une requête <code>HEAD</code>, le serveur peut ou non retourner les informations relatives à la taille du message (l'en-tête <code>Content-length</code>).</p>
+			</aside>
+
+			<h2 id="creer_une_ressource_put">Créer une ressource dont on connait l'URI</h2>
 			
 			<p>Lorsqu'un client veut créer une ressource sur le serveur, il faut distinguer le cas où le client connaît
 			l'URI finale de la ressource du cas où c'est au serveur de déterminer l'URI finale. Dans le cas où l'utilisateur
@@ -38,21 +87,36 @@
 				<figcaption>La requête</figcaption>
 				<pre><code class="http">PUT /individu/David+Gayerie HTTP/1.1
 Host: exemple.fr
-Content-Type: application/json; charset=utf-8
-Content-Length: 91
+Content-type: application/json; charset=utf-8
+Content-length: 91
 
-{'name' : 'Gayerie', 
- 'firstname' : 'David', 
- 'email' : 'david.gayerie.epsi@mailoo.org'}</code></pre>
+{"name" : "Gayerie", 
+ "firstname" : "David", 
+ "email" : "david.gayerie.epsi@mailoo.org"}</code></pre>
 
 			</figure>
 			<figure>
 				<figcaption>La réponse du serveur en cas de succès</figcaption>
 				<pre><code class="http">HTTP/1.1 201 Created
-				</code></pre>
-			</figure>			
+Content-length: 0
 
-			<h2>Création d'une ressource dont on ne connait pas l'URI</h2>
+</code></pre>
+			</figure>
+			
+			<p>Dans l'exemple ci-dessus, le client souhaite créer une nouvelle ressource identifiée par l'URI http://exemple.fr/individu/David+Gayerie.</p>
+			
+			<aside>
+				<p>La plupart du temps, la ressource créée par le serveur n'est pas strictement conforme à la représentation transmise par le client.
+				Le serveur peut, par exemple, ajouter des données telles que la date de création ou la version. Dans la sémantique HTTP, le serveur
+				est libre d'ignorer tout ou partie des informations transmises par le client et de rajouter les informations qui lui semble nécessaires.
+				Ainsi un client ne peut jamais être sûr que la représentation transmise au serveur correspondra bien à celle obtenue par en réponse
+				à une requête <code>GET</code> sur l'URI de la ressource. Pour éviter au client
+				de faire une requête <code>GET</code> supplémentaire, on admet qu'une requête <code>PUT</code> peut retourner une représentation de la ressource
+				qui vient d'être créée.
+				</p>
+			</aside>
+
+			<h2>Créer une ressource dont on ne connait pas l'URI</h2>
 			<p>Dans le cas où l'utilisateur ne connaît pas l'URI finale de la ressource, 
 			la méthode sera <strong>toujours</strong> un <code>POST</code>. En cas de succès, le serveur devrait répondre
 			le code 201 et un en-tête <code>Location</code> donnant au client l'URI de la nouvelle ressource.</p>
@@ -61,8 +125,8 @@ Content-Length: 91
 				<figcaption>La requête</figcaption>
 				<pre><code class="http">POST /individu/ HTTP/1.1
 Host: exemple.fr
-Content-Type: application/x-www-form-urlencoded; charset=utf-8
-Content-Length: 65
+Content-type: application/x-www-form-urlencoded; charset=utf-8
+Content-length: 65
 
 name=Gayerie&amp;firstname=David&amp;email=david.gayerie.epsi@mailoo.org</code></pre>
 			</figure>
@@ -70,11 +134,26 @@ name=Gayerie&amp;firstname=David&amp;email=david.gayerie.epsi@mailoo.org</code><
 				<figcaption>La réponse du serveur en cas de succès</figcaption>
 				<pre><code class="http">HTTP/1.1 201 Created
 Location: http://exemple.fr/individu/000001
+Content-length: 0
 
 </code></pre>
 			</figure>
 			
-			<h2>Suppression de l'accès à la ressource</h2>
+			<p>Dans l'exemple ci-dessus, le client souhaite créer une ressource et le serveur décide d'identifier cette nouvelle ressource par l'URI http://exemple.fr/individu/000001.
+			Dans ce cas, la méthode <code>POST</code> a la sémantique d'un ajout d'une ressource à un ensemble (celui des individus).</p>
+
+			<aside>
+				<p>La plupart du temps, la ressource créée par le serveur n'est pas strictement conforme à la représentation transmise par le client.
+				Le serveur peut, par exemple, ajouter des données telles que la date de création ou la version. Dans la sémantique HTTP, le serveur
+				est libre d'ignorer tout ou partie des informations transmises par le client et de rajouter les informations qui lui semble nécessaires.
+				Ainsi un client ne peut jamais être sûr que la représentation transmise au serveur correspondra bien à celle obtenue par en réponse
+				à une requête <code>GET</code> sur l'URI fournie par l'en-tête <code>Location</code>. Pour éviter au client
+				de faire une requête <code>GET</code> supplémentaire, on admet qu'une requête <code>POST</code> peut retourner une représentation de
+				la ressource qui vient d'être créée.
+				</p>
+			</aside>
+
+			<h2>Supprimer l'accès à une ressource</h2>
 			
 			<figure>
 				<figcaption>La requête</figcaption>
@@ -90,12 +169,141 @@ Host: exemple.fr
 </code></pre>
 			</figure>
 			
-			<h2>Le traitement asynchrone d'une requête</h2>
+			<h2>Mettre à jour une ressource</h2>
+
+			<p>La mise à jour complète d'une ressource existante se fait grâce à la méthode <code>PUT</code>.</p>
+			
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">PUT /individu/David+Gayerie HTTP/1.1
+Host: exemple.fr
+Content-type: application/json; charset=utf-8
+Content-length: 91
+
+{"name" : "Gayerie", 
+ "firstname" : "David", 
+ "email" : "david.gayerie.epsi@mailoo.org"}</code></pre>
+
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur en cas de succès</figcaption>
+				<pre><code class="http">HTTP/1.1 204 No content
+
+</code></pre>
+			</figure>
+			
+			<p>La requête de l'exemple ci-dessus est strictement identique à celle de la section <a href="#creer_une_ressource_put"><em>Créer une ressource dont on connait l'URI</em></a>.
+			Seule la réponse du serveur fait la différence&nbsp;: 204 signifie que la requête a été acceptée mais sans préciser une création (cela signifie que l'opération a été une mise à jour).
+			Le client ne sait pas <i>a priori</i> s'il demande une création ou une modification. Cela correspond parfaitement à la caractéristique d'idempotence de la méthode <code>PUT</code>&nbsp;:
+			la requête peut donc être répétée 1 à N fois et produira la même résultat sur le serveur.</p>
+			
+			<aside>
+				<p>Nous verrons avec les requêtes conditionnelles que le client peut, s'il le désire, s'assurer que sa requête est bien une requête de mise à jour.</p>
+			</aside>
+
+			<h2>Mettre à jour partiellement une ressource</h2>
+			
+			<p>La méthode <code>PATCH</code> a été introduite par la <a href="http://tools.ietf.org/html/rfc5789">RFC 5789</a> afin de fournir une méthode
+			pour la mise à jour partielle d'une ressource.</p>
+
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">PATCH /individu/David+Gayerie HTTP/1.1
+Host: exemple.fr
+Content-type: application/json-patch+json; charset=utf-8
+Content-length: 53
+
+{"op" : "add", 
+ "path" : "/taille", 
+ "value" : 174}</code></pre>
+
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur en cas de succès</figcaption>
+				<pre><code class="http">HTTP/1.1 204 No content
+
+</code></pre>
+			</figure>
+			
+			<p>La difficulté de l'utilisation de la méthode <code>PATCH</code> vient de la nécessité pour le serveur et le client
+			de partager un format de représentation permettant de décrire les modifications à apporter. L'exemple précédent utilise
+			le format JSON patch proposé par la <a href="http://tools.ietf.org/html/rfc6902">RFC 6902</a>. Le client
+			demande au serveur d'ajouter l'attribut "taille" à la ressource avec pour valeur le nombre 174.
+			JSON patch a précisément été créé pour être utilisé conjointement avec la méthode <code>PATCH</code>.</p>
+			
+			<aside>
+				<p>La méthode <code>PATCH</code> est relativement peu implémentée et utilisée. Même si la mise à jour partielle semble une opération
+				élémentaire sur des données, des utilisations judicieuses de <code>POST</code> et <code>PUT</code> suffisent généralement
+				à produire une API Web efficace.</p>
+			</aside>
+
+			<h2>Exécuter un processus de traitement</h2>
+			
+			<p>Il est parfois utile de demander à un serveur de traiter de l'information pour obtenir un résultat. Le résultat n'est pas
+			une ressource dont le serveur serait le dépositaire. Il s'agit juste d'une information qui est calculée mais non conservée par le serveur.
+			Dans ce cas, le client doit utiliser la méthode <code>POST</code>.</p>
+			
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">POST /calculatrice HTTP/1.1
+Host: www.monserveur.fr
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 40
+
+operande=2&amp;operande=3&amp;operation=addition</code></pre>
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur en cas de succès</figcaption>
+				<pre><code class="http">HTTP/1.1 200 OK
+Content-type: text/plain
+Content-length: 1
+
+5</code></pre>
+			</figure>
+			
+			<aside class="tip">
+				<p>Dans l'exemple précédent, la réponse ne contient ni l'en-tête <code>Location</code> ni l'en-tête <code>Content-location</code>.
+				Cela signifie que la réponse à la requête <code>POST</code> n'est associée à aucune ressource du serveur. Donc, il s'agit bien
+				d'un simple résultat de traitement.</p>
+			</aside>
+			
+			
+			<h2>Connaître les méthodes autorisées</h2>
+			
+			<p>Si un client tente d'appliquer une méthode HTTP interdite sur une ressource, 
+			le serveur répond généralement par le code statut 405 (Method not allowed).</p>
+			<p>Afin de permettre au client d'être informé de la liste des méthodes autorisées pour une URI, le serveur peut ajouter
+			l'en-tête <code>Allow</code> dans sa réponse. Cet en-tête liste les méthodes autorisées séparées par une virgule.</p>
+			<p>Le client peut également émettre une requête avec la méthode <code>OPTIONS</code> pour obtenir cet en-tête <code>Allow</code>&nbsp;:</p>
+
+			<figure>
+				<figcaption>La requête</figcaption>
+				<pre><code class="http">OPTIONS /individu/David+Gayerie HTTP/1.1
+Host: exemple.fr
+
+</code></pre>
+
+			</figure>
+			<figure>
+				<figcaption>La réponse du serveur en cas de succès</figcaption>
+				<pre><code class="http">HTTP/1.1 200 OK
+Content-length: 31
+Content-type: text/plain
+Allow: GET, HEAD, DELETE, PUT, OPTIONS
+
+GET, HEAD, DELETE, PUT, OPTIONS</code></pre>
+			</figure>
+			
+			<aside class="warn">
+				<p>La méthode <code>OPTIONS</code> est souvent désactivée sur les serveurs Web pour des raisons de sécurité. 
+				Le comble est donc que la plupart des requêtes OPTIONS aboutissent à un code d'erreur 405 (method not allowed).</p>
+			</aside>
+
+			<h2>Traitement asynchrone d'une requête</h2>
 			
 			<p>Parfois, le serveur ne peut pas traiter complètement une requête dans un temps acceptable. Dans ce cas,
 			il peut retourner le code 202 qui signifie qu'il a bien compris et accepté la requête mais
-			qu'il ne l'a pas encore traitée. L'en-tête <code>Location</code> pointe sur une URI où
-			le client pourra se rendre pour consulter l'état du traitement.</p>
+			qu'il ne l'a pas encore traitée.</p>
 
 			<figure>
 				<figcaption>La requête</figcaption>
@@ -108,298 +316,14 @@ Host: exemple.fr
 				<figcaption>La réponse du serveur lorsque la requête est traitée en asynchrone</figcaption>
 				<pre><code class="http">HTTP/1.1 202 Accepted
 Location: http://exemple.fr/jobs/1948321
+Content-type: text/plain
+Content-length: 53
 
+Traitement http://exemple.fr/jobs/1948321 en cours...
 </code></pre>
 			</figure>
-			
-			<h2>La négociation de contenu proactive</h2>
-			
-			<p>Parfois, un serveur peut disposer de plusieurs représentations pour une même ressource. Par exemple, il peut
-			présenter un série de données dans une page HTML et sous un format CSV. Le client peut alors
-			suggérer au serveur une liste de formats MIME correspondant à ses préférences. C'est ce que l'on appelle
-			la négociation de contenu proactive. L'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-5.3.2"><code>Accept</code></a>
-			permet au client de fournir une liste de types MIME séparés par une virgule. Bien évidemment, l'en-tête
-			<code>Accept</code> n'a de sens que si le client s'attend à recevoir une représentation de la part du serveur
-			(ou s'il utilise la méthode <code>HEAD</code> pour tester l'existence de ce format).</p>
-			
-			<figure>
-				<figcaption>Négociation de contenu sur le format de la représentation</figcaption>
-				<pre><code class="http">GET /individu/00001 HTTP/1.1
-Host: www.monserveur.fr
-Accept: text/html,text/plain,application/pdf
-
-</code></pre>
-			</figure>
-			
-			<p>Dans l'exemple précédent, l'ordre dans la liste n'a pas d'importance, le client annonce au serveur
-			qu'il peut indifféremment fournir une représentation au format HTML, texte brut ou un document PDF.
-			Si le serveur ne dispose d'aucune de ces représentations, il répondra un code statut <strong>415</strong> (Unsupported Media Type).</p>
-			
-			<aside>
-				<p>Le client peut affiner sa négociation en annonçant que si plusieurs représentations sont disponibles,
-				certaines seront préférées à d'autres. Cela se fait à l'aide du paramètre <strong>q</strong> qui donne
-				une pondération entre 0 et 1. Lorsque le paramètre <code>q</code> n'est pas précisé, sa valeur
-				implicite est 1 (la plus forte préférence).</p>
-				<figure>
-					<figcaption>Négociation de contenu avec pondération des formats</figcaption>
-					<pre><code class="http">GET /individu/00001 HTTP/1.1
-Host: www.monserveur.fr
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-
-</code></pre>
-				</figure>
-				<p>Dans l'exemple précédent, le client annonce au serveur qu'il préfére les formats HTML et XHTML (q=1 est ici implicite)
-				au format XML simple (q=0.9). Sinon il accepte de recevoir n'importe quel format (*/*;q=0.8). Ainsi, si un serveur
-				dispose d'une représentation HTML, XML et PDF pour une ressource, il doit retourner à ce client le format HTML.
-				Notez que cette valeur de l'en-tête <code>Accept</code> est celle par défaut du navigateur Firefox.</p>
-			</aside>
-			
-			<p>Le client peut également établir une négociation avec le serveur sur le type d'encodage du document (grâce à l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-5.3.3"><code>Accept-Charset</code></a>)
-			ou sur la langue utilisée dans le document <a href="http://tools.ietf.org/html/rfc7231#section-5.3.5"><code>Accept-Language</code></a>).
-			Si le serveur ne peut pas satisfaire les exigences du client dans ces cas, il est tout de même sensé retourner ce qu'il
-			juge la meilleure réponse afin de ne pas empêcher l'utilisateur d'accéder à l'information.</p>
-
-			<figure>
-				<figcaption>Négociation de contenu sur la langue du document</figcaption>
-				<pre><code class="http">GET /individu/00001 HTTP/1.1
-Host: www.monserveur.fr
-Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
-
-</code></pre>
-			</figure>
-			
-			<h2>Les requêtes conditionnelles</h2>
-			<p>Les requêtes conditionnelles permettent au client de préciser dans les en-têtes de requête des conditions
-			qui, selon qu'elles sont vraies ou fausses, doivent changer le comportement du serveur.
-			Les requêtes conditionnelles sont utilisées dans deux cas&nbsp;:
-			</p>
-			<ul>
-				<li>Pour la gestion de cache lors d'une requête GET, le client demande au serveur de lui retourner la 
-				représentation de la ressource si cette dernière diffère de la version dont le client dispose déjà.</li>
-				<li>Pour garantir l'intégrité des données lors d'une requête non sûre (PUT, POST, PATCH ou DELETE), 
-				le client désire que l'action soit effectuée uniquement si la ressource n'a pas été modifiée depuis
-				son dernier accès.</li>
-			</ul>
-			
-			<p>Les requêtes conditionnelles peuvent se baser sur la date de dernière modification de la ressource que
-			le serveur est sensé communiqué (principalement en réponse à une requête GET ou HEAD) grâce à l'en-tête
-			de réponse <a href="http://tools.ietf.org/html/rfc7232#section-2.2"><code>Last-Modified</code></a>.</p>
-
-			<figure>
-				<figcaption>Une réponse HTTP avec l'en-tête <code>Last-Modified</code></figcaption>
-				<pre><code class="http">HTTP/1.1 200 OK
-Content-Type: text/plain; charset=utf-8
-Content-Length: 17
-Last-Modified: <script type="text/javascript">document.write(new Date().toUTCString())</script>
-
-Hello the world!
-
-</code></pre>
-			</figure>
-			
-			<p>Les requêtes conditionnelles peuvent également se baser sur l'<code>Entity-Tag</code>. L'<code>Entity-Tag</code>
-			est une chaîne de caractères (délimitée par ") que le serveur peut communiquer (principalement en réponse à une requête GET ou HEAD)
-			grâce à l'en-tête de réponse <a href="http://tools.ietf.org/html/rfc7232#section-2.3"><code>ETag</code></a>.
-			Ce tag reste identique tant que la ressource ou sa représentation associée n'ont pas été modifiées.
-			L'<code>Entity-Tag</code> est opaque pour le client et ce dernier n'a pas besoin de connaître l'algorithme
-			utilisé par le serveur pour produire.</p>
-				
-			<figure>
-				<figcaption>Une réponse HTTP avec l'en-tête <code>ETag</code></figcaption>
-				<pre><code class="http">HTTP/1.1 200 OK
-Content-Type: text/plain; charset=utf-8
-Content-Length: 17
-ETag: "<script>document.write(Math.random().toString(16).substring(2))</script>"
-
-Hello the world!
-
-</code></pre>
-			</figure>
-			
-			<aside class="tip">
-				<p><code>Last-Modified</code> et <code>ETag</code> ne sont normalement pas fournis
-				par le serveur en réponse à la création ou la modification d'une ressource. En effet, la représentation
-				transmise par le client <i>via</i> une méthode <code>PUT</code> ou <code>POST</code>
-				peut ne pas correspondre exactement à la représentation qui sera retournée par le serveur lors d'une
-				requête <code>GET</code>. En effet, le serveur ajoute souvent des informations à la ressource
-				lors de sa création. Il est donc communément admis que la représentation de la ressource envoyée par
-				le client ne peut pas être considérée comme fiable. Pour éviter toute mise en cache prématurée,
-				le serveur ne renvoie donc pas les en-têtes <code>Last-Modified</code> et <code>ETag</code>.</p>
-			</aside>
-			
-			<h2>Demander une représentation à jour</h2>
-			<p>Lorsque le client dispose déjà d'une représentation de la resource, il peut demander au serveur de lui
-			retourner une nouvelle représentation uniquement si celle-ci diffère celle en cache. L'intérêt principal
-			et de limiter la consommation de bande passante. Mais cela peut aussi être un moyen de savoir si la ressource
-			a été modifiée par un autre client ou un processus asynchrone. Pour ce cas d'utilisation, le client
-			a besoin de connaître la date de dernière modification (obtenue grâce à l'en-tête de réponse <code>Last-Modified</code>)
-			ou la valeur de l'<code>Entity-Tag</code> (obtenue grâce à l'en-tête de réponse <code>Etag</code>)</p>
-			<p>Le client peut construire sa requête en utilisant l'un des en-têtes suivants&nbsp;:</p>
-
-			<dl>
-				<dt><a href="http://tools.ietf.org/html/rfc7232#section-3.3"><code>If-Modified-Since</code></a></dt>
-				<dd>Permet de spécifier au serveur que la ressource doit avoir été modifiée depuis la date donnée pour traiter la requête.
-				
-					<figure>
-						<figcaption>Requête conditionnelle avec <code>If-Modified-Since</code></figcaption>
-						<pre><code class="http">GET /individu/00001 HTTP/1.1
-Host: www.monserveur.fr
-If-Modified-Since: <script type="text/javascript">document.write(new Date().toUTCString())</script>
-
-</code></pre>
-					</figure>
-					<p>Si la ressource <strong>n'a pas été modifiée</strong> depuis cette date, le serveur devrait
-					retourner le code <strong>304</strong> (Not modified) sans payload dans la réponse.</p>
-
-					<figure>
-						<figcaption>Réponse lorsque la ressource n'a pas été modifiée depuis la date donnée</figcaption>
-						<pre><code class="http">HTTP/1.1 304 Not Modified
-
-</code></pre>
-					</figure>
-					<p>Si la ressource a été effectivement modifiée, le serveur doit traiter la requête normalement.</p>
-				</dd>
-
-				<dt><a href="http://tools.ietf.org/html/rfc7232#section-3.2"><code>If-None-Match</code></a></dt>
-				<dd>Permet de spécifier au serveur que la ressource doit avoir été modifiée depuis le dernier état connu pour traiter la requête.
-				    Le client demande au serveur de comparer l'<code>Entity-Tag</code> de la représentation de la ressource
-				    avec celui envoyé dans la requête.
-				
-					<figure>
-						<figcaption>Requête conditionnelle avec <code>If-None-Match</code></figcaption>
-						<pre><code class="http">GET /individu/00001 HTTP/1.1
-Host: www.monserveur.fr
-If-None-Match: "<script>document.write(Math.random().toString(16).substring(2))</script>"
-
-</code></pre>
-					</figure>
-					<p>Si l'<code>Entity-Tag</code> de la représentation de la ressource <strong>correspond à celui envoyé</strong> par le client, 
-					alors le serveur en déduit qu'il n'y a pas eu de modification et il devrait	retourner le code <strong>304</strong> (Not modified) sans payload dans la réponse.</p>
-
-					<figure>
-						<figcaption>Réponse lorsque l'<code>Entity-Tag</code> correspond à celui envoyé par le client</figcaption>
-						<pre><code class="http">HTTP/1.1 304 Not Modified
-
-</code></pre>
-					</figure>
-					<p>Si les <code>Entity-Tags</code> diffèrent,alors le serveur doit traiter la requête normalement.</p>
-				</dd>
-			</dl>
-
-			<h2>Créer une ressource si elle n'existe pas déjà</h2>
-			<p>La méthode <code>PUT</code> a une double sémantique de création et de mise à jour. Cependant, un client désire parfois créer
-			uniquement une ressource et ne souhaite pas la modifier si elle existe déjà. Dans ce cas, on peut utiliser l'en-tête <code>If-None-Match</code>
-			avec la valeur spéciale <code>*</code> (ce qui signifie que le serveur doit traiter la requête si aucune représentation de la ressource n'est disponible).</p>
-
-			<figure>
-				<figcaption>Requête de création uniquement</figcaption>
-				<pre><code class="http">PUT /individu/David+Gayerie HTTP/1.1
-Host: www.monserveur.fr
-If-None-Match: *
-Content-Type: application/x-www-form-urlencoded; charset=utf-8
-Content-Length: 65
-
-name=Gayerie&amp;firstname=David&amp;email=david.gayerie.epsi@mailoo.org</code></pre>
-			</figure>
-			
-			<p>Si le serveur dispose d'une représentation pour cette ressource (et donc si elle existe déjà), il doit répondre un code <strong>412</strong> (Precondition Failed)&nbsp;:</p>
-			<figure>
-				<figcaption>Réponse lorsque la ressource existe déjà</figcaption>
-				<pre><code class="http">HTTP/1.1 412 Precondition Failed
-
-</code></pre>
-			</figure>
-
-			<h2>Altérer une ressource sous condition</h2>
-			
-			<p>Dans un environnement client/serveur, la mise à jour de données pose systématiquement un problème&nbsp;: comment savoir si les données
-			que je mets à jour n'ont pas été altérées par un autre client depuis le dernier accès. Pour le Web, on trouve plusieurs solutions déclinant
-			généralement les solutions du verrou optimiste ou pessimiste (optimistic/pessimistic lock). HTTP fournit un mécanisme de verrou optimiste
-			grâce à différents en-têtes. Le client peut altérer une ressource avec une méthode <code>PUT</code>, <code>POST</code>, <code>PATCH</code>
-			ou <code>DELETE</code> en spécifiant au serveur la condition de validité de la requête. Pour ce cas d'utilisation, le client
-			a besoin de connaître la date de dernière modification (obtenue grâce à l'en-tête de réponse <code>Last-Modified</code>)
-			ou la valeur de l'<code>Entity-Tag</code> (obtenue grâce à l'en-tête de réponse <code>Etag</code>)</p>
-			<p>Le client peut construire sa requête en utilisant l'un des en-têtes suivants&nbsp;:</p>
-			
-			<dl>
-				<dt><a href="http://tools.ietf.org/html/rfc7232#section-3.4"><code>If-Unmodified-Since</code></a></dt>
-				<dd>Permet de spécifier au serveur que la ressource ne doit pas avoir été modifiée depuis la date donnée pour traiter la requête.
-					<figure>
-						<figcaption>Requête conditionnelle avec <code>If-Unmodified-Since</code></figcaption>
-						<pre><code class="http">PUT /individu/David+Gayerie HTTP/1.1
-Host: www.monserveur.fr
-If-Unmodified-Since: <script type="text/javascript">document.write(new Date().toUTCString())</script>
-Content-Type: application/x-www-form-urlencoded; charset=utf-8
-Content-Length: 65
-
-name=Gayerie&amp;firstname=David&amp;email=david.gayerie.epsi@mailoo.org</code></pre>
-					</figure>
-
-					<p>Si la ressource a effectivement été modifiée, le serveur doit retourner un code <strong>412</strong> (Precondition Failed)&nbsp;:</p>
-					<figure>
-						<figcaption>Réponse lorsque la ressource a été modifiée depuis la date donnée</figcaption>
-						<pre><code class="http">HTTP/1.1 412 Precondition Failed
-
-</code></pre>
-					</figure>
-				</dd>
-
-				<dt><a href="http://tools.ietf.org/html/rfc7232#section-3.1"><code>If-Match</code></a></dt>
-				<dd>Permet de spécifier au serveur que la ressource ne doit pas avoir été modifiée depuis le dernier état connu pour traiter la requête. 
-				Le client demande au serveur de comparer l'<code>Entity-Tag</code> de la représentation de la ressource avec celui envoyé dans la requête.
-				
-					<figure>
-						<figcaption>Requête conditionnelle avec <code>If-Match</code></figcaption>
-						<pre><code class="http">PUT /individu/David+Gayerie HTTP/1.1
-Host: www.monserveur.fr
-If-Match: "<script>document.write(Math.random().toString(16).substring(2))</script>"
-Content-Type: application/x-www-form-urlencoded; charset=utf-8
-Content-Length: 65
-
-name=Gayerie&amp;firstname=David&amp;email=david.gayerie.epsi@mailoo.org</code></pre>
-					</figure>
-					<p>Si l'<code>Entity-Tag</code> de la représentation de la ressource <strong>ne correspond pas à celui envoyé</strong> par le client, 
-					alors le serveur en déduit qu'il n'y a eu une modification et il devrait retourner le code <strong>412</strong> 
-					(Precondition failed) sans payload dans la réponse.</p>
-
-					<figure>
-						<figcaption>Réponse lorsque l'<code>Entity-Tag</code> ne correspond pas à celui envoyé par le client</figcaption>
-						<pre><code class="http">HTTP/1.1 412 Precondition failed
-
-</code></pre>
-					</figure>
-					<p>Si les <code>Entity-Tags</code> sont identiques,alors le serveur doit traiter la requête normalement.</p>
-
-				</dd>
-			</dl>
-
-			<aside>
-				<p>Si la ressource a été modifiée mais que le serveur est capable de déduire que l'état actuel est le
-				même que celui résultant du traitement de la requête, alors le serveur peut retourner un code statut <strong>2XX</strong>.
-				Ainsi la requête n'est pas traitée mais le résultat attendu par le client est déjà effectif.</p>
-			</aside>
-			
-			<h2>Altérer une ressource si elle existe</h2>
-			<p>Parfois, un client désire modifier une ressource et ne souhaite pas que sa requête soit traitée si elle n'existe pas. Dans ce cas, on peut utiliser l'en-tête <code>If-Match</code>
-			avec la valeur spéciale <code>*</code> (ce qui signifie que le serveur doit traiter la requête si au moins une representation de la ressource est disponible).</p>
-
-			<figure>
-				<figcaption>Requête de modification uniquement</figcaption>
-				<pre><code class="http">DELETE /individu/David+Gayerie HTTP/1.1
-Host: www.monserveur.fr
-If-Match: *
-
-</code></pre>
-			</figure>
-			
-			<p>Si le serveur ne dispose pas d'une représentation pour cette ressource (et donc si elle n'existe pas), il doit répondre un code <strong>412</strong> (Precondition Failed)&nbsp;:</p>
-			<figure>
-				<figcaption>Réponse lorsque la ressource n'existe pas</figcaption>
-				<pre><code class="http">HTTP/1.1 412 Precondition Failed
-
-</code></pre>
-			</figure>
-			
+			<p>Dans l'exemple ci-dessus, la requête a conduit à la création d'une ressource temporaire représentant le traitement en cours. 
+			L'en-tête <code>Location</code> donne l'URI où le client pourra se rendre pour consulter l'état du traitement.</p>
 			
 			<h2>Les redirections</h2>
 			
@@ -408,11 +332,11 @@ If-Match: *
 			exécuter une nouvelle requête vers une URI fournie dans la réponse par le serveur grâce à l'en-tête 
 			<a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a>.</p>
 			
-			<h2>Evolutivité du service et modification des URI</h2>
+			<h2>Évolution du service</h2>
 			
 			<p>Le cas le plus simple d'utilisation des redirections est celui où le serveur évolue dans le temps. Des évolutions peuvent
 			entraîner une modification des URI. Plutôt que de retourner simplement une erreur, le serveur propose une redirection
-			pour assurer une continuité du service. Dans ce cas, le serveur peut retourner une code statut <strong>301</strong> (Moved Permanently)
+			pour assurer une continuité du service. Dans ce cas, le serveur peut retourner un code statut <strong>301</strong> (Moved Permanently)
 			avec un en-tête <code>Location</code> donnant la nouvelle URI.</p>
 
 			<figure>
@@ -442,30 +366,29 @@ Host: www.mynews.fr
 			</figure>
 
 			<figure>
-				<figcaption>Redirection du serveur</figcaption>
+				<figcaption>Redirection du serveur...</figcaption>
 				<pre><code class="http">HTTP/1.1 307 Temporary redirect
 Location: http://www.mynews.fr/articles/les+nouvelles+du+monde.html
 
 </code></pre>
 			</figure>
 			
-			<aside>Pour une requête <code>GET</code>, la redirection est coûteuse car elle oblige le client
+			<p>La redirection est coûteuse car elle oblige le client
 			à émettre une nouvelle requête vers le serveur. Si le serveur peut répondre directement, il peut renvoyer
-			une code 2XX avec le payload attendu et ajouter l'en-tête de réponse <code>Content-Location</code> qui
-			indique au client la véritable URI pour cette ressource (appelée URI canonique). 
-				<figure>
-					<figcaption>Canonicalisation grâce à l'en-tête <code>Content-Location</code></figcaption>
-					<pre><code class="http">HTTP/1.1 200 OK
+			une code 2XX avec le message attendu et ajouter l'en-tête de réponse <code>Content-Location</code> qui
+			indique au client la véritable URI pour cette ressource (appelée URI canonique).</p>
+			<figure>
+				<figcaption>... ou canonicalisation grâce à l'en-tête <code>Content-Location</code></figcaption>
+				<pre><code class="http">HTTP/1.1 200 OK
 Content-Location: http://www.mynews.fr/articles/les+nouvelles+du+monde.html
-Cache-Control: no-store
-Content-Type: text/plain
-Content-Length: 35
+Cache-control: no-store
+Content-type: text/plain
+Content-length: 35
 
 Il n'y pas de nouvelle du monde :(
 
 </code></pre>
-				</figure>
-			</aside>
+			</figure>
 			
 			<h2>Séparer le traitement de la requête de son résultat</h2>
 			
@@ -524,5 +447,31 @@ Location: http://exemple.fr/individu/000001
 			
 		</section>
 	</article>
+
+	<article class="exercice note">
+		<section>
+			<h2>Exercice à rendre&nbsp;: utilisation d'une API Web</h2>
+			
+			<p>Vous devez utiliser l'API Web du site <a href="http://rest-bookmarks.herokuapp.com">http://rest-bookmarks.herokuapp.com</a>
+			pour réaliser les opérations suivantes&nbsp;:</p>
+			
+			<ul>
+				<li>Créer une nouvelle ressource bookmark (montrez qu'il est possible d'utiliser deux méthodes HTTP différentes)</li>
+				<li>Obtenir la représentation de la ressource bookmark que vous avez créée</li>
+				<li>Mettre à jour la ressource bookmark que vous avez créée</li>
+				<li>Supprimer la ressource bookmark que vous avez créée</li>
+				<li>Mettre à jour la dernière ressource bookmark ajoutée par n'importe quel client</li>
+			</ul>
+			
+			<p>Vous devez fournir la liste des commandes cURL pour réaliser les actions ci-dessus.</p>
+			
+			<aside class="tip">
+				<p>Pendant vos tests, il est très fortement conseillé d'utiliser l'option <strong>-v</strong> de cURL
+				afin de bien visualiser la requête que vous envoyée mais également le code statut et les 
+				en-têtes retournés par le serveur.</p>
+			</aside>
+		</section>
+	</article>
+
 </body>
 </html>
