@@ -73,7 +73,7 @@ Content-length: 226
 			</figure>
 			
 			<aside>
-				<p>Pour une requête <code>HEAD</code>, le serveur peut ou non retourner les informations relatives à la taille du message (l'en-tête <code>Content-length</code>).</p>
+				<p>Pour une requête <code>HEAD</code>, le serveur peut ou non retourner les informations relatives à la taille du message (l'en-tête <a href="http://tools.ietf.org/html/rfc7230#section-3.3.2"><code>Content-length</code></a>).</p>
 			</aside>
 
 			<h2 id="creer_une_ressource_put">Créer une ressource dont on connait l'URI</h2>
@@ -119,7 +119,7 @@ Content-length: 0
 			<h2>Créer une ressource dont on ne connait pas l'URI</h2>
 			<p>Dans le cas où l'utilisateur ne connaît pas l'URI finale de la ressource, 
 			la méthode sera <strong>toujours</strong> un <code>POST</code>. En cas de succès, le serveur devrait répondre
-			le code 201 et un en-tête <code>Location</code> donnant au client l'URI de la nouvelle ressource.</p>
+			le code 201 et un en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a> donnant au client l'URI de la nouvelle ressource.</p>
 
 			<figure>
 				<figcaption>La requête</figcaption>
@@ -147,7 +147,7 @@ Content-length: 0
 				Le serveur peut, par exemple, ajouter des données telles que la date de création ou la version. Dans la sémantique HTTP, le serveur
 				est libre d'ignorer tout ou partie des informations transmises par le client et de rajouter les informations qui lui semble nécessaires.
 				Ainsi un client ne peut jamais être sûr que la représentation transmise au serveur correspondra bien à celle obtenue par en réponse
-				à une requête <code>GET</code> sur l'URI fournie par l'en-tête <code>Location</code>. Pour éviter au client
+				à une requête <code>GET</code> sur l'URI fournie par l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a>. Pour éviter au client
 				de faire une requête <code>GET</code> supplémentaire, on admet qu'une requête <code>POST</code> peut retourner une représentation de
 				la ressource qui vient d'être créée.
 				</p>
@@ -262,7 +262,8 @@ Content-length: 1
 			</figure>
 			
 			<aside class="tip">
-				<p>Dans l'exemple précédent, la réponse ne contient ni l'en-tête <code>Location</code> ni l'en-tête <code>Content-location</code>.
+				<p>Dans l'exemple précédent, la réponse ne contient ni l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a> 
+				ni l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-3.1.4.2"><code>Content-location</code></a>.
 				Cela signifie que la réponse à la requête <code>POST</code> n'est associée à aucune ressource du serveur. Donc, il s'agit bien
 				d'un simple résultat de traitement.</p>
 			</aside>
@@ -273,8 +274,8 @@ Content-length: 1
 			<p>Si un client tente d'appliquer une méthode HTTP interdite sur une ressource, 
 			le serveur répond généralement par le code statut 405 (Method not allowed).</p>
 			<p>Afin de permettre au client d'être informé de la liste des méthodes autorisées pour une URI, le serveur peut ajouter
-			l'en-tête <code>Allow</code> dans sa réponse. Cet en-tête liste les méthodes autorisées séparées par une virgule.</p>
-			<p>Le client peut également émettre une requête avec la méthode <code>OPTIONS</code> pour obtenir cet en-tête <code>Allow</code>&nbsp;:</p>
+			l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.4.1"><code>Allow</code></a> dans sa réponse. Cet en-tête liste les méthodes autorisées séparées par une virgule.</p>
+			<p>Le client peut également émettre une requête avec la méthode <code>OPTIONS</code> pour obtenir cet en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.4.1"><code>Allow</code></a>&nbsp;:</p>
 
 			<figure>
 				<figcaption>La requête</figcaption>
@@ -323,7 +324,7 @@ Traitement http://exemple.fr/jobs/1948321 en cours...
 </code></pre>
 			</figure>
 			<p>Dans l'exemple ci-dessus, la requête a conduit à la création d'une ressource temporaire représentant le traitement en cours. 
-			L'en-tête <code>Location</code> donne l'URI où le client pourra se rendre pour consulter l'état du traitement.</p>
+			L'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a> donne l'URI où le client pourra se rendre pour consulter l'état du traitement.</p>
 			
 			<h2>Les redirections</h2>
 			
@@ -337,7 +338,7 @@ Traitement http://exemple.fr/jobs/1948321 en cours...
 			<p>Le cas le plus simple d'utilisation des redirections est celui où le serveur évolue dans le temps. Des évolutions peuvent
 			entraîner une modification des URI. Plutôt que de retourner simplement une erreur, le serveur propose une redirection
 			pour assurer une continuité du service. Dans ce cas, le serveur peut retourner un code statut <strong>301</strong> (Moved Permanently)
-			avec un en-tête <code>Location</code> donnant la nouvelle URI.</p>
+			avec un en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a> donnant la nouvelle URI.</p>
 
 			<figure>
 				<figcaption>Le serveur signale un changement de l'URI du service</figcaption>
@@ -355,7 +356,7 @@ Location: http://mon.nouveau.serveur.fr/ma/ressource/cible
 			souhaiter exposer une URI permettant d'accéder au dernier article publié. Cette URI désignera forcément dans le temps
 			des ressources différentes. Elle est volatile. Dans ce cas, le serveur peut retourner pour cette URI le code statut
 			<strong>307</strong> (Temporary redirect) qui demande au client de refaire la même requête vers l'URI donnée en réponse
-			par l'en-tête <code>Location</code>.</p>
+			par l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a>.</p>
 
 			<figure>
 				<figcaption>Requête sur une URI <i>volatile</i></figcaption>
@@ -375,10 +376,10 @@ Location: http://www.mynews.fr/articles/les+nouvelles+du+monde.html
 			
 			<p>La redirection est coûteuse car elle oblige le client
 			à émettre une nouvelle requête vers le serveur. Si le serveur peut répondre directement, il peut renvoyer
-			une code 2XX avec le message attendu et ajouter l'en-tête de réponse <code>Content-Location</code> qui
+			une code 2XX avec le message attendu et ajouter l'en-tête de réponse <a href="http://tools.ietf.org/html/rfc7231#section-3.1.4.2"><code>Content-Location</code></a> qui
 			indique au client la véritable URI pour cette ressource (appelée URI canonique).</p>
 			<figure>
-				<figcaption>... ou canonicalisation grâce à l'en-tête <code>Content-Location</code></figcaption>
+				<figcaption>... ou canonicalisation grâce à l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-3.1.4.2"><code>Content-Location</code></a></figcaption>
 				<pre><code class="http">HTTP/1.1 200 OK
 Content-Location: http://www.mynews.fr/articles/les+nouvelles+du+monde.html
 Cache-control: no-store
@@ -403,7 +404,7 @@ Il n'y pas de nouvelle du monde :(
 			Il est donc possible de supprimer les requêtes <code>POST</code> de l'historique de navigation
 			en s'assurant que les réponses sont toujours des redirections avec une méthode <code>GET</code> vers une page de résultat&nbsp;: 
 			il s'agit du modèle du POST/Redirect/GET. Pour cela, le développeur de site Web doit s'assurer que le code statut en réponse à une méthode
-			<code>POST</code> est un code <strong>303</strong> (See Other). L'en-tête de réponse <code>Location</code> indique à quelle URI
+			<code>POST</code> est un code <strong>303</strong> (See Other). L'en-tête de réponse <a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a> indique à quelle URI
 			le client doit soumettre la requête <code>GET</code> de redirection.</p>
 			
 			<figure>
@@ -436,12 +437,13 @@ Location: http://exemple.fr/individu/000001
 
 					<dt>303</dt>
 					<dd>Ce code stipule que la requête <strong>a été traitée</strong> par le serveur. Cependant le client
-					ne peut connaître le résultat que s'il soumet une requête <strong><code>GET</code></strong> à l'URI fournie en réponse dans l'en-tête <code>Location</code>.</dd>
+					ne peut connaître le résultat que s'il soumet une requête <strong><code>GET</code></strong> à l'URI fournie en réponse dans 
+					l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a>.</dd>
 
 					<dt>307</dt>
 					<dd>Ce code stipule que la requête <strong>n'a pas été traitée</strong> par le serveur. Le client
 					doit donc soumettre à nouveau <strong>la même</strong> requête quelle que soit la méthode à l'URI fournie 
-					en réponse dans l'en-tête <code>Location</code>.</dd>
+					en réponse dans l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.2"><code>Location</code></a>.</dd>
 				</dl>
 			</aside>
 			

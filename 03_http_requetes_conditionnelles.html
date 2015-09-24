@@ -43,7 +43,7 @@
 			de réponse <a href="http://tools.ietf.org/html/rfc7232#section-2.2"><code>Last-Modified</code></a>.</p>
 
 			<figure>
-				<figcaption>Une réponse HTTP avec l'en-tête <code>Last-Modified</code></figcaption>
+				<figcaption>Une réponse HTTP avec l'en-tête <a href="http://tools.ietf.org/html/rfc7232#section-2.2"><code>Last-Modified</code></a></figcaption>
 				<pre><code class="http">HTTP/1.1 200 OK
 Content-Type: text/plain; charset=utf-8
 Content-Length: 17
@@ -62,7 +62,7 @@ Hello the world!
 			utilisé par le serveur pour le produire.</p>
 				
 			<figure>
-				<figcaption>Une réponse HTTP avec l'en-tête <code>ETag</code></figcaption>
+				<figcaption>Une réponse HTTP avec l'en-tête <a href="http://tools.ietf.org/html/rfc7232#section-2.3"><code>ETag</code></a></figcaption>
 				<pre><code class="http">HTTP/1.1 200 OK
 Content-Type: text/plain; charset=utf-8
 Content-Length: 17
@@ -74,14 +74,14 @@ Hello the world!
 			</figure>
 			
 			<aside class="tip">
-				<p><code>Last-Modified</code> et <code>ETag</code> ne sont normalement pas fournis
+				<p><a href="http://tools.ietf.org/html/rfc7232#section-2.2"><code>Last-Modified</code></a> et <a href="http://tools.ietf.org/html/rfc7232#section-2.3"><code>ETag</code></a> ne sont normalement pas fournis
 				par le serveur en réponse à la création ou la modification d'une ressource. En effet, la représentation
 				transmise par le client <i>via</i> une méthode <code>PUT</code> ou <code>POST</code>
 				peut ne pas correspondre exactement à la représentation qui sera retournée par le serveur lors d'une
 				requête <code>GET</code>. En effet, le serveur ajoute souvent des informations à la ressource
 				lors de sa création. Il est donc communément admis que la représentation de la ressource envoyée par
 				le client ne peut pas être considérée comme fiable. Pour éviter toute mise en cache prématurée,
-				le serveur ne renvoie donc pas les en-têtes <code>Last-Modified</code> et <code>ETag</code>.</p>
+				le serveur ne renvoie donc pas les en-têtes <a href="http://tools.ietf.org/html/rfc7232#section-2.2"><code>Last-Modified</code></a> et <a href="http://tools.ietf.org/html/rfc7232#section-2.3"><code>ETag</code></a>.</p>
 			</aside>
 			
 			<h2>Demander une représentation à jour</h2>
@@ -89,8 +89,8 @@ Hello the world!
 			retourner une nouvelle représentation uniquement si celle-ci diffère de celle qu'il connaît déjà. L'intérêt principal
 			et de limiter la consommation de bande passante. Mais cela peut aussi être un moyen de savoir si la ressource
 			a été modifiée par un autre client ou un processus asynchrone. Pour ce cas d'utilisation, le client
-			a besoin de connaître la date de dernière modification (obtenue grâce à l'en-tête de réponse <code>Last-Modified</code>)
-			ou la valeur de l'<code>Entity-Tag</code> (obtenue grâce à l'en-tête de réponse <code>Etag</code>)</p>
+			a besoin de connaître la date de dernière modification (obtenue grâce à l'en-tête de réponse <a href="http://tools.ietf.org/html/rfc7232#section-2.2"><code>Last-Modified</code></a>)
+			ou la valeur de l'<code>Entity-Tag</code> (obtenue grâce à l'en-tête de réponse <a href="http://tools.ietf.org/html/rfc7232#section-2.3"><code>ETag</code></a>)</p>
 			<p>Le client peut construire sa requête en utilisant l'un des en-têtes suivants&nbsp;:</p>
 
 			<dl>
@@ -177,8 +177,8 @@ Content-Length: 0
 			sur le principe du verrou optimiste ou le principe du verrou pessimiste (optimistic/pessimistic lock). HTTP fournit un mécanisme de verrou optimiste
 			grâce à différents en-têtes. Le client peut altérer une ressource avec une méthode <code>PUT</code>, <code>POST</code>, <code>PATCH</code>
 			ou <code>DELETE</code> en spécifiant au serveur la condition de validité de la requête. Pour ce cas d'utilisation, le client
-			a besoin de connaître la date de dernière modification (obtenue grâce à l'en-tête de réponse <code>Last-Modified</code>)
-			ou la valeur de l'<code>Entity-Tag</code> (obtenue grâce à l'en-tête de réponse <code>Etag</code>)</p>
+			a besoin de connaître la date de dernière modification (obtenue grâce à l'en-tête de réponse <a href="http://tools.ietf.org/html/rfc7232#section-2.2"><code>Last-Modified</code></a>)
+			ou la valeur de l'<code>Entity-Tag</code> (obtenue grâce à l'en-tête de réponse <a href="http://tools.ietf.org/html/rfc7232#section-2.3"><code>ETag</code></a>)</p>
 			<p>Le client peut construire sa requête en utilisant l'un des en-têtes suivants&nbsp;:</p>
 			
 			<dl>
