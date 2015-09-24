@@ -273,7 +273,7 @@ Host: www.epsi.fr
 					</tr>
 	
 					<tr>
-						<td rowspan="6">4XX</td>
+						<td rowspan="7">4XX</td>
 						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.1">400</a></td>
 						<td>Bad Request</td>
 						<td>La requête n'a pas pu être traitée car elle est syntaxiquement incorrecte.</td>
@@ -289,6 +289,11 @@ Host: www.epsi.fr
 						<td>La ressource cible est connue du serveur mais le client ne peut pas utiliser la méthode spécifiée dans la requête.</td>
 					</tr>
 					<tr>
+						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.13">406</a></td>
+						<td>Not Acceptable</td>
+						<td>Indique qu'il n'existe pas de représentation au format demandé par le client pour la ressource cible (échec de la négociation de contenu).</td>
+					</tr>
+					<tr>
 						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.8">409</a></td>
 						<td>Conflict</td>
 						<td>La requête ne peut pas être traitée sans entrer en conflit avec l'état courant d'une ressource sur le serveur.</td>
@@ -301,7 +306,8 @@ Host: www.epsi.fr
 					<tr>
 						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.13">415</a></td>
 						<td>Unsupported Media Type</td>
-						<td>Indique qu'il n'existe pas de représentation au format demandé par le client pour la ressource cible (échec de la négociation de contenu).</td>
+						<td>Indique que le message envoyé par le client utilise un format qui n'est pas supporté par le serveur. Par exemple, le client envoie au serveur un message au format XML
+						alors que ce dernier s'attend à un document PDF.</td>
 					</tr>
 	
 					<tr>
