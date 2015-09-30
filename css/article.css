@@ -130,6 +130,11 @@ aside, blockquote {
 blockquote {
     border-color: #C7A317;
     font-style: italic;
+    font-size: 100%;
+}
+
+blockquote footer {
+	text-align: right;
 }
 
 aside>header {

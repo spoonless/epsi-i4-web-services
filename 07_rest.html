@@ -27,13 +27,22 @@
 			<p>REST est un style d'architecture pour les systèmes hypermédia distribués.</p>
 			<p>En 2000, Roy Fielding a formalisé l'architecture REST dans le chapitre 5 de sa <a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">thèse de doctorat</a>.
 			En 2007, Leonard Richardson et Sam Ruby présentent ROA (Resource Oriented Architecture) dans leur ouvrage <em>RESTful Web Services</em>.
-			ROA est devenu depuis le modèle d'application de REST pour les services Web.</p>
+			ROA est devenu depuis le modèle d'application de REST pour les API Web.</p>
 			
 			<p>Le modèle REST a été conçu au moment de l'évolution de HTTP vers sa version 1.1 afin d'assurer les évolutions nécessaires du World Wide Web dans les années 1990.
 			HTTP est ainsi le premier protocole basé sur une architecture REST.</p>
 			<p><strong>REST est le modèle d'architecture du Web&nbsp;!</strong> Cela ne signifie pas que l'ensemble du Web
 			se conforme au modèle décrit par REST mais cela signifie que HTTP a été conçu selon ce modèle (principalement
-			pour des raisons de scalabilité et de fiabilité).</p>
+			pour des raisons de scalabilité et de fiabilité). Dans ce chapitre nous prendrons donc HTTP comme
+			exemple pour illustrer notre propos, mais il faut garder à l'esprit que REST est un modèle plus général.</p>
+			
+			<aside>
+				<p>Depuis 2007, beaucoup de développeurs Web ont voulu créer des applications <em>RESTful</em>... sans
+				réellement comprendre ce que REST signifie et implique. Il en a résulté une tour de babel d'articles et
+				de posts sur le Web (voire de publication d'ouvrages) expliquant ce que devait être une application
+				<em>RESTful</em>... mais sans véritable rapport avec REST voire en étant en complète contradiction
+				avec le modèle d'architecture auquel les auteurs souhaitaient se conformer.</p>
+			</aside>
 		</section>
 		
 		<section>
@@ -42,14 +51,15 @@
 			<p>REST est un style d'architecture <strong>orienté ressource</strong>. Mais qu'est-ce qu'une ressource&nbsp;?</p>
 			
 			<blockquote>
-				<p>"Any information that can be named can be a resource" - Roy Fielding</p>
+				<p>Any information that can be named can be a resource</p>
+				<footer>Roy Fielding - <a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm">Thèse de doctorat</a></footer>
 			</blockquote>
 			
 			<p>Dans le domaine du Web, la notion d'adressabilité (<i>addressability</i>) vient renforcer celle de nommage. 
-			Une ressource est donc une information qui est adressable à partir d'une URI.</p>
+			Une ressource Web est donc quelque chose qui est adressable à partir d'une URI.</p>
 			
 			<aside>
-				<p>Par exemple, ce cours est adressable à partir de l'URI 
+				<p>Par exemple, le support de ce cours est adressable à partir de l'URI 
 				<script>document.write("<a class='explicit' href='" + window.location + "'>" + window.location + "</a>")</script></p>
 			</aside>
 			
@@ -62,13 +72,13 @@
 			<pre><code class="http">http://epsi.fr/bordeaux/informatique/i4/etudiants/annee-courante</code></pre>
 			
 			<aside>
-				<p>Nous avons vu dans les cas d'utilisation de HTTP, que la canonicalisation pouvait se traduire par une redirection
+				<p>Nous avons vu dans les <a href="02_http_cas_d_utilisation.html#canonicalisation">cas d'utilisation de HTTP</a>, que la canonicalisation pouvait se traduire par une redirection
 				avec un code statut 307 (Temporary Redirect) ou par l'en-tête de réponse <code>Content-Location</code>.</p>
 			</aside>
 			
 			<h3>URI informative ou URI opaque ?</h3>
 			
-			<p>Une bonne pratique consiste à concevoir des URI descriptives et hiérarchiques. Par exemple, si l'on considère cette URI&nbsp;:</p>
+			<p>Concevoir des URI descriptives et hiérarchiques semble <i>a priori</i> une bonne pratique. Par exemple, si l'on considère cette URI&nbsp;:</p>
 	
 			<pre><code class="http">http://epsi.fr/bordeaux/informatique/i4/etudiants/<script>document.write(new Date().getFullYear())</script></code></pre>
 	
@@ -82,16 +92,26 @@
 	
 			<pre><code class="http">http://epsi.fr/b54adc00-67f9-11d9-9669-0800200c9a66</code></pre>
 			
-			<p>Dans une architecture REST, les URI peuvent être opaques, c'est-à-dire qu'elles ne portent pas nécessairement d'information
-			sur la ressource qu'elles désignent, elles se limitent à la rendre adressable.</p>
+			<p>Dans une architecture REST, les noms ne servent qu'à désigner les ressources. Il n'y a aucune règle particulière à connaître et à partager sur
+			la signification de ces noms. Pour le Web, les URI sont la plupart du temps imposées par le serveur mais le client n'a pas à connaître les
+			règles qui prévalent à leur construction. Cela donne beaucoup plus de liberté au serveur si son évolution implique de formaliser les URI différemments.
+			On dit ainsi qu'une URI doit être <strong>opaque</strong> pour le client.</p>
+			
+			<aside class="warn">
+				<p>On trouvre malheureusement énormément de littératures sur les soi-disantes règles à respecter dans la façon de créer des URI pour des <em>API RESTful</em>.
+				On peut prendre comme exemple l'ouvrage Mark Massé&nbsp;: <em>REST API Design Rulebook</em>. Il nous explique ainsi qu'une URI désignant un document
+				doit se terminer par un nom au singulier et une URI désignant une collection doit se terminer par un nom au pluriel. Ces règles stylistiques sont
+				certes utiles pour améliorer la lisibilité mais elles n'ont aucun rapport avec REST. Pire, elles véhiculent l'idée qu'un client pourrait tirer
+				partie de ces règles pour deviner les URIs des ressources du serveur.</p>
+			</aside>
 			
 			<h3>Ressource contre RPC</h3>
 			
-			<p>Il existe une autre grande famille de modèles d'architecture pour les échanges entre processus&nbsp;: le <code>RPC</code> (Remote Procedure Call).
+			<p>Il existe une autre grande famille de modèles d'architecture pour les échanges entre processus&nbsp;: le <strong>RPC</strong> (Remote Procedure Call).
 			L'idée générale est de permettre d'invoquer une procédure à travers un réseau pour la faire exécuter sur un serveur et récupèrer
 			le résultat par le client.</p>
 			<p>Il existe une différence de perspective entre une approche RPC et une approche orientée ressource telle que REST. Avec le RPC,
-			la conception du service se focalise sur un traitement et sur l'appel à une procédure comme on le ferait dans un langage impératif. 
+			la conception du service se focalise sur le traitement et sur l'appel à une procédure comme on le ferait dans un langage impératif. 
 			Dans une approche orientée ressource, la conception du service se focalise sur l'information et on tend à uniformiser les opérations disponibles pour manipuler
 			cette information (les méthodes HTTP <code>GET</code>, <code>PUT</code>, <code>POST</code>, <code>DELETE</code> et <code>PATCH</code> 
 			en sont une très bonne illustration).
@@ -100,7 +120,8 @@
 			<p>Ainsi, une URI doit représenter une ressource et non pas une procédure.</p>
 			
 			<aside class="warn">
-				<p>Le jeu d'URI suivant n'est pas correct du point de vue REST&nbsp;:</p>
+				<p>Même si l'utilisation d'URI informatives n'est pas une exigence de REST, elle sont parfois utiles pour détecter une API orientée RPC.
+				Le jeu d'URI suivant n'est pas correct du point de vue d'une architecture orientée ressources&nbsp;:</p>
 				<pre><code class="http">
 http://epsi.fr/bordeaux/informatique/i4/etudiants/inscrire?nom=John&amp;prenom=Doe
 
@@ -109,9 +130,11 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/desinscrire?id=1337
 http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webservices&amp;note=16
 
 </code></pre>
-				<p>Certes il s'agit d'URI informatives pour lesquelles on comprend assez facilement ce qu'elles représentent. 
-				Cependant, elles semblent décrire des opérations et sont donc orientées RPC.</p>
+				<p>Chacune de ces URI semble désigner une action (inscrire, désinscrire, noter) sur un étudiant.</p>
 			</aside>
+			<p>La distinction entre orienté ressource et RPC est fondamentale. Pour HTTP qui est orienté ressource, 
+			l'action est portée par la méthode
+			employée dans la requête (GET, POST, PUT, DELETE...) pas par l'URI.</p>
 		</section>
 			
 		<section>
@@ -119,8 +142,8 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<p>Dans une architecture REST, un client et un serveur n'échangent pas une ressource 
 			mais des représentations, c'est-à-dire <strong>un ensemble de données relatives à l'état courant d'une ressource</strong>.
 			Ainsi, on peut dire que, du point de vue du client, la nature d'une ressource est inconnue puisqu'il ne manipule que
-			des URI et des représentations. Lorsqu'un client veut créer une ressource sur le serveur en utilisant par
-			exemple la méthode <code>PUT</code>, il ne fournira qu'une représentation de ce qu'il souhaite. Le serveur est libre
+			des noms et des représentations. Avec HTTP, lorsqu'un client veut créer une ressource sur le serveur en utilisant
+			la méthode <code>PUT</code>, il ne fournira qu'une représentation de ce qu'il souhaite pour l'URI utilisée. Le serveur est libre
 			d'utiliser tout ou partie de l'information transmise par le client ou même l'enrichir pour générer la ressource.
 			Le serveur peut également choisir les formats de représentation disponibles lors de l'accès à la ressource avec la méthode <code>GET</code>.
 			Parmi ces formats, il peut choisir de supporter ou non le format utilisé par le client au moment de la création.</p>
@@ -135,9 +158,10 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 				</p>
 			</aside>
 			
-			<h2>Les contraintes REST</h2>
+			<h2 id="contraintes_rest">Les contraintes REST</h2>
 			
-			<p>Dans le chapitre 5 de sa thèse, Roy Fielding présente les contraintes d'une architecture REST&nbsp;:</p>
+			<p>Dans le chapitre 5 de sa thèse, Roy Fielding présente les contraintes d'une architecture REST. En effet, ce modèle d'architecture
+			n'est en fait constitué que de six contraintes (la dernière étant même optionnelle).</p>
 			<ul>
 				<li>client/serveur</li>
 				<li>interface uniforme</li>
@@ -151,7 +175,7 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			
 			<p>Cette contrainte ne semble pas en être une tellement nous sommes habitués à interagir
 			avec des réseaux informatiques basés sur ce modèle. Pourtant une approche client/serveur
-			n'a rien de "naturelle" et il s'agit bien de limiter les rôles que peuvent jouer
+			n'a rien de "naturelle" et il s'agit bien de contraindre les rôles que peuvent jouer
 			les éléments d'un réseau. Dans cette approche un élément du réseau peut être
 			client et/ou serveur. En tant que serveur, il dispose d'un ensemble d'information qu'il
 			peut transmettre à la demande à d'autres éléments du réseau qui sont appelés ses clients.</p>
@@ -207,32 +231,26 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			de conserver une représentation et de la considérer comme valide pendant un certain laps de temps.
 			Cette contrainte est malheureusement très largement sous-estimée par les développeurs de services Web alors
 			qu'elle permet d'améliorer considérablement les performances d'une application. Il ne faut pas oublier
-			que la mise en cache est un mécanisme qui est largement exploité par les éléments "transparents" d'Internet
+			que la mise en cache est un mécanisme qui est largement exploité par les éléments intermédiaires du Web
 			comme les proxies pour améliorer l'efficacité des échanges.</p>
-			<p>La <a href="http://tools.ietf.org/html/rfc7234">RFC 7234</a> est entièrement consacrée à la mise en cache avec HTTP/1.1.
-			La gestion du cache est assurée par les en-têtes de réponse <a href="http://tools.ietf.org/html/rfc7234#section-5.3"><code>Expires</code></a>
-			et <a href="http://tools.ietf.org/html/rfc7234#section-5.2"><code>Cache-Control</code></a> mais
-			aussi par les en-têtes de validation 
-			<a href="http://tools.ietf.org/html/rfc7232#section-2.2"><code>Last-Modified</code></a> et 
-			<a href="http://tools.ietf.org/html/rfc7232#section-2.3"><code>ETag</code></a> 
-			(ces derniers ont été décrits dans les cas d'utilisation de HTTP).
-			</p>
+			<p>Nous avons déjà abordé les grands principes de la <a href="05_http_gestion_du_cache.html">gestion du cache pour HTTP</a>.</p>
 			
 			<h3>Layered system</h3>
 			
 			<p>Un réseau doit être stratifié en couches. Un élément du réseau ne peut dialoguer qu'avec 
 			ses voisins immédiats, c'est-à-dire les composants appartenant aux couches adjacentes. Ainsi si un client
 			veut envoyer une requête à un serveur qui n'est pas localisé dans une couche adjacente, il va devoir
-			passer par des intermédiaires. Pour Internet, les intermédiaires sont les <strong>proxies</strong> et les 
+			passer par des intermédiaires. Pour le Web, les intermédiaires sont les <strong>proxies</strong> et les 
 			<strong>gateways</strong>.</p>
 
 			<h3>Code on demand</h3>
 			
-			<p>Il s'agit d'une contrainte optionnelle de l'architecture REST. Un client peut étendre ses fonctionnalités
-			en téléchargeant du code exécutable. Le code-on-demand est trés largement utilisé dans le Web pour les humains 
+			<p>Il s'agit d'une contrainte optionnelle de l'architecture REST. Un serveur peut étendre les fonctionnalités
+			d'un client en lui proposant de télécharger du code exécutable. 
+			Le code-on-demand est trés largement utilisé dans le Web pour les humains 
 			avec notamment le support de JavaScript pour étendre les fonctionnalités du navigateur Web.</p>
 
-			<h2>Hypermédia</h2>
+			<h2 id="hypermedia">Hypermédia</h2>
 			
 			<p>Dans sa thèse de 2000, Roy Fielding cite une contrainte d'interface&nbsp;:</p>
 			<blockquote>hypermedia as the engine of application state</blockquote>
@@ -240,7 +258,7 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			Alors que le lecteur s'attend à une explication, Roy Fielding ne revient pas directement et 
 			explicitement sur cette contrainte. Depuis, la notion d'hypermédia est associée à 
 			REST mais est trop rarement explicitée.</p>
-			<p>Un site Web ou un service Web n'est pas qu'un ensemble d'URI permettant d'identifier
+			<p>Un site Web ou une API Web n'est pas qu'un ensemble d'URI permettant d'identifier
 			des ressources et de les manipuler à travers des représentations. Les représentations sont
 			également des hypermédias&nbsp;: elles contiennent des liens vers d'autres ressources.</p>
 			
@@ -251,9 +269,10 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			Lorsque l'on dit couramment que l'on <em>navigue</em> ou que l'on <em>surfe</em> sur le Web,
 			on décrit les actions rendues possibles par le fait que HTML est un format hypermédia.</p>
 			
-			<p>Pour l'implémentation de services Web, on préfèrera d'autres langages que HTML&nbsp;:
+			<p>Pour l'implémentation d'API Web, on pourra préférer d'autres langages que HTML&nbsp;:
 			généralement XML et JSON. En effet, ces langages sont plus <em>neutres</em> que HTML
-			qui ajoute une sémantique de structuration documentaire. Cependant, XML et JSON ne sont pas
+			qui ajoute une sémantique de structuration documentaire (et JSON est bien évidemment plus proche
+			d'un langage de programmation). Cependant, XML et JSON ne sont pas
 			par défaut des langages hypermédias. Il n'existe pas de support natif pour les liens
 			dans ces formats. Soit le client doit s'adapter pour comprendre la manière dont le serveur
 			inclut le support de l'hypermédia, soit il faut avoir recours à des extensions.
@@ -261,27 +280,31 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<a href="http://www.yoyodesign.org/doc/w3c/xlink/index.html"><strong>XLink</strong></a>
 			et pour le JSON grâce au format <a href="http://stateless.co/hal_specification.html"><strong>HAL</strong></a> 
 			(Hypertext Application Language).</p>
+			
+			<p>Actuellement, JSON semble être le langage <em>naturel</em> pour la représentation des ressources
+			dans une API Web. Quiconque comprend les apports de l'hypermédia dans la mise en place de telles API Web
+			sait que l'utilisation de JSON est un leurre car il donne une certaine facilité aux développeurs mais
+			en sacrifiant le support de l'hypermédia qui est justement au c&oelig;ur de REST.</p>
 						
 			<h3>L'en-tête Link</h3>
-			<p>L'en-tête <code>Link</code> (décrit dans la <a href="http://tools.ietf.org/html/rfc5988">RFC 5988</a>)
-			permet au serveur de spécifier un lien et le type de relation. Il se présente sous le format suivant &nbsp;:</p>
+			<p>Nous avons déjà abordé l'utilisation de l'en-tête <a href="06_http_lien.html"><code>Link</code></a>.
+			Il permet d'ajouter une dimension hypermédia au protocole HTTP. Il peut être une bonne alternative
+			pour fournir des liens à un client tout en utilisant un format de représentation qui est dépourvu
+			de support pour les liens (comme un format vidéo ou image).</p>
 			
-			<pre><code class="http">Link: &lt;URI&gt;;[attributs]</code></pre>
-			
-			<p>Parmi les attributs possibles, on trouve principalement <code>rel</code> qui permet de spécifier
-			le type de la relation et <code>title</code> qui fournit une description textuelle du lien.</p>
-			
-			<pre><code class="http">Link: &lt;<script>document.write(window.location)</script>&gt;;rel="self";title="REST"</code></pre>
+			<figure>
+				<figcaption>Un exemple d'utilisation de l'en-tête Link</figcaption>
+				<pre><code class="http">Link: &lt;<script>document.write(window.location)</script>&gt;;rel="self";title="REST"</code></pre>
+			</figure>
 			
 			<aside>
 				<p>Le type de relation indiqué par l'attribut <code>rel</code> est soit un nom défini par le 
 				<a href="http://www.iana.org/assignments/link-relations/link-relations.xhtml">registre du IANA</a>
-				soit une URI pour un type propre au serveur.</p>
+				soit une URI pour un type de relation propre au serveur.</p>
 			</aside>
 			
-			<p>Avec l'en-tête <code>Link</code>, il est possible d'exprimer des liens entre ressources
-			hors de la représentation (et donc dans des réponses ne contenant pas de <i>payload</i>).
-			Cependant, l'en-tête <code>Link</code> est encore rarement utilisé.</p>
+			<p>Cependant, l'en-tête <code>Link</code> est encore rarement utilisé même si on a vu apparaîter dans différents
+			frameworks Web un support pour cet en-tête.</p>
 			
 			
 			<!--  hypermedia comme gestion d'état applicatif -->
@@ -290,7 +313,7 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<p>L'hypermédia a pour objectif de déléguer au serveur la responsabilité de guider
 			le client dans ce qu'il est possible de réaliser. Au client de choisir ce qu'il souhaite faire
 			parmi les possibilités qui lui sont proposées.
-			Cette pratique permet au client de ne connaître que le minimum requis pour utiliser le service.
+			Cette pratique permet au client de ne connaître que le minimum requis pour interagir avec le serveur.
 			L'hypermédia n'est pas une technologie ni une méthode de développement. Il est le résultat de la
 			conception d'un service respectant les contraintes REST.</p>
 			<p>Ainsi, grâce à l'hypermédia, un client ne sera pas dépendant des règles de construction
@@ -303,24 +326,34 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			possible de modéliser des interactions client/serveur complexes par un enchaînement de requête/réponse.
 			On peut donc bien dire, à la suite de Roy Fielding, que l'hypermédia permet de décrire une machine à état
 			d'une application formée par l'intéraction entre un client et un serveur.</p>
+			
+			<blockquote>
+				<p>A REST API should be entered with no prior knowledge beyond the initial URI (bookmark) and set of standardized 
+				media types that are appropriate for the intended audience (i.e., expected to be understood by any client that 
+				might use the API). From that point on, all application state transitions must be driven by client selection 
+				of server-provided choices that are present in the received representations or implied by the user’s manipulation 
+				of those representations. The transitions may be determined (or limited by) the client’s knowledge of media types 
+				and resource communication mechanisms, both of which may be improved on-the-fly (e.g., code-on-demand).</p>
+				<footer>Roy Fielding - <a href="http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven">REST APIs must be hypertext-driven</a></footer>
+			</blockquote>
 
 			<h2>REST&nbsp;: ça veut dire quoi&nbsp;?</h2>
 			
 			<p>REST est un acronyme pour <strong>Representational State Transfer</strong>.</p>
 			<p>Il s'agit bien d'une architecture dont l'objectif et de transférer des états sous la forme de représentation.</p>
 
-			<h2>Les services Web RESTful</h2>
+			<h2 id="api_web">Les API Web</h2>
 			
-			<p>Les services Web RESTful (appelés également API Web) ne sont fondamentalement pas différents des sites Web traditionnels.
-			Ils obéissent aux mêmes contraintes d'architecture. La différence est une différence d'utilisation. 
+			<p>Les API Web (appelés également Web service RESTful) ne sont fondamentalement pas différentes des sites Web traditionnels.
+			Elles obéissent aux mêmes contraintes d'architecture. La différence est une différence d'utilisation. 
 			<p>Dans le cas d'un site Web, le travail du programme client consiste à présenter l'information à un être humain.
 			L'interprétation des données est donc de la responsabilité de l'être humain et c'est bien lui qui va sélectionner 
 			tel ou tel lien hypermédia selon ses objectifs ou ses goûts.</p>
-			<p>Pour un service Web, on attend le plus souvent du logiciel client qu'il sache, non seulement exploiter les URI 
+			<p>Pour une API Web, on attend le plus souvent du logiciel client qu'il sache, non seulement exploiter les URI 
 			et invoquer correctement les méthodes HTTP, mais également adapter son comportement en fonction du contenu de l'information échangée.
 			Cette capacité à analyser le contenu des représentations doit être favorisée par le serveur qui à la charge
 			de définir la sémantique de protocole et la sémantique applicative (ces notions sont empruntées à l'ouvrage 
-			<strong>RESTful Web APIs</strong> - O'Reilly 2013).</p>
+			<strong><a href="http://shop.oreilly.com/product/0636920028468.do">RESTful Web APIs</a></strong> - O'Reilly 2013).</p>
 			
 			<dl>
 				<dt>Sémantique de protocole</dt>
@@ -354,21 +387,6 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 				L'avantage de créer son propre type de contenu est que l'on peut définir simultanément la sémantique de protocole et la sémantique applicative (en fournissant
 				le format autorisé des représentations).</p>
 			</aside>
-			
-			<!--
-			HTML 5 Web storage : http://www.w3schools.com/html/html5_webstorage.asp
-			MIME list: http://www.iana.org/assignments/media-types/media-types.xhtml
-			http://microformats.org/wiki/hcard
-			microdata
-			http://schema.org/
-			RDFa (http://www.w3.org/TR/rdfa-lite/)
-			Faire la différence entre sémantique de protocole (décrit les URI, le format de construction et les méthodes autorisées) et sémantique applicative
-			(décrit la signification des réprésentations échangées). Normalement il n'est pas nécessaire de fournir une documentation de la sémantique du protocole
-			si ce dernier supporte l'hypermédia.
-			profile = description des liens (rel) + descripteur sémantique
-			http://www.google.com/webmasters/tools/richsnippets
-			http://www.w3.org/TR/json-ld/
-			 -->
 		</section>
 	</article>
 	
@@ -402,144 +420,6 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			<li>L'autorisation échoue car les informations bancaires fournies sont incorrectes</li>
 			<li>L'autorisation échoue car le client ne dispose pas du crédit suffisant sur son compte.</li>
 		</ul>
-
-		<h2>Implémentation</h2>
-		<p>Voici un exemple d'implémentation d'après les choix réalisés en cours.</p>
-		
-		<p>Pour la requête de création, nous partons du principe que le service à réaliser n'est pas un système
-		de gestion de factures. Il n'est donc pas nécessaire d'appliquer d'éventuelles règles légales concernant
-		la numérotation des factures. Le client est responsable de fournir l'URI de la ressource de la nouvelle facture
-		lors de la création (utilisation de la méthode <code>PUT</code>).</p>
-
-		<figure>
-			<figcaption>Requête de création d'une facture</figcaption>
-			<pre><code class="http">PUT /factures/1984 HTTP/1.1
-Host: mon-serveur.com
-Content-type: application/xml
-Content-length: 605
-
-&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
-&lt;facture
-    xmlns="http://mon-serveur.com/facture"
-    xsi:schemaLocation="http://mon-serveur.com/facture.xsd"&gt;
-    
-    &lt;dateFacture&gt;14/11/2014&lt;/dateFacture&gt;
-
-    &lt;montant monnaie="EUR"&gt;114&lt;/montant&gt;
-
-    &lt;client&gt;
-        &lt;prenom&gt;Jean&lt;/prenom&gt;
-        &lt;nom&gt;Dalbant&lt;/nom&gt;
-    &lt;/client&gt;
-    
-    &lt;adresseFacturation&gt; 
-        &lt;numero&gt;24&lt;/numero&gt;
-        &lt;voie&gt;rue de mon voisin&lt;/voie&gt;
-        &lt;zipcode&gt;31000&lt;/zipcode&gt;
-        &lt;ville&gt;Bordeaux&lt;/ville&gt;
-        &lt;pays&gt;France&lt;/pays&gt;
-    &lt;/adresseFacturation&gt;
-    
-    &lt;crediteur&gt;
-        &lt;iban&gt;BE43068999999501&lt;/iban&gt;
-    &lt;/crediteur&gt;
-&lt;/facture&gt;
-
-</code></pre>
-		</figure>
-		
-		<figure>
-			<figcaption>Réponse pour la création d'une facture</figcaption>
-			<pre><code class="http">HTTP/1.1 201 Created
-Location:  http://www.mon-serveur.com/factures/1984
-Link: &lt;http://www.mon-serveur.com/factures/1984/paiement&gt;; rel="payment"; title="Paiement"
-</code></pre>
-		</figure>
-		
-		<p>Afin d'utiliser une sémantique pré existante pour notre service, nous pouvons choisir de
-		nous baser sur les schémas Web définis sur <a href="http://schema.org">schema.org</a>.
-		Il n'existe pas à proprement parler de schéma pour une facture, mais nous disposons
-		d'une <a href="https://schema.org/PayAction"><code>PayAction</code></a>. Ainsi, une adaptation
-		de ce schéma donnerait&nbsp;:</p>
-		
-		<figure>
-			<figcaption>Requête d'une PayAction</figcaption>
-			<pre><code class="http">PUT /PayAction/1984 HTTP/1.1
-Host: mon-serveur.com
-Content-type: application/xml
-Content-length: 565
-
-&lt;PayAction 
-     xmlns="http://schema.org/PayAction"
-     xsi:schemaLocation="http://mon-serveur.com/xsd/PayAction.xsd"&gt;
-  &lt;purpose&gt;
-    &lt;name&gt;CLI-23234584391&lt;/name&gt;
-    &lt;description&gt;Commande sur le site Internet trouvetout.com&lt;/description&gt;
-    &lt;url&gt;https://trouvetout.com/bill/CLI-23234584391&lt;/url&gt;
-  &lt;/purpose&gt;
-  &lt;price priceCurrency="EUR"&gt;114&lt;/price&gt;
-  &lt;recipient&gt;
-    &lt;name&gt;trouvetout Inc.&lt;/name&gt;
-    &lt;iban&gt;BE43068999999501&lt;/iban&gt;
-  &lt;/recipient&gt;
-  &lt;agent&gt;
-    &lt;honorificPrefix&gt;M.&lt;/honorificPrefix&gt;
-    &lt;givenName&gt;Jean&lt;/givenName&gt;
-    &lt;name&gt;Dalbant&lt;/name&gt;
-  &lt;/agent&gt;
-&lt;/PayAction&gt;
-</code></pre>
-		</figure>
-
-		<figure>
-			<figcaption>Réponse pour une PayAction</figcaption>
-			<pre><code class="http">HTTP/1.1 201 Created
-Location:  http://www.mon-serveur.com/PayAction/1984
-Link: &lt;http://www.mon-serveur.com/PayAction/1984/payment&gt;; rel="payment"; title="Paiement"
-</code></pre>
-		</figure>
-		
-		<p>Pour le paiement, le client doit suivre le lien typé <code>payment</code> fourni dans l'en-tête de la réponse.
-		</p>
-		
-		<figure>
-			<figcaption>Requête de demande d'autorisation</figcaption>
-			<pre><code class="http">POST /PayAction/1984/payment HTTP/1.1
-Host: mon-serveur.com
-Content-type: application/x-www-form-urlencoded; charset=utf-8
-Content-length: 148
-
-cardNumber=1111222233334444&amp;expiryDate=12/<script type="text/javascript">document.write(new Date().getFullYear())</script>&amp;securityCode=123
-</code></pre>
-		</figure>
-		
-		<figure>
-			<figcaption>Réponse pour la demande d'autorisation</figcaption>
-			<pre><code class="http">HTTP/1.1 307 Temporary Redirect
-Location: http://www.mon-serveur.com/PayAction/1984/payment/456938103394
-
-</code></pre>
-		</figure>
-		
-		<p>Une réponse avec le code 307, suggère au client que le paiement ne sera terminé que si il refait la même
-		requête que précédemment à la nouvelle URI donnée par l'en-tête de réponse <code>Location</code>. Dans notre exemple,
-		le serveur fournit une URI qu'il identifiera comme une URI de ressource valide pour une capture.</p>
-		
-		<aside>
-			<p>Il n'est pas obligatoire d'utiliser un code de redirection. On peut même considéré que pour des raisons
-			de sécurité, on ne désire pas que le client envoie deux fois les données bancaires. Dans, ce cas, on
-			peut opter pour une autre cinématique dans laquelle le serveur renvoie à nouveau un lien vers l'URI de capture.</p>
-			<figure>
-				<figcaption>Réponse pour la demande d'autorisation sans redirection</figcaption>
-				<pre><code class="http">HTTP/1.1 200 OK
-Link: &lt;http://www.mon-serveur.com/PayAction/1984/payment/456938103394&gt;;rel="urn:epsi:capture"
-
-</code></pre>
-			</figure>
-			<p>Comme il n'existe pas de type de relation dans le <a href="http://www.iana.org/assignments/link-relations/link-relations.xhtml">registre du IANA</a>
-			pour décrire un lien vers une capture, on utilise une URI pour décrire la relation : urn:epsi:capture</p>
-		</aside>
-
 	</article>
 	
 	<article class="exercice">
@@ -556,62 +436,6 @@ Link: &lt;http://www.mon-serveur.com/PayAction/1984/payment/456938103394&gt;;rel
 			<li>L'utilisateur valide son panier pour le paiement en ligne</li>
 		</ul>
 		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
-		
-
-		<h2>Implémentation</h2>
-		<p>Voici un exemple d'implémentation d'après les choix réalisés en cours.</p>
-		
-		<p>Pour la consultation de la liste de produits du catalogue, on opte pour une représentation au format HAL+JSON.
-		Cela permet d'introduire facilement un lien vers chaque produit du catalogue&nbsp;:</p>
-		
-		<figure>
-			<figcaption>Requête pour connaître la liste des produits du catalogue</figcaption>
-			<pre><code class="http">GET /products HTTP/1.1
-Host: www.mon-serveur.com
-Accept: application/hal+json
-
-</code></pre>
-		</figure>
-
-		<figure>
-			<figcaption>Réponse contenant la liste des produits du catalogue</figcaption>
-			<pre><code class="http">HTTP/1.1 200 OK
-Content-type: application/hal+json; charset=utf-8
-Content-length: 407
-
-{
-  "_links": {
-    "self": { "href": "/products" },
-    "next": { "href": "/products?page=2" }
-  },
-  "_embedded": {
-    "product": [
-      {
-        "_links": {
-          "self": { "href": "/products/3958302947394" }
-        },
-        "name": "un super produit"
-      },
-      {
-        "_links": {
-          "self": { "href": "/products/495049347238" }
-        },
-        "name": "un autre super produit"
-      }
-    ]
-  }
-}
-</code></pre>
-		</figure>
-		
-		<p>La gestion du panier d'achat est en fait une logique du client. En effet, suivre REST impose de se contraindre à concevoir un service dont les requêtes sont sans état. Si on désire conserver un état
-		du client au fur et à mesure de la navigation, alors cela doit être au client de le faire. Donc l'API Web n'a pas besoin de fournir une ressource pour à un panier d'achat.
-		Si le client désire implémenter une telle logique, il peut tout simplement conserver une liste en mémoire et soumettre au moment de l'achat
-		l'ensemble des articles. Dans ce cas, l'API Web doit se contenter de fournir la possibilité de créer une ressource de commande d'articles par exemple.
-		Dans le cas d'un site HTML, il est tout à fait possible de gérer un panier côté client à l'aide de 
-		<a href="http://www.w3schools.com/html/html5_webstorage.asp">l'API HTML 5 <strong>Local Storage</strong> ou <strong>Session Storage</strong></a>.
-		</p>
-		
 	</article>
 	
 	<article class="exercice">
@@ -627,7 +451,7 @@ Content-length: 407
 			<li>Le gestionnaire du site consulte la liste des réservations confirmées pour un concert.</li>
 		</ul>
 		<p><strong>Attention, un utilisateur qui a confirmé sa réservation ne peut plus l'annuler !</strong></p>
-		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
+		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP pour la réalisation de chacun des cas d'utilisation.</p>
 	</article>
 		
 	<article>
