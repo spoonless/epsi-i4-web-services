@@ -397,8 +397,9 @@ Il n'y pas de nouvelle du monde :(
 			Mais il existe d'autres cas pour lesquels le serveur ne souhaite pas retourner directement de réponse au client.
 			</p>
 			<p>Dans la navigation Web, un cas répandu est le <a href="http://fr.wikipedia.org/wiki/Post-Redirect-Get">POST/Redirect/GET</a>.
-			Une requête <code>POST</code> étant idempotente, lorsqu'un utilisateur remonte dans son historique de navigation, le navigateur n'a pas
-			d'autre choix que de demander à l'utilisateur s'il désire soumettre à nouveau une requête <code>POST</code>. Il est donc souhaitable
+			La méthode <code>POST</code> n'est pas idempotente. Lorsqu'un utilisateur remonte dans son historique de navigation jusqu'à
+                        une requête <code>POST</code>, le navigateur n'a pas
+			d'autre choix que de demander à l'utilisateur s'il désire soumettre à nouveau cette requête. Il est donc souhaitable
 			de faire disparaître les méthodes non idempotentes de l'historique de navigation. Or un navigateur Web ne conserve pas l'historique 
 			d'une requête dont la réponse est une redirection (ou plus exactement, il lui substitue la requête de redirection). 
 			Il est donc possible de supprimer les requêtes <code>POST</code> de l'historique de navigation
