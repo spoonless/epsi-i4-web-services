@@ -467,12 +467,12 @@ Host: www.epsi.fr
 		<section>
 			<h2>Les en-têtes HTTP</h2>
 			
-			<p>Les en-têtes de requête et de réponse permettent de spécifier des paramètres pour la requête ou la réponse.
+			<p>Les en-têtes de requête et de réponse permettent d'enrichir le contexte de la requête ou la réponse.
 			Ils servent à fournir des données pour le support d'un ensemble de fonctionnalités de HTTP&nbsp;:</p>
 			
 			<ul>
 				<li>Gestion du cycle de vie de la connexion client/serveur</li>
-				<li>Compression de la charge utile</li>
+				<li>Compression du corps du message</li>
 				<li>Gestion de la taille et du contenu des entités de requête et de réponse</li>
 				<li>Négociation de contenu</li>
 				<li>Requêtes conditionnelles</li>
@@ -519,11 +519,11 @@ Host: www.monserveur.fr:9090
 							<td>Un fichier HTML</td>
 						</tr>
 						<tr>
-							<td>text/xml</td>
+							<td>text/xml ou application/xml</td>
 							<td>Un fichier XML</td>
 						</tr>
 						<tr>
-							<td>text/json</td>
+							<td>text/json ou application/json</td>
 							<td>Un fichier JSON</td>
 						</tr>
 						<tr>
@@ -608,7 +608,7 @@ Hello the world!
 			<ul>
 				<li>Le premier <a href="http://freegeoip.net/">freegeip.net</a>	permet de connaître la géolocalisation d'une adresse IP.</li>
 				<li>Le second est l'API Web de World of Warcraft. La documentation est 
-				disponible sur le compte <a href="https://dev.battle.net/io-docs">GitHub de Blizzard</a></li>
+				disponible sur le site <a href="https://dev.battle.net/io-docs">battle.net pour les développeurs</a>.</li>
 			</ul>
 			
 			<p>Pour écrire ces applications clientes, vous pouvez partir du template de projet Maven téléchargeable <a href="assets/jaxrs-client-template.zip">ici</a>.</p>
