@@ -46,7 +46,7 @@
 		<section>
 			<h2>Serveur d'origine et intermédiaires</h2>
 			<p>Un serveur d'origine est celui qui fait autorité pour répondre à une requête. Par exemple, il peut s'agir du serveur
-			qui détient un document particulier. En théorie, un client qui décide obtenir ce document doit faire une requête HTTP
+			qui détient un document particulier. En théorie, un client qui souhaite obtenir ce document doit faire une requête HTTP
 			au serveur d'origine. Cependant, HTTP supporte le recours à des intermédiaires, formant ainsi une chaîne de 
 			connexions entre le client qui émet la requête initiale (appelé agent utilisateur ou <em>user agent</em>) et le serveur d'origine. 
 			Un intermédiaire agit à la fois comme un serveur (car il doit retourner une réponse à une requête cliente) et comme un client 
@@ -64,7 +64,7 @@
 				<dd>Une <strong>gateway</strong> (ou reverse proxy) est un intermédiaire qui agit comme un serveur d'origine.
 				Les reverse proxies sont souvent utilisés comme des accelérateurs HTTP (pour la mise en place de cache). Ils peuvent
 				également permettre d'isoler des serveurs d'origine d'un réseau publique ou non sécurisé.
-				On résume l'action d'un reverse proxy en disant qu'il se substitue à un N clients pour des requêtes vers un serveur.
+				On résume l'action d'un reverse proxy en disant qu'il se substitue à N clients pour des requêtes vers un serveur.
 				</dd>
 
 				<dt>tunnel</dt>
@@ -198,14 +198,17 @@ always on as in the concept of utility computing.</code></pre>
 					</aside>
 				</dd>
 			</dl>
+			<p>Si la réponse du serveur ne contient ni l'en-tête <a href="http://tools.ietf.org/html/rfc7234#section-5.3">Expires</a>, ni l'en-tête 
+			<a href="http://tools.ietf.org/html/rfc7234#section-5.2">Cache-Control</a> mais que la méthode HTTP de la requête est <a href="01_http.html#cacheable"><strong>cacheable</strong></a>,
+			alors le gestionnaire de cache peut appliquer une heuristique afin de déduire une date limite de fraîcheur.</p>
 		</section>
 		<section>
 			<h2>La revalidation</h2>
 			
 			<p>Lorsqu'un gestionnaire de cache détecte qu'une donnée n'est plus fraîche. Il doit demander une revalidation
-			auprès du serveur d'origine. La revalidation consiste à émettre une <a href="03_http_requetes_conditionnelles.html">requête conditionnelle</a> basée la date de 
+			auprès du serveur d'origine. La revalidation consiste à émettre une <a href="03_http_requetes_conditionnelles.html">requête conditionnelle</a> basée sur la date de 
 			dernière modification ou sur l'entity-tag selon les informations fournies précédemment par le serveur.</p>
-			<p>Le résultat de la revalidation dépend du résultat de la requête conditionnelles&nbsp;:</p>
+			<p>Le résultat de la revalidation dépend du résultat de la requête conditionnelle&nbsp;:</p>
 			<ul>
 				<li>Si le serveur répond 304 (Not modified), alors la réponse en cache peut être mise à jour et utilisée comme réponse à la requête.</li>
 				<li>Si le serveur retourne une réponse complète avec un code 2XX, alors le serveur informe que la réponse en cache n'est plus valide.
@@ -284,10 +287,11 @@ always on as in the concept of utility computing.</code></pre>
 			du serveur&nbsp;: c'est-à-dire les méthodes non sûres <code>POST</code>, <code>PUT</code>, <code>DELETE</code> et <code>PATCH</code>.
 			Le cache ne sera invalidé que si la réponse est un succès (code statut 2XX ou 3XX).</p>
 			
-			<p>La difficulté de la gestion du cache survient lorsqu'il est possible d'atteindre un serveur d'origine sans passer nécessairement
-			par le même gestionnaire de cache. En effet, si une réponse est mise en cache et qu'une requête <code>PUT</code> est émise vers la même
-			ressource sans passer par le gestionnaire de cache, alors la réponse en cache devient invalide sans que le gestionnaire de cache n'ait
-			de moyen de le détecter.</p>
+			<p>La difficulté de la mise en place d'un cache HTTP provient souvent du fait qu'il est possible d'atteindre un serveur d'origine sans passer nécessairement
+			par le même gestionnaire de cache. Ainsi, si une réponse est mise en cache et qu'une requête <code>PUT</code> est émise vers la même
+			ressource sans passer par le gestionnaire de cache, alors la réponse en cache devient invalide. Cependant, le gestionnaire de cache ne pourra détecter
+			cette modification qu'une fois la date de fraîcheur dépassée pour la réponse. Il peut donc y avoir un temps de latence entre le moment
+			où une ressource est modifiée et le moment où le gestionnaire de cache prend en compte cette modification.</p>
 		</section>
 		
 		<section>
@@ -299,7 +303,7 @@ always on as in the concept of utility computing.</code></pre>
 			<dl>
 				<dt><a href="http://tools.ietf.org/html/rfc7230#section-5.7.1">Via</a></dt>
 				<dd>L'en-tête <a href="http://tools.ietf.org/html/rfc7230#section-5.7.1"><code>Via</code></a> sert simplement à un intermédiaire à signaler sa présence
-				en indiquant son nom et sa version. Il n'est pas à proprement parlé utilisé dans le cadre de la gestion de cache, mais il est utile à connaître
+				en indiquant son nom et sa version. Cet en-tête n'est pas spécifique à la gestion de cache, mais il est utile de le connaître
 				pour détecter la présence d'intermédiaire dans un échange client/serveur. Dans l'exemple ci-dessous, on supposera qu'il existe un proxy Squid
 				utilisé comme intermédiaire.
 				
@@ -317,7 +321,7 @@ Host: www.dictionary.info
 				<figcaption>La requête vue par le serveur</figcaption>
 				<pre><code class="http">GET /web+service HTTP/1.1
 Host: www.dictionary.info
-Via: 1.0 Squid
+Via: 1.1 squid
 
 </code></pre>
 			</figure>
@@ -340,7 +344,7 @@ always on as in the concept of utility computing.</code></pre>
 Content-type: text/plain; charset=utf-8
 Content-language: en
 Content-length: 226
-Via: 1.0 Squid
+Via: 1.1 squid
 
 A Web Service is a method of communication between two electronic devices over a network.
 It is a software function provided at a network address over the web with the service 
@@ -368,7 +372,7 @@ Content-type: text/plain; charset=utf-8
 Content-language: en
 Content-length: 226
 Age: 22
-Via: 1.0 Squid
+Via: 1.1 squid
 
 A Web Service is a method of communication between two electronic devices over a network.
 It is a software function provided at a network address over the web with the service 
