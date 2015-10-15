@@ -240,7 +240,7 @@ always on as in the concept of utility computing.</code></pre>
 			dernière modification ou sur l'entity-tag selon les informations fournies précédemment par le serveur.</p>
 			<p>Le résultat de la revalidation dépend du résultat de la requête conditionnelle&nbsp;:</p>
 			<ul>
-				<li>Si le serveur répond 304 (Not modified), alors la réponse en cache peut être mise à jour et utilisée comme réponse à la requête.</li>
+				<li>Si le serveur répond 304 (Not modified), alors la réponse en cache est utilisée comme réponse à la requête.</li>
 				<li>Si le serveur retourne une réponse complète avec un code 2XX, alors le serveur informe que la réponse en cache n'est plus valide.
 				La réponse retournée par le serveur est celle utilisée pour répondre à la requête et le cache est mis à jour en accord avec la réponse du serveur.</li>
 				<li>Si le serveur ne répond pas (ou répond une erreur 5XX), alors il est possible de retourner l'erreur du serveur comme réponse (ou un <strong>504</strong> Gateway Timeout).
