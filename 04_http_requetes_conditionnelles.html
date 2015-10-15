@@ -220,7 +220,7 @@ Content-Length: 65
 name=Gayerie&amp;firstname=David&amp;email=david.gayerie.epsi@mailoo.org</code></pre>
 					</figure>
 					<p>Si l'<code>Entity-Tag</code> de la représentation de la ressource <strong>ne correspond pas à celui envoyé</strong> par le client, 
-					alors le serveur en déduit qu'il n'y a eu une modification et il devrait retourner le code <strong>412</strong> 
+					alors le serveur en déduit que la ressource a été modifiée entre temps et il devrait retourner le code <strong>412</strong> 
 					(Precondition failed) sans payload dans la réponse.</p>
 
 					<figure>
@@ -230,7 +230,7 @@ Content-Length: 0
 
 </code></pre>
 					</figure>
-					<p>Si les <code>Entity-Tags</code> sont identiques,alors le serveur doit traiter la requête normalement.</p>
+					<p>Si les <code>Entity-Tags</code> sont identiques, alors le serveur doit traiter la requête normalement.</p>
 
 				</dd>
 			</dl>
