@@ -406,26 +406,26 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 		<p>Décrivez une API Web RESTful par des exemples de requêtes/réponses HTTP permettant de réaliser les cas d'utilisation ci-dessus.</p>
 
 		<h3>Correction</h3>
-		<ul>
-			<li>L'utilisateur consulte la liste des concerts disponibles</li>
-		</ul>
-		
-		<p>GET /concerts</p>
-		<p>Le serveur répond 200 avec un type de contenu text/uri-list, c'est-à-dire une liste d'URL pointant
-		chacune sur un concert.</p>
-		<figure>
-			<figcaption>Exemple de réponse du serveur au format text/uri-list</figcaption>
-			<pre><code>http://monconcert.com/concerts/AAAAAA
+		<dl>
+			<dt>L'utilisateur consulte la liste des concerts disponibles</dt>
+
+		<dd>		
+			<p>GET /concerts</p>
+			<p>Le serveur répond 200 avec un type de contenu text/uri-list, c'est-à-dire une liste d'URL pointant
+			chacune sur un concert.</p>
+			<figure>
+				<figcaption>Exemple de réponse du serveur au format text/uri-list</figcaption>
+				<pre><code>http://monconcert.com/concerts/AAAAAA
 http://monconcert.com/concerts/BBBBBB
 http://monconcert.com/concerts/CCCCCC
 </code></pre>
-		</figure>
+			</figure>
 
-		<p>Le client peut choisir le lien qu'il souhaite dans cette liste et faire un GET pour obtenir le
-		détail d'un concert au format HAL (application/hal+json).</p>
-		<figure>
-			<figcaption>Exemple de réponse du serveur pour un GET sur une URL de concert</figcaption>
-			<pre><code>{
+			<p>Le client peut choisir le lien qu'il souhaite dans cette liste et faire un GET pour obtenir le
+			détail d'un concert au format HAL (application/hal+json).</p>
+			<figure>
+				<figcaption>Exemple de réponse du serveur pour un GET sur une URL de concert</figcaption>
+				<pre><code>{
   "_links": {
     "self": { "href": "http://monconcert.com/concerts/AAAAAA"},
     "http://monconcert.com/reservation": { "href": "URL_POUR_RESERVER"}
@@ -438,21 +438,20 @@ http://monconcert.com/concerts/CCCCCC
     "summary": "good vibe"
   }
 }
-</code></pre>
-		</figure>
+	</code></pre>
+			</figure>
+			
+			<aside>
+				<p>Dans la représentation ci-dessus, on utilise le <a href="http://microformats.org/wiki/h-event">microformat h-event</a>
+				afin d'améliorer la portabilité du format de la représentation.</p>
+			</aside>
 		
-		<aside>
-			<p>Dans la représentation ci-dessus, on utilise le <a href="http://microformats.org/wiki/h-event">microformat h-event</a>
-			afin d'améliorer la portabilité du format de la représentation.</p>
-		</aside>
-		
-		
-		<p>On peut imaginer accepter une négociation de contenu pour le format HAL (application/hal+json)
-		afin de fournir plus d'information au client directement dans la liste des concerts.</p>
-
-		<figure>
-			<figcaption>Exemple de réponse du serveur au format application/hal+json</figcaption>
-			<pre><code>{
+			<p>On peut imaginer accepter une négociation de contenu pour le format HAL (application/hal+json)
+			afin de fournir plus d'information au client directement dans la liste des concerts.</p>
+	
+			<figure>
+				<figcaption>Exemple de réponse du serveur au format application/hal+json</figcaption>
+				<pre><code>{
   "_embedded": {
     "item": [{
       "_links": [{
@@ -478,108 +477,112 @@ http://monconcert.com/concerts/CCCCCC
   }
 }
 </code></pre>
-		</figure>
+			</figure>
+		</dd>
+		
+		<dt>L'utilisateur réserve une place pour un concert avec un pseudo</dt>
+		
+		<dd>
 
-		<ul>
-			<li>L'utilisateur réserve une place pour un concert avec un pseudo</li>
-		</ul>
-		
-		<p>Pour réserver, le client effectue un <strong>POST</strong> sur le lien avec le type
-		de relation <strong>http://monconcert.org/reservation</strong> en envoyant dans le corps du message son pseudo.</p>
-		
-		<figure>
-			<figcaption>Pseudo requête de réservation</figcaption>
-			<pre><code>POST URL_POUR_RESERVER HTTP/1.1
+			<p>Pour réserver, le client effectue un <strong>POST</strong> sur le lien avec le type
+			de relation <strong>http://monconcert.org/reservation</strong> en envoyant dans le corps du message son pseudo.</p>
+			
+			<figure>
+				<figcaption>Pseudo requête de réservation</figcaption>
+				<pre><code>POST URL_POUR_RESERVER HTTP/1.1
 Content-type: text/plain
 
 spoonless</code></pre>
-		</figure>
-		
-		<aside>
-			<p>À charge pour le serveur de forger une URL pour la réservation qui lui permettent d'identifier le concert
-			concerné. Par exemple si l'URL du concert est http://monconcert.com/AAAAAA, alors le serveur
-			peut générer une URL pour la réservation de la forme http://monconcert.com/AAAAAA/reservations par exemple.</p>
-		</aside>
-		
-		<p>La réponse du serveur ressemblera à&nbsp;:</p>
-		<figure>
-			<figcaption>Pseudo réponse du serveur</figcaption>
-			<pre><code>HTTP/1.1 201 Created
+			</figure>
+			
+			<aside>
+				<p>À charge pour le serveur de forger une URL pour la réservation qui lui permettent d'identifier le concert
+				concerné. Par exemple si l'URL du concert est http://monconcert.com/AAAAAA, alors le serveur
+				peut générer une URL pour la réservation de la forme http://monconcert.com/AAAAAA/reservations par exemple.</p>
+			</aside>
+			
+			<p>La réponse du serveur ressemblera à&nbsp;:</p>
+			<figure>
+				<figcaption>Pseudo réponse du serveur</figcaption>
+				<pre><code>HTTP/1.1 201 Created
 Location: URL_DE_LA_RESERVATION
 
 </code></pre>
-		</figure>
+			</figure>
 		
-		<p>Le client peut ensuite obtenir la définition de sa réservation en faisant un GET sur l'URL donnée par
-		l'en-tête <strong>Location</strong>&nbsp;:</p>
-		
-		<figure>
-			<figcaption>Exemple de pseudo réponse pour un GET sur l'URL de la réservation</figcaption>
-			<pre><code>HTTP/1.1 200 OK
+			<p>Le client peut ensuite obtenir la définition de sa réservation en faisant un GET sur l'URL donnée par
+			l'en-tête <strong>Location</strong>&nbsp;:</p>
+			
+			<figure>
+				<figcaption>Exemple de pseudo réponse pour un GET sur l'URL de la réservation</figcaption>
+				<pre><code>HTTP/1.1 200 OK
 Link: &lt;URL_DU_CONCERT&gt;;rel="http://monconcert.com/concert"
 Link: &lt;URL_DE_CONFIRMATION&gt;;rel="http://monconcert.com/confirmation"
 Link: &lt;URL_D_ANNULATION&gt;;rel="http://monconcert.com/annulation"
 Content-type: text/plain
 
 spoonless</code></pre>
-		</figure>
+			</figure>
 		
-		<ul>
-			<li>L'utilisateur annule sa réservation</li>
-		</ul>
-		<p>Un effectuant un <strong>PUT</strong> sur l'URL donnée par le lien de type <strong>http://monconcert.com/annulation</strong>
-		et avec un corps de message vide, l'utilisateur réalise un annulation de sa réservation. Il s'agit de réaliser une mise
-		à jour avec un contenu vide.</p>
-
-		<figure>
-			<figcaption>Exemple de pseudo requête pour annuler une réservation</figcaption>
-			<pre><code>PUT URL_D_ANNULATION HTTP/1.1
+		</dd>
+		<dt>L'utilisateur annule sa réservation</dt>
+		<dd>
+			<p>Un effectuant un <strong>PUT</strong> sur l'URL donnée par le lien de type <strong>http://monconcert.com/annulation</strong>
+			et avec un corps de message vide, l'utilisateur réalise un annulation de sa réservation. Il s'agit de réaliser une mise
+			à jour avec un contenu vide.</p>
+	
+			<figure>
+				<figcaption>Exemple de pseudo requête pour annuler une réservation</figcaption>
+				<pre><code>PUT URL_D_ANNULATION HTTP/1.1
 Content-length: 0
 
 </code></pre>
-		</figure>
+			</figure>
 
-		<aside>On peut aussi imaginer utiliser la méthode <strong>DELETE</strong> plutôt que <strong>PUT</strong>
-		pour réaliser une annulation de réservation.
-		</aside>
+			<aside>On peut aussi imaginer utiliser la méthode <strong>DELETE</strong> plutôt que <strong>PUT</strong>
+			pour réaliser une annulation de réservation.
+			</aside>
+		</dd>
+		
+		<dt>L'utilisateur confirme sa réservation</dt>
+		
+		<dd>
+			<p>L'utilisateur confirme sa réservation en effectuant un <strong>POST</strong> sur l'URL donnée par le lien
+			de type <strong>http://monconcert.com/confirmation</strong>. Il n'y a pas de corps à la requête.</p>
 
-		<ul>
-			<li>L'utilisateur confirme sa réservation</li>
-		</ul>
-		<p>L'utilisateur confirme sa réservation en effectuant un <strong>POST</strong> sur l'URL donnée par le lien
-		de type <strong>http://monconcert.com/confirmation</strong>. Il n'y a pas de corps à la requête.</p>
-
-		<figure>
-			<figcaption>Pseudo requête de confirmation</figcaption>
-			<pre><code>POST URL_DE_CONFIRMATION HTTP/1.1
+			<figure>
+				<figcaption>Pseudo requête de confirmation</figcaption>
+				<pre><code>POST URL_DE_CONFIRMATION HTTP/1.1
 Content-Length: 0
 
 </code></pre>
-		</figure>
+			</figure>
 		
-		<p>Si la confirmation est un succès alors, un appel GET sur l'URL de la réservation ne fournira
-		plus les liens de type <strong>http://monconcert.com/annulation</strong> et <strong>http://monconcert.com/confirmation</strong>.
-		Ainsi, le serveur précise au client qu'après une confirmation, ce dernier ne peut plus ni annuler sa réservation ni la
-		confirmer à nouveau.</p>
-
-		<figure>
-			<figcaption>Exemple de pseudo réponse pour un GET sur l'URL de la réservation après une confirmation</figcaption>
-			<pre><code>HTTP/1.1 200 OK
+			<p>Si la confirmation est un succès alors, un appel GET sur l'URL de la réservation ne fournira
+			plus les liens de type <strong>http://monconcert.com/annulation</strong> et <strong>http://monconcert.com/confirmation</strong>.
+			Ainsi, le serveur précise au client qu'après une confirmation, ce dernier ne peut plus ni annuler sa réservation ni la
+			confirmer à nouveau.</p>
+	
+			<figure>
+				<figcaption>Exemple de pseudo réponse pour un GET sur l'URL de la réservation après une confirmation</figcaption>
+				<pre><code>HTTP/1.1 200 OK
 Link: &lt;URL_DU_CONCERT&gt;;rel="http://monconcert.com/concert"
 Content-type: text/plain
 
 spoonless</code></pre>
-		</figure>
-
-		<ul>
-			<li>Le gestionnaire du site consulte la liste des réservations confirmées pour un concert.</li>
-		</ul>
+			</figure>
+		</dd>
 		
-		<p>Il suffit de fournir une URL spécifique qui liste les concerts avec, pour chacun, la liste des URL vers
-		les réservations. Ce qui est important ici, c'est que le gestionnaire de site a un rôle particulier et
-		que l'on souhaitera sans doute limiter l'accès à cette ressource. On peut imaginer une configuration réseau
-		dans laquelle le serveur dispose d'une interface réseau publique et d'une interface réseau pour un réseau
-		interne sécurisé uniquement accessible au gestionnaire du site.</p>
+		<dt>Le gestionnaire du site consulte la liste des réservations confirmées pour un concert.</dt>
+		
+		<dd>
+			<p>Il suffit de fournir une URL spécifique qui liste les concerts avec, pour chacun, la liste des URL vers
+			les réservations. Ce qui est important ici, c'est que le gestionnaire de site a un rôle particulier et
+			que l'on souhaitera sans doute limiter l'accès à cette ressource. On peut imaginer une configuration réseau
+			dans laquelle le serveur dispose d'une interface réseau publique et d'une interface réseau pour un réseau
+			interne sécurisé uniquement accessible au gestionnaire du site.</p>
+		</dd>
+	</dl>
 	</article>
 
 	<article class="exercice">
