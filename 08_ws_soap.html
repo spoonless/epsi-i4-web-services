@@ -61,7 +61,7 @@
 			Un message est constitué par une enveloppe (<strong>SOAP envelope</strong>) qui peut contenir un en-tête (<strong>SOAP header</strong>) et ensuite une
 			charge utile (<strong>SOAP body</strong>). 
 			<p>
-			<p>Pour une utilisation avec le protocole HTTP, Le message doit être envoyé avec la méthode POST à l'URL du service (appelée aussi <strong>endpoint</strong>)</p>
+			<p>Pour une utilisation avec le protocole HTTP, le message doit être envoyé avec la méthode POST à l'URL du service (appelée aussi <strong>endpoint</strong>)</p>
 			<figure>
 				<figcaption>Exemple de message SOAP</figcaption>
 				<pre><code class="xml">
@@ -89,7 +89,7 @@
 			<aside>
 				<p>Dans l'exemple ci-dessus le message contient de toute évidence un relevé météorologique pour la ville
 				de bordeaux. Ce message peut aussi bien être une requête d'un expéditeur qu'une réponse d'un destinataire (la
-				structure des messages sont les mêmes).</p>
+				structure des messages est la même).</p>
 			</aside>
 			
 			<p>Du fait de son utilisation exclusive du XML pour la composition des messages, une bonne compréhension de SOAP
@@ -596,7 +596,7 @@ System.out.println(helloService.sayHello("world"));
 
 	<article class="exercice">
 		<section>
-			<h2>Excercice&nbsp;: &Eacute;crire à un programme client d'un service Web</h2>
+			<h2>Excercice&nbsp;: &Eacute;crire un programme client d'un service Web</h2>
 			<p>&Eacute;crivez une client pour le service Web SOAP disponible à cette adresse&nbsp;: <a class="explicit" href="http://ws-meteo.herokuapp.com/">http://ws-meteo.herokuapp.com/</a>.</p>
 			<p>Par exemple, vous pouvez écrire un programme qui accepte le nom d'une ville en paramètre et qui affiche la température obtenue pour cette ville après un appel au service Web.</p>
 			
