@@ -51,7 +51,7 @@
 			connexions entre le client qui émet la requête initiale (appelé agent utilisateur ou <em>user agent</em>) et le serveur d'origine. 
 			Un intermédiaire agit à la fois comme un serveur (car il doit retourner une réponse à une requête cliente) et comme un client 
 			(car il doit obtenir l'information auprès de l'élément suivant dans la chaîne de connexions).</p>
-			<p>HTTP définit trois type d'intermédiaires&nbsp;:</p>
+			<p>HTTP définit trois types d'intermédiaires&nbsp;:</p>
 			<dl>
 				<dt>proxy (serveur mandataire)</dt>
 				<dd>Un <strong>proxy</strong> est utilisé par un client pour transmettre des messages à sa place. Il est en général
@@ -69,12 +69,12 @@
 
 				<dt>tunnel</dt>
 				<dd>Un <strong>tunnel</strong> agit comme un relais entre deux connexions sans changer la nature des messages
-				échangés. Un tunnel est utilisé pour établir des connexions sécurisées ou pour utiliser un protocol tiers à travers HTTP.
+				échangés. Un tunnel est utilisé pour établir des connexions sécurisées ou pour utiliser un protocole tiers à travers HTTP.
 				Dans la mesure où HTTP impose que les messages circulant dans un tunnel ne peuvent pas être mis en cache, ce type
 				d'intermédiaire ne nous intéressera pas dans ce chapitre.  
 				</dd>
 			</dl>
-			<p>Un <strong>proxy</strong> et un <strong>reverse proxy</strong> sont souvent pouvus d'un système de gestion cache.
+			<p>Un <strong>proxy</strong> et un <strong>reverse proxy</strong> sont souvent pourvus d'un système de gestion cache.
 			Dans le cas d'un reverse proxy utilisé comme accélérateur, il s'agit même de la principale raison de sa mise en place.
 			Ces intermédiaires vont donc pouvoir décider d'écourter la chaîne de connexions en répondant directement 
 			à partir des données dont ils disposent en cache. Ils auront également besoin de contacter de temps en temps le serveur d'origine
