@@ -16,7 +16,7 @@
 	<div id="titleBar">
 		<a href="index.html" title="Retourner au sommaire"><img src="assets/go-home.png"></a>
  		<a href="https://github.com/spoonless/epsi-i4-web-services/archive/gh-pages.zip" title="Télécharger tout le cours"><img src="assets/download.png"></a>
-		<script>document.write(document.title)</script> - EPSI I4 2015/2016 - <a href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a>
+		<script>document.write(document.title)</script> - EPSI I4 2016/2017 - <a href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a>
 		<span class="license"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/fr/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/fr/80x15.png" /></a></span>
 	</div>
 
@@ -52,23 +52,18 @@
 				<li><a href="07_rest.html#api_web">Les API Web</a></li>
 			</ol>
 			
-			<h3>Service Web (WS-*)</h3>
+			<h3>Annexes</h3>
 			<ol>
-				<li><a href="08_ws_soap.html">SOAP</a></li>
-				<li><a href="08_ws_soap.html#wsdl">WSDL</a></li>
-				<li><a href="08_ws_soap.html#jaxws">Implémenter des services Web avec JAX-WS</a></li>
-			</ol>
-			
-			<h3>Compléments au cours</h3>
-			<ul>
 				<li><a href="a1_xml.html">XML</a></li>
-			</ul>
+				<li><a href="a2_ws_soap.html">Service Web (WS-*)&nbsp;: SOAP/WSDL</a></li>
+			</ol>
 		</section>
 
 		<section id="introduction">
 			<h2>Introduction&nbsp;: Web Service et Web API</h2>
 			
-			<p>Voici la définition du terme "Web service" donnée respectivement par le W3C et Wikipedia&nbsp;:</p>
+			<p>Le terme de <i>Web service</i> est problématique car, pour des raisons historiques, il peut regrouper plusieurs acceptions. 
+			Voici la définition du terme "Web service" donnée respectivement par le W3C et Wikipedia&nbsp;:</p>
 			
 			<figure>
 				<figcaption><a href="http://www.w3.org/TR/2004/NOTE-ws-gloss-20040211/#webservice">Définition du W3C</a></figcaption>
@@ -82,8 +77,7 @@
 			<figure>
 				<figcaption><a href="http://en.wikipedia.org/wiki/Web_service">Définition de Wikipedia</a></figcaption>
 			    <blockquote cite="http://en.wikipedia.org/wiki/Web_service">
-				    <p>A Web Service is a <strong>method of communication</strong> between two electronic devices over a network. It is a software function provided at a network address <strong>over the web</strong> with the service always on as in the concept of utility computing. The W3C defines a Web service generally as:-</p>
-				    <p>a software system designed to support <strong>interoperable</strong> machine-to-machine interaction over a network.</p>
+				    <p>A Web service is a service offered by an electronic device to another electronic device, communicating with each other via the <strong>World Wide Web</strong>. In a Web service, Web technology such as HTTP, originally designed for human-to-machine communication, is utilized for machine-to-machine communication, more specifically for transferring machine readable file formats such as XML and JSON.</p>
 			    </blockquote>
 			</figure>
 			
@@ -93,8 +87,9 @@
 			
 			<p>Pour l'ensemble de ce cours, nous opterons pour une distinction entre <a href="https://en.wikipedia.org/wiki/Web_API">Web API</a> et Web service qui s'impose de plus en plus dans la littérature.
 			Une <strong>API Web</strong> (parfois nommée RESTful Web Services) est une interface programmatique basée sur HTTP permettant à une client et à un serveur 
-			d'interagir suivant un échange de requête/réponse. Un <strong>service Web</strong> est un protocole de communication basé sur les standards W3 tels que XML, SOAP et WSDL.
-			</p>
+			d'interagir suivant un échange de requête/réponse. Un <strong>service Web</strong> est un protocole de communication basé sur les standards W3 tels que XML, SOAP et WSDL.</p> 
+			<p>Ce cours porte principalement sur les <strong>API Web</strong> au travers d'un approfondissement des connaissances sur le protocole HTTP et une présentation du modèle d'architecture REST.
+			Les services Web proprement dits sont présentés dans les <a href="a2_ws_soap.html">annexes</a> pour celles et ceux qui désirent une introduction aux protocoles SOAP et WSDL.</p>
 		</section>
 	</article>
 
