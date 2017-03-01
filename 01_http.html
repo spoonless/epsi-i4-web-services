@@ -7,7 +7,7 @@
 	<link href="css/article.css" rel="stylesheet" media="screen">
 	<link href="css/print-article.css" rel="stylesheet" media="print">
 	<link href="highlight/styles/zenburn.css" rel="stylesheet">
-	
+
 	<script src="highlight/highlight.pack.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script src="js/toc.js"></script>
@@ -19,14 +19,14 @@
 		Les API Web - EPSI I4 2016/2017 - <a href="mailto:david.gayerie.epsi@mailoo.org">David Gayerie</a>
 		<span class="license"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/fr/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/fr/80x15.png" /></a></span>
 	</div>
-	
+
 	<header></header>
 	<article>
 		<h1><script>document.write(document.title)</script></h1>
 		<section id="toc"></section>
-		
+
 		<section>
-		<p>L'<b>Hypertext Transfer Protocol</b> (HTTP) est un protocole de la <a href="http://en.wikipedia.org/wiki/Application_layer">couche application</a>. 
+		<p>L'<b>Hypertext Transfer Protocol</b> (HTTP) est un protocole de la <a href="http://en.wikipedia.org/wiki/Application_layer">couche application</a>.
 		Il est le fondement de l'échange de données pour le World Wide Web.
 		Comme tous les protocoles applicatifs d'Internet, HTTP est orienté texte.</p>
 
@@ -39,21 +39,21 @@
 		    <li><a href="http://tools.ietf.org/html/rfc7234">RFC 7234</a> - HTTP/1.1: Caching - La gestion du cache client et des caches des éléments intermédiaires</li>
 		    <li><a href="http://tools.ietf.org/html/rfc7235">RFC 7235</a> - HTTP/1.1: Authentication - La gestion de l'authentification HTTP</li>
 		</ul>
-		
+
 		<aside>
 			<p>Depuis 1999, le protocole HTTP était défini par la "célèbre" <a href="http://tools.ietf.org/html/rfc2616">RFC 2616</a>. En juin 2014, une reécriture a été
 			publiée afin de clarifier certains points et d'améliorer la structure globale de la spécification en la scindant en six RFC distinctes.</p>
 		</aside>
 		</section>
-		
+
 		<section>
 			<h2>Structure des messages</h2>
 			<p>HTTP est un protocole <strong>sans état</strong> dans un environnement <strong>client/serveur</strong>. Le client émet une requête qui contient les informations suffisantes pour permettre
 			au serveur de fournir une réponse.</p>
-			
+
 			<figure>
 				<figcaption>Une requête HTTP GET</figcaption>
-				<pre><code class="http">GET /Programmes/Formation-informatique HTTP/1.1
+				<pre><code class="http">GET /Programmes/Panorama-des-etudes HTTP/1.1
 Host: www.epsi.fr
 				</code></pre>
 			</figure>
@@ -67,7 +67,7 @@ Content-Length: 420
 ...
 &lt;/html&gt;</code></pre>
 			</figure>
-			
+
 			<p>Une requête HTTP débute par une ligne de requête (request line) terminée par un saut de ligne (<a href="http://fr.wikipedia.org/wiki/Carriage_Return_Line_Feed">CRLF</a>).
 			Cette ligne contient la méthode HTTP que le client souhaite exécuter, le chemin de la ressource cible sur laquelle la méthode doit s'appliquer et enfin la version du protocole
 			HTTP utilisée (HTTP/1.1).<p>
@@ -80,20 +80,20 @@ Content-Length: 420
 [ligne vide]
 [corps de message]</code></pre>
 			</figure>
-			
+
 			<p>Lorsque le serveur reçoit la requête, il reconstitue l'URI de la requête afin de déterminer quelle réponse il doit retourner au client. L'URI de la requête est
 			déterminée à partir de la ressource cible et de la valeur de l'en-tête <code>Host</code>. Ainsi pour la requête suivante&nbsp;:</p>
 			<figure>
-				<pre><code class="http">GET /Programmes/Formation-informatique HTTP/1.1
+				<pre><code class="http">GET /Programmes/Panorama-des-etudes HTTP/1.1
 Host: www.epsi.fr
 				</code></pre>
 			</figure>
-			
+
 			<p>Le serveur infère que le client veut exécuter la méthode <code>GET</code> sur l'URI&nbsp;:</p>
 			<figure>
-				<pre><code class="http">http://www.epsi.fr/Programmes/Formation-informatique</code></pre>
+				<pre><code class="http">http://www.epsi.fr/Programmes/Panorama-des-etudes</code></pre>
 			</figure>
-			
+
 			<aside>
 				<p>On pourra retenir comme règle simple que le contenu de l'en-tête <code>Host</code> correspond au nom de l'hôte dans l'URI et que la ressource cible
 				correspond au chemin suivant l'hôte dans l'URI.</p>
@@ -108,10 +108,10 @@ Host: www.epsi.fr
 			<aside>
 				<p>Lorsqu'on saisit une URI dans la barre d'adresse du navigateur, ce dernier effectue le traitement inverse d'un serveur. Il transforme l'URI en une requête HTTP valide en utilisant la méthode <code>GET</code>.</p>
 			</aside>
-			
+
 
 			<p>Une réponse HTTP débute par une ligne de réponse (response line) terminée par un saut de ligne (<a href="http://fr.wikipedia.org/wiki/Carriage_Return_Line_Feed">CRLF</a>).
-			Celle-ci donne la version du protocole de réponse, le code de statut du traitement de la requête et enfin un message décrivant le code statut. 
+			Celle-ci donne la version du protocole de réponse, le code de statut du traitement de la requête et enfin un message décrivant le code statut.
 			On trouve ensuite une liste d'en-têtes et une ligne vide qui marque la fin des en-têtes. Si la réponse a un contenu (un <em>corps de message</em>), il est ensuite transmis.</p>
 			<figure>
 				<figcaption>Structure d'une réponse HTTP</figcaption>
@@ -121,76 +121,76 @@ Host: www.epsi.fr
 [ligne vide]
 [corps de message]</code></pre>
 			</figure>
-			
+
 			<aside class="tip">
 				<p>En HTTP 1.1, seul l'en-tête <em>Host</em> est obligatoire.</p>
 			</aside>
 		</section>
 	</article>
-	
+
 	<article class="exercice">
 		<section>
 			<h2>Exercice&nbsp;: écrivons en HTTP</h2>
-			<p>Afficher le contenu de la page Web <a href="http://www.epsi.fr/Programmes/Formation-informatique">http://www.epsi.fr/Programmes/Formation-informatique</a> ... <strong>avec telnet</strong>&nbsp;!
+			<p>Afficher le contenu de la page Web <a href="http://www.epsi.fr/Programmes/Panorama-des-etudes">http://www.epsi.fr/Programmes/Panorama-des-etudes</a> ... <strong>avec telnet</strong>&nbsp;!
 			Pour rappel, le protocole HTTP est associé au port 80.</p>
 			<p>Essayez ensuite avec l'URI <a href="http://www.google.com">http://www.google.com</a>. Quelle est la différence dans la réponse du serveur ?</p>
 		</section>
 	</article>
-	
+
 	<article class="exercice">
 		<section>
 			<h2>Exercice&nbsp;: introduction à cURL</h2>
-			<p>cURL est un outil en ligne de commande permettant de récupérer des données à partir d'une URL. Il supporte de nombreux protocoles dont HTTP. 
+			<p>cURL est un outil en ligne de commande permettant de récupérer des données à partir d'une URL. Il supporte de nombreux protocoles dont HTTP.
 			Vous le téléchargez à partir <a href="http://curl.haxx.se/download.html">du site officiel</a>.</p>
-			
+
 			<figure>
 				<figcaption>Utilisation simple de cURL</figcaption>
 				<pre><code class="bash">curl http://www.epsi.fr</code></pre>
 			</figure>
-			
+
 			<p>cURL offre de nombreuses options. Celles qui vont nous être utiles&nbsp;:</p>
-			
+
 			<dl>
 				<dt>-i</dt>
 				<dd>Affiche le contenu complet de la réponse HTTP. On visualise ainsi la ligne de statut et les en-têtes retournés par le serveur.</dd>
-				
+
 				<dt>-v</dt>
 				<dd>Mode verbeux affichant notamment la requête émise et la réponse reçue.</dd>
-				
+
 				<dt>-X [méthode]</dt>
 				<dd>Permet de préciser la méthode HTTP à utiliser dans la requête (<code>GET</code> par défaut).</dd>
-				
+
 				<dt>-H "[en-tête]"</dt>
 				<dd>Permet d'ajouter ou de modifier un en-tête de la requête.</dd>
-				
+
 				<dt>--data-binary [data]</dt>
 				<dd>Ajoute les données spécifiées comme corps du message</dd>
-				
+
 				<dt>-o [nom de fichier]</dt>
 				<dd>Permet de sauvegarder la réponse retournée par le serveur dans un fichier.</dd>
 			</dl>
-			
+
 			<figure>
 				<figcaption>Utilisation avancée de cURL</figcaption>
 				<pre><code class="bash">curl -v -X GET -H "Accept: text/html" http://www.epsi.fr -o /dev/null</code></pre>
 			</figure>
-			
+
 			<p>L'exemple ci-dessus permet d'obtenir une exécution en mode verbeux d'une requête <code>GET</code> pour l'hote www.epsi.fr pour la ressource / en ajoutant
-			l'en-tête <code>Accept</code> avec la valeur <code>text/html</code>. Le corps de la réponse est sauvegardé dans /dev/null, c'est-à-dire nulle part, afin 
+			l'en-tête <code>Accept</code> avec la valeur <code>text/html</code>. Le corps de la réponse est sauvegardé dans /dev/null, c'est-à-dire nulle part, afin
 			que le terminal n'affiche que la ligne de statut et les en-têtes de la réponse.</p>
-			
+
 			<figure>
 				<figcaption>Utilisation avancée de cURL</figcaption>
-				<pre><code class="bash">curl -v -X POST -H "Content-type: application/json" 
+				<pre><code class="bash">curl -v -X POST -H "Content-type: application/json"
      --data-binary '{"cours": "Web Service", "promo": "I4"}' http://api.epsi.fr/cours</code></pre>
 			</figure>
 
 			<p>L'exemple ci-dessus permet d'exécuter une méthode POST sur une API Web hypothétique en envoyant un document JSON. cURL calculera automatiquement
 			pour nous la taille du message à envoyer. Il n'est donc pas nécessaire de préciser l'en-tête <code>Content-length</code>.</p>
-			
+
 			<hr>
 
-			<p>Reprenez les URL de l'exercice précédent pour vous familiariser avec cURL : http://www.epsi.fr/Programmes/Formation-informatique et http://www.google.com.
+			<p>Reprenez les URL de l'exercice précédent pour vous familiariser avec cURL : http://www.epsi.fr/Programmes/Panorama-des-etudes et http://www.google.com.
 			Essayez ensuite d'utiliser la méthode HEAD puis la méthode POST plutôt que la méthode GET dans vos requêtes. Quelles différences constatez-vous ?</p>
 		</section>
 	</article>
@@ -198,20 +198,20 @@ Host: www.epsi.fr
 	<article>
 		<section>
 			<h2>Les codes de statut</h2>
-			<p>Dans la ligne de réponse, le serveur transmet le <a href="http://tools.ietf.org/html/rfc7231#section-6">code de statut</a> du traitement de la requête. 
+			<p>Dans la ligne de réponse, le serveur transmet le <a href="http://tools.ietf.org/html/rfc7231#section-6">code de statut</a> du traitement de la requête.
 			Il s'agit d'un nombre sur 3 chiffres. Les codes de statut HTTP sont regroupés par familles identifiées par le chiffre des centaines.</p>
-			
+
 			<ul>
-				<li><strong>1xx&nbsp; réponse informationnelle.</strong> La requête a été reçue et son traitement est en cours. Ce type de réponse n'est pas définitif&nbsp;: 
+				<li><strong>1xx&nbsp; réponse informationnelle.</strong> La requête a été reçue et son traitement est en cours. Ce type de réponse n'est pas définitif&nbsp;:
 				cela signifie que le client doit attendre une nouvelle réponse du serveur</li>
 				<li><strong>2xx&nbsp; succès.</strong> La requête a été reçue avec succès, comprise et acceptée par le serveur.</li>
 				<li><strong>3xx&nbsp; redirection.</strong> Une action supplémentaire a besoin d'être faite par le client pour terminer la requête.</li>
 				<li><strong>4xx&nbsp; erreur du client.</strong> La requête est syntaxiquement incorrecte ou ne peut pas être prise en compte. La requête ne doit pas être émise à nouveau telle quelle.</li>
 				<li><strong>5xx&nbsp; erreur du serveur.</strong> La serveur a échoué dans la prise en compte de la requête bien que cette dernière soit valide.</li>
 			</ul>
-			
+
 			<p>Parmi les codes existants, certains sont plus remarquables et doivent être connus&nbsp;:</p>
-			
+
 			<table>
 				<col width="10%">
 				<col width="10%">
@@ -243,26 +243,26 @@ Host: www.epsi.fr
 						<td>No Content</td>
 						<td>La requête est un succès et la réponse ne contient pas de message.</td>
 					</tr>
-	
+
 					<tr>
 						<td rowspan="4">3XX</td>
 						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.4.2">301</a></td>
 						<td>Moved Permanently</td>
-						<td>Indique que le serveur connaît la ressource à laquelle le client désire accéder 
-						mais qu'elle n'est plus disponible à l'URI spécifiée. 
-						L'en-tête de réponse <code>Location</code> permet au serveur d'indiquer la nouvelle 
+						<td>Indique que le serveur connaît la ressource à laquelle le client désire accéder
+						mais qu'elle n'est plus disponible à l'URI spécifiée.
+						L'en-tête de réponse <code>Location</code> permet au serveur d'indiquer la nouvelle
 						URI à laquelle le client pourra accéder à la ressource.</td>
 					</tr>
 					<tr>
 						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.4.4">303</a></td>
 						<td>See Other</td>
-						<td>La requête a été exécutée mais la réponse doit être consultée à une autre URI. 
+						<td>La requête a été exécutée mais la réponse doit être consultée à une autre URI.
 						L'en-tête de réponse <code>Location</code> permet au serveur d'indiquer l'URI vers laquelle le client peut exécuter un <strong>GET</strong> pour accéder au résultat.</td>
 					</tr>
 					<tr>
 						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.4.7">307</a></td>
 						<td>Temporary redirect</td>
-						<td>La requête n'a pas été traitée par le serveur et le client doit refaire la même requête vers une URI différente. 
+						<td>La requête n'a pas été traitée par le serveur et le client doit refaire la même requête vers une URI différente.
 						L'en-tête de réponse <code>Location</code> permet au serveur d'indiquer la nouvelle URI à laquelle le client pourra renvoyer sa requête.</td>
 					</tr>
 					<tr>
@@ -272,7 +272,7 @@ Host: www.epsi.fr
 						Il s'agit d'une redirection car ce code est utilisé la plupart du temps pour la gestion de la mise en cache. Le serveur notifie ainsi le client
 						qu'il peut utiliser la représentation qu'il a déjà obtenue (et mise en cache) lors de son dernier accès.</td>
 					</tr>
-	
+
 					<tr>
 						<td rowspan="7">4XX</td>
 						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.5.1">400</a></td>
@@ -310,7 +310,7 @@ Host: www.epsi.fr
 						<td>Indique que le message envoyé par le client utilise un format qui n'est pas supporté par le serveur. Par exemple, le client envoie au serveur un message au format XML
 						alors que ce dernier s'attend à un document PDF.</td>
 					</tr>
-	
+
 					<tr>
 						<td rowspan="1">5XX</td>
 						<td><a href="http://tools.ietf.org/html/rfc7231#section-6.6.1">500</a></td>
@@ -320,12 +320,12 @@ Host: www.epsi.fr
 				</tbody>
 			</table>
 		</section>
-		
+
 		<section>
 			<h2>Les méthodes HTTP</h2>
 			<p>Les <a href="http://tools.ietf.org/html/rfc7231#section-4">méthodes HTTP</a> désignent le type d'opération que le client désire réaliser.
 			Attention, leur nom s'écrit en majuscules dans une requête HTTP.</p>
-			
+
 			<dl>
 				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.1">GET</a></dt>
 				<dd>Demande au serveur une représentation de la ressource cible.</dd>
@@ -352,7 +352,7 @@ Host: www.epsi.fr
 						<li>Ajouter des informations à la représentation d'une ressource</li>
 					</ul>
 					<p>Lorsqu'un client reçoit une réponse à une méthode <code>POST</code>, il peut être important de savoir si la réponse correspond à une représentation
-					d'une ressource ou s'il s'agit du résultat d'un traitement. Pour un code statut 200, l'en-tête de réponse <code>Content-Location</code> sert à faire cette différence. 
+					d'une ressource ou s'il s'agit du résultat d'un traitement. Pour un code statut 200, l'en-tête de réponse <code>Content-Location</code> sert à faire cette différence.
 					S'il est présent, l'en-tête <code>Content-Location</code> signale que le corps de la réponse correspond bien à la représentation d'une ressource dont l'URI
 					est donnée par cet en-tête.</p>
 				</dd>
@@ -367,29 +367,29 @@ Host: www.epsi.fr
 				<dt><a href="http://tools.ietf.org/html/rfc7231#section-4.3.6">CONNECT</a></dt>
 				<dd>&Eacute;tablit un tunnel à travers un proxy. Cette méthode n'est pas utilisée pour la réalisation d'API Web.</dd>
 			</dl>
-			
+
 			<h3>Propriétés des méthodes HTTP</h3>
-			
+
 			<p>Les méthodes HTTP sont classées selon trois propriétés : la <strong>sûreté</strong>, <strong>l'idempotence</strong> et <strong>le support du cache</strong> (cacheable).</p>
-			
+
 			<dl>
 				<dt>Sûreté (safety)</dt>
-				<dd>Une méthode est sûre si le client ne s'attend à aucune modification d'état sur le serveur. 
-				Une méthode sûre est assimilable à une simple lecture de données. 
+				<dd>Une méthode est sûre si le client ne s'attend à aucune modification d'état sur le serveur.
+				Une méthode sûre est assimilable à une simple lecture de données.
 				En tant que telle, elle doit pouvoir être exécutée entre 0 et N fois sans que cela n'affecte la ressource associée.
 				<strong>Les méthodes GET, HEAD et OPTIONS doivent être sûres</strong>.
-				
+
 				<aside>
 					<p>L'implémentation d'un serveur peut amener des modifications lors de l'exécution d'une méthode sûre. Par exemple, une requête <code>GET</code>
 					peut générer des fichiers de log sur le serveur. Ce qu'il est important de retenir, c'est que ce type de modification n'est pas de la responsabilité du client.</p>
 				</aside>
-				
+
 				</dd>
-				
+
 				<dt>Idempotence (idempotent)</dt>
 				<dd>
 				Une méthode est idempotente si l'effet obtenu est le même qu'elle soit exécutée 1 ou N fois. Autrement dit, toutes choses étant égales par ailleurs,
-				la répétition d'une requête utilisant une méthode idempotente conduit au même résultat. 
+				la répétition d'une requête utilisant une méthode idempotente conduit au même résultat.
 				<strong>Les méthodes GET, HEAD, OPTIONS, PUT et DELETE doivent être idempotentes.</strong>
 				<p>En HTTP, la notion d'idempotence est fortement associée à la reprise sur erreur. En effet, les requêtes utilisant des méthodes idempotentes peuvent
 				être répétées en cas d'erreur de communication. Par exemple, si un client emet une requête <code>DELETE</code> et qu'il n'obtient pas de réponse du serveur,
@@ -464,13 +464,13 @@ Host: www.epsi.fr
 				</tbody>
 			</table>
 		</section>
-		
+
 		<section>
 			<h2>Les en-têtes HTTP</h2>
-			
+
 			<p>Les en-têtes de requête et de réponse permettent d'enrichir le contexte de la requête ou la réponse.
 			Ils servent à fournir des données pour le support d'un ensemble de fonctionnalités de HTTP&nbsp;:</p>
-			
+
 			<ul>
 				<li>Gestion du cycle de vie de la connexion client/serveur</li>
 				<li>Compression du corps du message</li>
@@ -485,9 +485,9 @@ Host: www.epsi.fr
 				Le nom des en-têtes est insensible à la casse.<br>
 				Les en-têtes peuvent être envoyés dans n'importe quel ordre.
 			</aside>
-			
+
 			<p>A titre d'exemple, on citera&nbsp;:</p>
-			
+
 			<dl>
 				<dt><a href="http://tools.ietf.org/html/rfc7230#section-5.4">Host</a> (requête)</dt>
 				<dd>L'en-tête <code>Host</code> est le seul obligatoire en HTTP 1.1 pour un requête. Il contient le nom et le port du serveur.
@@ -498,7 +498,7 @@ Host: www.epsi.fr
 Host: www.monserveur.fr:9090
 					</code></pre>
 				</figure>
-				
+
 				</dd>
 
 				<dt><a href="http://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> (requête et réponse)</dt>
@@ -552,7 +552,7 @@ nom=David&amp;prenom=Gayerie&amp;taille=174
 
 </code></pre>
 				</figure>
-				
+
 				<aside>
 					<p>Le IANA (Internet Assigned Numbers Authority) maintient un <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">registre des types MIME</a> qui lui ont été officiellement soumis.</p>
 				</aside>
@@ -587,31 +587,31 @@ Hello the world!
 				</figure>
 
 				<aside>
-					Il est possible de ne pas fournir l'en-tête <code>Content-Length</code> en utilisant la technique de 
+					Il est possible de ne pas fournir l'en-tête <code>Content-Length</code> en utilisant la technique de
 					<a href="http://fr.wikipedia.org/wiki/Chunked_transfer_encoding">l'encodage de transfert en bloc</a> (chunked transfer encoding).
 					Cette technique est très largement utilisée par les serveurs qui génèrent du contenu dynamique pour lequel il serait coûteux de
 					mettre en cache la réponse avant de la transmettre pour connaître sa taille définitive.
 				</aside>
-				
+
 				</dd>
 			</dl>
 		</section>
 	</article>
-	
+
 	<article class="exercice">
 		<section>
 			<h2>&Eacute;criture d'un client HTTP en Java</h2>
-			
+
 			<p>JAX-RS est l'API officielle en Java pour écrire des API Web. Cette API fournit également
 			une classe <code><a href="http://docs.oracle.com/javaee/7/api/javax/ws/rs/client/ClientBuilder.html">ClientBuilder</a></code>
 			permettant d'implémenter un client HTTP.</p>
 			<p>Pour cet exercice, il vous faut développer un client pour deux API Web&nbsp;:</p>
 			<ul>
 				<li>Le premier <a href="http://freegeoip.net/">freegeip.net</a>	permet de connaître la géolocalisation d'une adresse IP.</li>
-				<li>Le second est l'API Web de World of Warcraft. La documentation est 
+				<li>Le second est l'API Web de World of Warcraft. La documentation est
 				disponible sur le site <a href="https://dev.battle.net/io-docs">battle.net pour les développeurs</a>.</li>
 			</ul>
-			
+
 			<p>Pour écrire ces applications clientes, vous pouvez partir du template de projet Maven téléchargeable <a href="assets/jaxrs-client-template.zip">ici</a>.</p>
 		</section>
 	</article>
@@ -619,10 +619,10 @@ Hello the world!
 	<article class="exercice">
 		<section>
 			<h2>Un serveur Web en Shell</h2>
-			
-			<p>Comme le protocole HTTP est orienté texte, il est assez facile de développer des clients et des serveurs. 
+
+			<p>Comme le protocole HTTP est orienté texte, il est assez facile de développer des clients et des serveurs.
 			Le script Shell ci-dessous est un serveur minimaliste executable à partir de la commande <code>ncat</code> sous Linux&nbsp;:</p>
-			
+
 			<figure>
 				<figcaption>Fichier http_file_server.sh</figcaption>
 				<pre><code class="bash">#!/bin/bash -e
