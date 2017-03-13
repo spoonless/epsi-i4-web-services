@@ -79,7 +79,7 @@
 			Dans le cas d'un reverse proxy utilisé comme accélérateur, il s'agit même de la principale raison de sa mise en place.
 			Ces intermédiaires vont donc pouvoir décider d'écourter la chaîne de connexions en répondant directement 
 			à partir des données dont ils disposent en cache. Ils auront également besoin de contacter de temps en temps le serveur d'origine
-			(directement ou indirectement) pour renouveller le contenu de leur cache.</p>
+			(directement ou indirectement) pour renouveler le contenu de leur cache.</p>
 		</section>
 		
 		<section>
@@ -116,37 +116,7 @@
 				</li>
 			</ul>
 		</section>
-	</article>
 	
-	<article class="exercice note">
-		<section>
-			<h2>Exercice à rendre&nbsp;: mise en place d'un reverse proxy Squid</h2>
-			
-			<p>Afin d'améliorer les performances du site <a href="http://rest-bookmarks.herokuapp.com">http://rest-bookmarks.herokuapp.com</a>, on décide
-			de mettre en place un accélérateur HTTP. Un accélérateur est un reverse proxy HTTP qui doit mettre en cache les réponses d'un site
-			afin de les servir plus rapidement auprès d'un grand nombre de clients.</p>
-			
-			<p>Pour cet exercice, nous utiliserons le serveur <a href="http://www.squid-cache.org/Versions/">Squid</a>. La documentation
-			Squid concernant le reverse proxy est disponible à <a href="http://wiki.squid-cache.org/SquidFaq/ReverseProxy">cette adresse</a>.</p>
-			
-			<p>Vous devez&nbsp;:</p>
-			<ul>
-				<li>fournir le fichier de configuration squid.conf de l'accélérateur HTTP</li>
-				<li>fournir une description de la configuration réseau mise en place</li>
-				<li>donner des traces de requêtes et de réponses HTTP et des explications montrant que votre accélérateur HTTP est fonctionnel.</li>
-			</ul>
-			
-			<aside class="tip">
-				<p>La plus grande complexité de cet exercice vient du fait que le serveur d'origine génère des URI dans ses réponses. Il faut dont s'assurer
-				que ces URI pointeront, non pas directement vers le serveur d'origine, mais vers l'accélérateur HTTP.
-				Le plus simple pour cela est de démarrer le serveur Squid sur le port 80 et de configurer localement votre machine pour
-				que l'adresse <code>rest-bookmarks.io</code> ou l'adresse <code>rest-bookmarks.herokuapp.com</code> pointe sur le serveur Squid.</p>
-			</aside>
-
-		</section>
-	</article>
-
-	<article>
 		<section>
 			<h2>La fraîcheur d'une réponse</h2>
 			
