@@ -7,7 +7,7 @@
 	<link href="css/article.css" rel="stylesheet" media="screen">
 	<link href="css/print-article.css" rel="stylesheet" media="print">
 	<link href="highlight/styles/zenburn.css" rel="stylesheet">
-	
+
 	<script src="highlight/highlight.pack.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script src="js/toc.js"></script>
@@ -26,37 +26,37 @@
 		<section id="toc"></section>
 
 		<section>
-		
-			<p>La forme des messages échangés entre un client et un serveur n'est absolument pas prescrite par HTTP. 
+
+			<p>La forme des messages échangés entre un client et un serveur n'est absolument pas prescrite par HTTP.
 			Par forme, il faut comprendre aussi bien le format, le jeu de caractères (charset) mais aussi la langue utilisée (s'il s'agit d'une forme textuelle).
 			On dit que le client et le serveur n'échangent que des <strong>représentations</strong>. Différents clients et serveurs peuvent
 			avoir des capacités ou des préférences différentes concernant la forme d'une représentation. HTTP définit ainsi la possibilité
-			de décrire le contenu d'un message grâce aux en-têtes 
-			<a href="http://tools.ietf.org/html/rfc7231#section-3.1.1.5"><code>Content-type</code></a> et 
+			de décrire le contenu d'un message grâce aux en-têtes
+			<a href="http://tools.ietf.org/html/rfc7231#section-3.1.1.5"><code>Content-type</code></a> et
 			<a href="http://tools.ietf.org/html/rfc7231#section-3.1.3.2"><code>Content-Language</code></a>.
 			Mais HTTP permet aussi à un client et à un serveur de se mettre d'accord sur la forme de représentation souhaitée. Ce mécanisme
 			s'appelle la <strong>négociation de contenu</strong>. On distingue deux méthodes de négociation de contenu&nbsp;:</p>
 			<dl>
 				<dt>La négociation proactive</dt>
 				<dd>Le serveur sélectionne la représentation la plus appropriée en fonction des préférences du client que ce dernier transmet dans la requête.</dd>
-				
+
 				<dt>La négociation réactive</dt>
 				<dd>Le serveur répond à un client non pas une représentation, mais une liste de liens vers des représentations en précisant la forme de chacune.
 				Le client peut alors choisir parmi cette liste la représentation qui lui convient le mieux.</dd>
 			</dl>
-			
+
 			<p>Dans la suite de ce chapitre, nous nous bornerons à détailler la négociation de contenu proactive.</p>
-			
+
 			<h2>La négociation de type de contenu</h2>
-			
+
 			<p>Parfois, un serveur peut disposer de plusieurs représentations pour une même ressource. Par exemple, il peut
 			présenter un série de données dans une page HTML et sous un format CSV. Le client peut alors
-			suggérer au serveur une liste de formats MIME correspondant à ses préférences. 
+			suggérer au serveur une liste de formats MIME correspondant à ses préférences.
 			L'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-5.3.2"><code>Accept</code></a>
 			permet au client de fournir une liste de types MIME séparés par une virgule. Bien évidemment, l'en-tête
 			<code>Accept</code> n'a de sens que si le client s'attend à recevoir une représentation de la part du serveur
 			(ou s'il utilise la méthode <code>HEAD</code> pour tester l'existence de ce format).</p>
-			
+
 			<figure>
 				<figcaption>Négociation de contenu sur le type de représentation</figcaption>
 				<pre><code class="http">GET /individu/00001 HTTP/1.1
@@ -65,7 +65,7 @@ Accept: text/html,text/plain,application/pdf
 
 </code></pre>
 			</figure>
-			
+
 			<p>Dans l'exemple précédent, l'ordre dans la liste n'a pas d'importance, le client annonce au serveur
 			qu'il peut indifféremment fournir une représentation au format HTML, texte brut ou un document PDF.
 			Si le serveur ne peut fournir aucune de ces représentations, il doit considérer qu'il ne peut pas fournir
@@ -94,12 +94,12 @@ Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
 				dispose d'une représentation HTML, XML et PDF pour une ressource, il doit retourner à ce client le format HTML.
 				Notez que cette valeur de l'en-tête <code>Accept</code> est celle par défaut du navigateur Firefox.</p>
 			</aside>
-			
+
 			<h2>La négociation de jeu de caractères</h2>
 
 			<p>Le client peut négocier avec le serveur le jeu de caractères (charset) utilisé dans la réponse
 			grâce à l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-5.3.3"><code>Accept-Charset</code></a>&nbsp;:</p>
-			
+
 			<figure>
 				<figcaption>Négociation de contenu sur l'encodage</figcaption>
 				<pre><code class="http">GET /individu/00001 HTTP/1.1
@@ -108,7 +108,7 @@ Accept-Charset: iso-8859-1, utf-8;q=0.8, *;q=0.3
 
 </code></pre>
 			</figure>
-			
+
 			<p>Si le serveur ne peut pas fournir de représentation utilisant un des jeux caractères spécifiés par l'en-tête
 			<a href="http://tools.ietf.org/html/rfc7231#section-5.3.3"><code>Accept-Charset</code></a>, il doit considérer que sa représentation
 			n'est pas acceptable par le client. Dans ce cas, le serveur peut&nbsp;:</p>
@@ -133,24 +133,24 @@ Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
 
 </code></pre>
 			</figure>
-			
+
 			<aside>
 				<p>La valeur de l'en-tête <code>Accept-Language</code> de l'exemple ci-dessus est celle du navigateur Firefox pour un
 				utilisateur français. On peut le traduire de la façon suivante&nbsp;: le client préfère les documents écrits
 				en langue française (fr). Sinon, le client préfère les documents français (fr-fr;q=0.8). Sinon, le client préfère les documents écrits en américain (en-us;q=0.5).
 				Sinon le client préfère les document écrits en langue anglaise (en;q=0.3).</p>
 			</aside>
-			
+
 			<p>La négociation de contenu proactive pour la langue est une technique utilisée pour internationaliser un site Web.</p>
 
 			<h2>L'en-tête Vary</h2>
-			
-			<p>L'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.4"><code>Vary</code></a> est très utile 
+
+			<p>L'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.4"><code>Vary</code></a> est très utile
 			pour donner au client un indice sur le type de négociation de contenu proactive
 			qu'il peut réaliser. En effet, lorsqu'un serveur dispose de plus d'une représentation et qu'il répond à un client, il peut
 			ajouter l'en-tête <a href="http://tools.ietf.org/html/rfc7231#section-7.1.4"><code>Vary</code></a> qui indique la liste
 			des en-têtes pouvant l'influencer dans son processus de sélection et de représentation de la réponse.</p>
-			
+
 			<figure>
 				<figcaption>Exemple de découverte d'une négociation de contenu proactive</figcaption>
 				<pre><code class="http">HEAD /individu/00001 HTTP/1.1
@@ -167,26 +167,26 @@ Content-length: 532
 
 </code></pre>
 			</figure>
-			
+
 			<p>Dans l'exemple ci-dessus, le client peut savoir grâce à une requête <code>HEAD</code> que le serveur
-			retourne par défaut une réprésentation texte brut en UTF-8 rédigée en américain. De plus, l'en-tête 
+			retourne par défaut une réprésentation texte brut en UTF-8 rédigée en américain. De plus, l'en-tête
 			<a href="http://tools.ietf.org/html/rfc7231#section-7.1.4"><code>Vary</code></a> indique que le serveur
-			accepte la négociation de contenu proactive sur le type de la représentation (<code>Accept</code>) 
+			accepte la négociation de contenu proactive sur le type de la représentation (<code>Accept</code>)
 			et sur la langue (<code>Accept-Language</code>).</p>
-			
+
 		</section>
 	</article>
 
 	<article class="exercice note">
 		<section>
 			<h2>Exercice à rendre&nbsp;: négociation de contenu proactive</h2>
-			
+
 			<p>Utilisez l'API Web du site <a href="http://rest-bookmarks.herokuapp.com">http://rest-bookmarks.herokuapp.com</a>
-			pour expérimenter la négociation de contenu proactive. 
-			En utilisant les URI des différentes ressources que vous avez déjà découvertes, essayez de réaliser une
+			pour expérimenter la négociation de contenu proactive.
+			À partir d'un bookmark que vous aurez créé avec cette API, essayez de réaliser une
 			négociation de contenu sur le type de représentation (avec l'en-tête <code>Accept</code>).
 			Trouvez des cas pour lesquels&nbsp;:</p>
-			
+
 			<ul>
 				<li>vous obtenez un type de contenu différent de celui par défaut</li>
 				<li>vous obtenez une réponse <strong>406</strong> de la part du serveur</li>
