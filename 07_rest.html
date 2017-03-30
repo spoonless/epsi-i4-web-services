@@ -392,6 +392,186 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 	</article>
 	
 	<article class="exercice">
+		<h2>Exercice&nbsp;: Un service de paiement de factures</h2>
+		
+		<p>&Eacute;tant donné le workflow suivant décrivant le paiement d'une facture&nbsp;:</p>
+		<figure>
+			<img src="assets/diagramme_activite_paiement_facture.svg" alt="Diagramme d'activité de paiement de facture" />
+		</figure>
+		<p>Les activités sont&nbsp;:</p>
+		<dl>
+			<dt>créer facture</dt>
+			<dd>Création d'un document identifiant les coordonnées bancaires du créditeur et le montant à payer.</dd>
+
+			<dt>autoriser paiement</dt>
+			<dd>Le débiteur indique ses informations de paiement (numéro de carte de paiement, date limite de validité
+			de la carte et cryptogramme de sécurité). Le client effectue une demande auprès de l'organisme bancaire pour savoir
+			si la transaction est autorisée. L'organisme bancaire fournit un numéro d'autorisation permettant
+			d'identifier la transaction.</dd>
+
+			<dt>capturer paiement</dt>
+			<dd>Si l'autorisation s'est bien passée, le client réalise une <em>capture</em>, c'est-à-dire qu'il
+			demande à l'organisme bancaire d'enregister le paiement et d'effectuer le transfert du compte du
+			débiteur vers le compte du créditeur.</dd>
+		</dl>
+		
+		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
+		
+		<section style="display:none">
+		<h3>Correction</h3>
+		<dl>
+			<dt>créer facture</dt>
+			<dd>
+				<p>Le client réalise un <strong>POST</strong> en envoyant les informations nécessaires (au moins montant et IBAN pour identifier le créditeur)</p>
+				<figure>
+					<figcaption>Pseudo requête de création de facture</figcaption>
+					<pre><code>POST /factures HTTP/1.1
+Host: factureonline.com
+Content-type: application/x-www-form-urlencoded
+
+montant=3000&amp;iban=GB87BARC20658244971655</code></pre>
+				</figure>
+				
+				<p>Le serveur répond en fournissant l'URL de la facture créée</p>
+
+				<figure>
+					<figcaption>Pseudo réponse à la création de facture</figcaption>
+					<pre><code>HTTP/1.1 201 Created
+Location: URL_FACTURE
+Content-length: 0
+
+</code></pre>
+				</figure>
+				
+				<p>Le client peut ensuite obtenir les informations sur sa facture grâce à une requête GET sur l'URL de la facture</p>
+
+				<figure>
+					<figcaption>Pseudo réponse à la requête GET sur l'URL de la facture</figcaption>
+					<pre><code>HTTP/1.1 200 OK
+Link: &lt;URL_CREATION_AUTORISATION&gt;;rel="http://factureonline.com/autorisation"
+
+[information sur la facture]</code></pre>
+				</figure>
+
+				<p>Dans la réponse ci-dessus, le contenu le plus intéressant est l'en-tête <strong>Link</strong> permettant d'obtenir
+				le lien vers la création d'autorisation afin de continuer le processus de paiement.</p>
+			</dd>
+
+			<dt>autoriser paiement</dt>
+			<dd>
+				<p>En utilisant le lien avec le type de relation <strong>http://factureonline.com/autorisation</strong>, le client
+			peut créer un autorisation pour le montant de la facture grâce à une requête POST.</p>
+			
+				<figure>
+					<figcaption>Pseudo requête de création de l'autorisation</figcaption>
+					<pre><code>POST URL_CREATION_AUTORISATION HTTP/1.1
+Host: factureonline.com
+Content-Length: 0
+
+</code></pre>
+				</figure>
+				
+				<aside>Il n'est pas nécessaire de préciser le montant de l'autorisation. En effet, le serveur
+				doit forger une URL pour la création d'autorisation lui permettant d'identifier la facture.
+				Par exemple, si la facture a pour URL http://factureonline.com/factures/2015001 alors le serveur
+				peut décider de générer l'URL http://factureonline.com/factures/2015001/autorisation pour la création
+				d'une autorisation. Il peut donc sans difficulté retrouver les informations nécessaires pour identifier
+				la facture et en déduire le montant de l'autorisation.
+				</aside>
+				
+				<figure>
+					<figcaption>Pseudo réponse à la création de l'autorisation</figcaption>
+					<pre><code>HTTP/1.1 201 Created
+Location: URL_AUTORISATION
+Content-length: 0
+
+</code></pre>
+				</figure>
+
+				<p>Le client peut ensuite obtenir les informations sur son autorisation grâce à une requête GET sur l'URL de l'autorisation</p>
+
+				<figure>
+					<figcaption>Pseudo réponse à la requête GET sur l'URL de l'autorisation</figcaption>
+					<pre><code>HTTP/1.1 200 OK
+Link: &lt;URL_CREATION_CAPTURE&gt;;rel="http://factureonline.com/capture"
+
+[information sur l'autorisation]</code></pre>
+				</figure>
+
+				<p>Dans la réponse ci-dessus, le contenu le plus intéressant est l'en-tête <strong>Link</strong> permettant d'obtenir
+				le lien vers la création d'une capture afin de continuer le processus de paiement.</p>
+			</dd>
+
+			<dt>capturer paiement</dt>
+			<dd>
+				<p>En utilisant le lien avec le type de relation <strong>http://factureonline.com/capture</strong>, le client
+			peut créer une capture pour son autorisation grâce à une requête POST.</p>
+			
+				<figure>
+					<figcaption>Pseudo requête de création de la capture</figcaption>
+					<pre><code>POST URL_CREATION_CAPTURE HTTP/1.1
+Host: factureonline.com
+Content-Length: 0
+
+</code></pre>
+				</figure>
+				
+				<aside>Il n'est pas nécessaire de préciser l'autorisation concernée pour cette capture. En effet, le serveur
+				doit forger une URL pour la création de capture lui permettant d'identifier l'autorisation.
+				Par exemple, si l'autorisation a pour URL http://factureonline.com/factures/2015001/autorisation/2333
+				alors le serveur peut décider de générer l'URL http://factureonline.com/factures/2015001/autorisation/2333/capture
+				pour la création d'une capture. Il peut donc sans difficulté retrouver les informations nécessaires pour identifier
+				l'autorisation.
+				</aside>
+				
+				<figure>
+					<figcaption>Pseudo réponse à la création de la capture</figcaption>
+					<pre><code>HTTP/1.1 303 See Other
+Location: URL_RECU_FACTURATION
+Content-length: 0
+
+</code></pre>
+				</figure>
+				
+				<p>Pour une capture réussie, le serveur peut retourner une redirection vers l'URL qui détaillera le reçu du paiement (numéro de transaction, date...)</p>
+			</dd>
+		</dl>
+		</section>
+		
+
+		<p>Décrivez également des scénarios alternatifs&nbsp;:</p>
+		<ul>
+			<li>L'autorisation échoue car les informations bancaires fournies sont incorrectes</li>
+			<li>L'autorisation échoue car le client ne dispose pas du crédit suffisant sur son compte.</li>
+		</ul>
+		
+		<section style="display:none">
+		<h3>Correction</h3>
+		<p>Pour ces deux cas, le serveur retournera simplement une réponse 4XX (comme par exemple 400 BAD REQUEST) le
+		corps du message pourra détailler les raisons de l'échec. Dans tous les cas, le client ne disposera pas de lien
+		pour créer la capture, le processus de paiement sera donc bien interrompu.</p>
+		
+		<figure>
+			<figcaption>Pseudo réponse pour l'échec de création d'une autorisation</figcaption>
+			<pre><code>HTTP/1.1 400 Bad request
+Content-type: text/plain
+
+Les informations bancaires fournies sont incorrectes.</code></pre>
+		</figure>
+		
+		<aside>
+		<p>Notez que ce processus de paiement est relativement simple à implémenter côté client. Il suit
+		toujours le même modèle&nbsp;: création avec un POST, récupération des informations avec un GET. Le client
+		se contente de réagir en fonction du type de lien donné par le GET&nbsp;:</p>
+			<ul>
+				<li><strong>http://factureonline.com/autorisation</strong> pour la création d'une autorisation</li>
+				<li><strong>http://factureonline.com/capture</strong> pour la création d'une capture</li>
+			</ul>
+		</aside>
+		</section>
+	</article>
+
+	<article class="exercice">
 		<h2>Exercice&nbsp;: Un service de réservation de billet</h2>
 		
 		<p>On désire mettre en ligne un service de réservation de billets de concert. Le service ne gère pas de base de données des utilisateurs&nbsp;: un utilisateur est simplement identifié par un pseudo au moment de la réservation.</p>
@@ -405,7 +585,9 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 		</ul>
 		<p><strong>Attention, un utilisateur qui a confirmé sa réservation ne peut plus l'annuler !</strong></p>
 		<p>Décrivez une API Web RESTful par des exemples de requêtes/réponses HTTP permettant de réaliser les cas d'utilisation ci-dessus.</p>
-
+		
+		
+		<section style="display:none">
 		<h3>Correction</h3>
 		<dl>
 			<dt>L'utilisateur consulte la liste des concerts disponibles</dt>
@@ -584,185 +766,7 @@ spoonless</code></pre>
 			interne sécurisé uniquement accessible au gestionnaire du site.</p>
 		</dd>
 	</dl>
-	</article>
-
-	<article class="exercice">
-		<h2>Exercice&nbsp;: Un service de paiement de factures</h2>
-		
-		<p>&Eacute;tant donné le workflow suivant décrivant le paiement d'une facture&nbsp;:</p>
-		<figure>
-			<img src="assets/diagramme_activite_paiement_facture.svg" alt="Diagramme d'activité de paiement de facture" />
-		</figure>
-		<p>Les activités sont&nbsp;:</p>
-		<dl>
-			<dt>créer facture</dt>
-			<dd>Création d'un document identifiant les coordonnées bancaires du créditeur et le montant à payer.</dd>
-
-			<dt>autoriser paiement</dt>
-			<dd>Le débiteur indique ses informations de paiement (numéro de carte de paiement, date limite de validité
-			de la carte et cryptogramme de sécurité). Le client effectue une demande auprès de l'organisme bancaire pour savoir
-			si la transaction est autorisée. L'organisme bancaire fournit un numéro d'autorisation permettant
-			d'identifier la transaction.</dd>
-
-			<dt>capturer paiement</dt>
-			<dd>Si l'autorisation s'est bien passée, le client réalise une <em>capture</em>, c'est-à-dire qu'il
-			demande à l'organisme bancaire d'enregister le paiement et d'effectuer le transfert du compte du
-			débiteur vers le compte du créditeur.</dd>
-		</dl>
-		
-		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
-		<p>Décrivez également des scénarios alternatifs&nbsp;:</p>
-		<ul>
-			<li>L'autorisation échoue car les informations bancaires fournies sont incorrectes</li>
-			<li>L'autorisation échoue car le client ne dispose pas du crédit suffisant sur son compte.</li>
-		</ul>
-		
-		
-		<h3>Correction</h3>
-		<dl>
-			<dt>créer facture</dt>
-			<dd>
-				<p>Le client réalise un <strong>POST</strong> en envoyant les informations nécessaires (au moins montant et IBAN pour identifier le créditeur)</p>
-				<figure>
-					<figcaption>Pseudo requête de création de facture</figcaption>
-					<pre><code>POST /factures HTTP/1.1
-Host: factureonline.com
-Content-type: application/x-www-form-urlencoded
-
-montant=3000&amp;iban=GB87BARC20658244971655</code></pre>
-				</figure>
-				
-				<p>Le serveur répond en fournissant l'URL de la facture créée</p>
-
-				<figure>
-					<figcaption>Pseudo réponse à la création de facture</figcaption>
-					<pre><code>HTTP/1.1 201 Created
-Location: URL_FACTURE
-Content-length: 0
-
-</code></pre>
-				</figure>
-				
-				<p>Le client peut ensuite obtenir les informations sur sa facture grâce à une requête GET sur l'URL de la facture</p>
-
-				<figure>
-					<figcaption>Pseudo réponse à la requête GET sur l'URL de la facture</figcaption>
-					<pre><code>HTTP/1.1 200 OK
-Link: &lt;URL_CREATION_AUTORISATION&gt;;rel="http://factureonline.com/autorisation"
-
-[information sur la facture]</code></pre>
-				</figure>
-
-				<p>Dans la réponse ci-dessus, le contenu le plus intéressant est l'en-tête <strong>Link</strong> permettant d'obtenir
-				le lien vers la création d'autorisation afin de continuer le processus de paiement.</p>
-			</dd>
-
-			<dt>autoriser paiement</dt>
-			<dd>
-				<p>En utilisant le lien avec le type de relation <strong>http://factureonline.com/autorisation</strong>, le client
-			peut créer un autorisation pour le montant de la facture grâce à une requête POST.</p>
-			
-				<figure>
-					<figcaption>Pseudo requête de création de l'autorisation</figcaption>
-					<pre><code>POST URL_CREATION_AUTORISATION HTTP/1.1
-Host: factureonline.com
-Content-Length: 0
-
-</code></pre>
-				</figure>
-				
-				<aside>Il n'est pas nécessaire de préciser le montant de l'autorisation. En effet, le serveur
-				doit forger une URL pour la création d'autorisation lui permettant d'identifier la facture.
-				Par exemple, si la facture a pour URL http://factureonline.com/factures/2015001 alors le serveur
-				peut décider de générer l'URL http://factureonline.com/factures/2015001/autorisation pour la création
-				d'une autorisation. Il peut donc sans difficulté retrouver les informations nécessaires pour identifier
-				la facture et en déduire le montant de l'autorisation.
-				</aside>
-				
-				<figure>
-					<figcaption>Pseudo réponse à la création de l'autorisation</figcaption>
-					<pre><code>HTTP/1.1 201 Created
-Location: URL_AUTORISATION
-Content-length: 0
-
-</code></pre>
-				</figure>
-
-				<p>Le client peut ensuite obtenir les informations sur son autorisation grâce à une requête GET sur l'URL de l'autorisation</p>
-
-				<figure>
-					<figcaption>Pseudo réponse à la requête GET sur l'URL de l'autorisation</figcaption>
-					<pre><code>HTTP/1.1 200 OK
-Link: &lt;URL_CREATION_CAPTURE&gt;;rel="http://factureonline.com/capture"
-
-[information sur l'autorisation]</code></pre>
-				</figure>
-
-				<p>Dans la réponse ci-dessus, le contenu le plus intéressant est l'en-tête <strong>Link</strong> permettant d'obtenir
-				le lien vers la création d'une capture afin de continuer le processus de paiement.</p>
-			</dd>
-
-			<dt>capturer paiement</dt>
-			<dd>
-				<p>En utilisant le lien avec le type de relation <strong>http://factureonline.com/capture</strong>, le client
-			peut créer une capture pour son autorisation grâce à une requête POST.</p>
-			
-				<figure>
-					<figcaption>Pseudo requête de création de la capture</figcaption>
-					<pre><code>POST URL_CREATION_CAPTURE HTTP/1.1
-Host: factureonline.com
-Content-Length: 0
-
-</code></pre>
-				</figure>
-				
-				<aside>Il n'est pas nécessaire de préciser l'autorisation concernée pour cette capture. En effet, le serveur
-				doit forger une URL pour la création de capture lui permettant d'identifier l'autorisation.
-				Par exemple, si l'autorisation a pour URL http://factureonline.com/factures/2015001/autorisation/2333
-				alors le serveur peut décider de générer l'URL http://factureonline.com/factures/2015001/autorisation/2333/capture
-				pour la création d'une capture. Il peut donc sans difficulté retrouver les informations nécessaires pour identifier
-				l'autorisation.
-				</aside>
-				
-				<figure>
-					<figcaption>Pseudo réponse à la création de la capture</figcaption>
-					<pre><code>HTTP/1.1 303 See Other
-Location: URL_RECU_FACTURATION
-Content-length: 0
-
-</code></pre>
-				</figure>
-				
-				<p>Pour une capture réussie, le serveur peut retourner une redirection vers l'URL qui détaillera le reçu du paiement (numéro de transaction, date...)</p>
-			</dd>
-		</dl>
-
-		<p>Décrivez également des scénarios alternatifs&nbsp;:</p>
-		<ul>
-			<li>L'autorisation échoue car les informations bancaires fournies sont incorrectes</li>
-			<li>L'autorisation échoue car le client ne dispose pas du crédit suffisant sur son compte.</li>
-		</ul>
-		<p>Pour ces deux cas, le serveur retournera simplement une réponse 4XX (comme par exemple 400 BAD REQUEST) le
-		corps du message pourra détailler les raisons de l'échec. Dans tous les cas, le client ne disposera pas de lien
-		pour créer la capture, le processus de paiement sera donc bien interrompu.</p>
-		
-		<figure>
-			<figcaption>Pseudo réponse pour l'échec de création d'une autorisation</figcaption>
-			<pre><code>HTTP/1.1 400 Bad request
-Content-type: text/plain
-
-Les informations bancaires fournies sont incorrectes.</code></pre>
-		</figure>
-		
-		<aside>
-		<p>Notez que ce processus de paiement est relativement simple à implémenter côté client. Il suit
-		toujours le même modèle&nbsp;: création avec un POST, récupération des informations avec un GET. Le client
-		se contente de réagir en fonction du type de lien donné par le GET&nbsp;:</p>
-			<ul>
-				<li><strong>http://factureonline.com/autorisation</strong> pour la création d'une autorisation</li>
-				<li><strong>http://factureonline.com/capture</strong> pour la création d'une capture</li>
-			</ul>
-		</aside>
+	</section>
 	</article>
 	
 	<article class="exercice">
