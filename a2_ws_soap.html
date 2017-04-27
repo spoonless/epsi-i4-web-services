@@ -7,7 +7,7 @@
 	<link href="css/article.css" rel="stylesheet" media="screen">
 	<link href="css/print-article.css" rel="stylesheet" media="print">
 	<link href="highlight/styles/zenburn.css" rel="stylesheet">
-	
+
 	<script src="highlight/highlight.pack.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script src="js/toc.js"></script>
@@ -24,16 +24,16 @@
 	<article>
 		<h1><script>document.write(document.title)</script></h1>
 		<section id="toc"></section>
-		
+
 		<section>
 			<aside class="tip">
-				<p>Pour ce cours, vous aurez besoin de l'outil SoapUI. <strong>Vous devez le télécharger à l'adresse <a href="http://sourceforge.net/projects/soapui/">http://sourceforge.net/projects/soapui/</a></strong></p>
+				<p>Pour ce cours, vous aurez besoin de l'outil SoapUI. <strong>Vous devez le télécharger à l'adresse <a href="https://www.soapui.org/downloads/soapui/source-forge.html">https://www.soapui.org/downloads/soapui/source-forge.html</a></strong></p>
 			</aside>
 		</section>
-		
+
 		<section>
 			<h2>La quête de l'interopérabilité</h2>
-			<p>Une problématique courante dans la mise en place de systèmes d'information et de savoir 
+			<p>Une problématique courante dans la mise en place de systèmes d'information et de savoir
 			comment échanger des informations entre plusieurs processus. Cette problématique est souvent résumée par la notion
 			d'<a href="https://fr.wikipedia.org/wiki/Interop%C3%A9rabilit%C3%A9">interopérabilité</a>. D'un point de vue technique,
 			l'interopérabilité est rendue plus complexe par un ou plusieurs facteurs&nbsp;:</p>
@@ -42,32 +42,32 @@
 				<li>les processus s'exécutent sur des machines différentes</li>
 				<li>les machines appartiennent à des réseaux différents</li>
 			</ul>
-			<p>Avant l'an 2000, on trouve des solutions telles que Sun RPC, CORBA, DCOM, RMI. 
-			&Agrave; partir des années 2000, le succés des réseaux IP, de HTTP 
+			<p>Avant l'an 2000, on trouve des solutions telles que Sun RPC, CORBA, DCOM, RMI.
+			&Agrave; partir des années 2000, le succés des réseaux IP, de HTTP
 			et de XML apporte une nouvelle perspective : définir
 			un protocole d'échange de messages XML <i>via</i> HTTP entre deux processus.</p>
 			<p>Ce protocole originellement défini par Microsoft puis maintenu par le W3 s'appelle <strong>SOAP</strong>.
 			Depuis SOAP a été enrichi de nombreuses spécifications et l'ensemble de ces technologies sont désignées sous le terme <strong>WS-*</strong>.</p>
-			
-			
+
+
 			<aside class="warn">
 				WS-* est un ensemble de technologies, il ne s'agit ni d'un modèle de conception ni d'un modèle d'architecture.
 			</aside>
-			
+
 		</section>
 		<section>
 			<h2>SOAP&nbsp;: structure des messages</h2>
 			<p><a href="http://www.w3.org/TR/soap/">SOAP</a> est une recommandation pour l'échange de messages au format XML entre un expéditeur (SOAP sender)
 			et un destinataire (SOAP receiver). La structure des messages SOAP est identique qu'elle provienne de l'expéditeur (requête) ou du destinataire (réponse).
 			Un message est constitué par une enveloppe (<strong>SOAP envelope</strong>) qui peut contenir un en-tête (<strong>SOAP header</strong>) et ensuite une
-			charge utile (<strong>SOAP body</strong>). 
+			charge utile (<strong>SOAP body</strong>).
 			<p>
 			<p>Pour une utilisation avec le protocole HTTP, le message doit être envoyé avec la méthode POST à l'URL du service (appelée aussi <strong>endpoint</strong>)</p>
 			<figure>
 				<figcaption>Exemple de message SOAP</figcaption>
 				<pre><code class="xml">
-&lt;soapenv:Envelope 
-   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+&lt;soapenv:Envelope
+   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
    xmlns:m="http://www.mymeteo.com/meteo"&gt;
    &lt;soapenv:Header&gt;
    &lt;/soapenv:Header&gt;
@@ -86,24 +86,24 @@
 
 </code></pre>
 			</figure>
-			
+
 			<aside>
 				<p>Dans l'exemple ci-dessus le message contient de toute évidence un relevé météorologique pour la ville
 				de bordeaux. Ce message peut aussi bien être une requête d'un expéditeur qu'une réponse d'un destinataire (la
 				structure des messages est la même).</p>
 			</aside>
-			
+
 			<p>Du fait de son utilisation exclusive du XML pour la composition des messages, une bonne compréhension de SOAP
 			nécessite une connaissance approfondie de XML (<i>Cf.</i> <a href="a1_xml.html">le complément au cours sur XML</a>).</p>
-			
-			<p>Un message SOAP est défini pour le namespace XML 
+
+			<p>Un message SOAP est défini pour le namespace XML
 			<a class="explicit" href="http://schemas.xmlsoap.org/soap/envelope/">http://schemas.xmlsoap.org/soap/envelope/</a></p>
 
 			<figure>
 				<figcaption>Structure d'un message SOAP</figcaption>
 				<pre><code class="xml">
-&lt;!-- l'enveloppe du message --&gt; 
-&lt;soapenv:Envelope 
+&lt;!-- l'enveloppe du message --&gt;
+&lt;soapenv:Envelope
    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"&gt;
 
   &lt;!-- l'en-tête du message --&gt;
@@ -120,7 +120,7 @@
 
 </code></pre>
 			</figure>
-			
+
 			<p>SOAP définit un format pour un type de réponse particulière : <strong>une SOAP fault</strong>.
 			Une SOAP fault signale un problème lors du traitement du service.</p>
 
@@ -138,7 +138,7 @@
 
 </code></pre>
 			</figure>
-			
+
 			<aside>
 				<p>Pour l'élément <code>faultcode</code>, on peut utiliser les valeurs&nbsp;:</p>
 				<ul>
@@ -148,18 +148,18 @@
 					provient de la requête du client</li>
 				</ul>
 			</aside>
-			
+
 		</section>
-		
+
 		<section id="wsdl">
 			<h2>Web Service Description Language (WSDL)</h2>
-			
+
 			<p>La condition pour utiliser un service Web SOAP est de connaître les opérations disponibles et le format des
-			messages autorisés en entrée et/ou en sortie de ses opérations. <strong>WSDL</strong> (Web Service Description Language) 
-			est un langage XML permettant la description complète d'un service Web. Ainsi un fichier WSDL est analysable par 
+			messages autorisés en entrée et/ou en sortie de ses opérations. <strong>WSDL</strong> (Web Service Description Language)
+			est un langage XML permettant la description complète d'un service Web. Ainsi un fichier WSDL est analysable par
 			programme et on trouve des outils dans différents langages de programmation pour générer
 			du code (les stubs) facilitant le développement des programmes (client ou serveur).</p>
-			
+
 			<aside>
 				<p>La plupart des <i>stacks</i> SOAP donne accès au WSDL en ligne (en le générant dynamiquement si nécessaire).</p>
 				<p>Par exemple, pour les serveurs d'application Java EE, le WSDL est disponible à la même URL que le service
@@ -174,14 +174,14 @@
 				<figcaption>Exemple de WSDL</figcaption>
 				<pre><code class="xml">
 &lt;?xml version='1.0' encoding='UTF-8'?&gt;
-&lt;definitions 
-  xmlns="http://schemas.xmlsoap.org/wsdl/" 
-  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" 
-  xmlns:tns="http://www.mymeteo.com/webservices/meteo" 
-  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+&lt;definitions
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+  xmlns:tns="http://www.mymeteo.com/webservices/meteo"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:ns1="http://www.mymeteo.com/meteo"
-  targetNamespace="http://www.mymeteo.com/webservices/meteo" 
+  targetNamespace="http://www.mymeteo.com/webservices/meteo"
   name="MeteoService"
 &gt;
 
@@ -214,9 +214,9 @@
     &lt;/xs:schema&gt;
   &lt;/types&gt;
 
-  &lt;!-- 
+  &lt;!--
     La description de tous les messages possibles.
-    Un message est défini par un ensemble de parties (une partie pour le payload 
+    Un message est défini par un ensemble de parties (une partie pour le payload
     et une partie par en-tête)
   --&gt;
   &lt;message name="releveMeteo"&gt;
@@ -227,18 +227,18 @@
     &lt;part name="partReleve" element="ns1:releve"/&gt;
   &lt;/message&gt;
 
-  &lt;!-- 
+  &lt;!--
     Description des interfaces (indépendantes de SOAP)
     Une interface est composée d'un ensemble d'opérations.
     Chaque opération est définie par les messages en entrée et en sortie.
   --&gt;
   &lt;portType name="MeteoService"&gt;
     &lt;operation name="releveMeteo"&gt;
-      &lt;input 
-        wsam:Action="http://www.mymeteo.com/webservices/meteo/MeteoService/releveMeteoRequest" 
+      &lt;input
+        wsam:Action="http://www.mymeteo.com/webservices/meteo/MeteoService/releveMeteoRequest"
         message="tns:releveMeteo"/&gt;
-      &lt;output 
-        wsam:Action="http://www.mymeteo.com/webservices/meteo/MeteoService/releveMeteoResponse" 
+      &lt;output
+        wsam:Action="http://www.mymeteo.com/webservices/meteo/MeteoService/releveMeteoResponse"
         message="tns:releveMeteoResponse"/&gt;
     &lt;/operation&gt;
   &lt;/portType&gt;
@@ -257,8 +257,8 @@
     &lt;/operation&gt;
   &lt;/binding&gt;
 
-  &lt;!-- 
-    Localisation du service 
+  &lt;!--
+    Localisation du service
     Dans le cas d'un binding SOAP avec un transport HTTP, on trouve ici l'URL du service.
   --&gt;
   &lt;service name="MeteoService"&gt;
@@ -271,41 +271,41 @@
 </code></pre>
 			</figure>
 		</section>
-		
+
 		<section>
 			<h2>Développer un service Web SOAP</h2>
-			
+
 			<p>On distingue deux approches pour développer un service Web WS-*&nbsp;:</p>
-			
+
 			<dl>
 				<dt>Contract first</dt>
 				<dd>On définit le contrat du service en spécifiant le WSDL et on utilise des outils pour générer le code des <em>stubs</em>.</dd>
-				
+
 				<dt>Contract last</dt>
 				<dd>On développe le service et on utilise des outils pour générer le WSDL.</dd>
 			</dl>
 		</section>
 	</article>
-	
+
 	<article class="exercice">
 		<section>
 			<h2>Excercice&nbsp;: Accéder à un service Web</h2>
-			
+
 			<p>Testez le service Web SOAP disponible à cette adresse&nbsp;: <a class="explicit" href="http://ws-meteo.herokuapp.com/">http://ws-meteo.herokuapp.com/</a></p>
-			
+
 			<p>Pour tester ce service Web, vous pouvez utiliser le client <a href="http://sourceforge.net/projects/soapui/">SoapUI</a>.</p>
 		</section>
 	</article>
-	
+
 	<article>
 		<section>
 			<h2 id="jaxws">Implémenter des services Web avec JAX-WS</h2>
 			<p>Depuis Java 6, l'environnement d'exécution Java inclut JAX-WS qui est l'API permettant d'implémenter des services
 			Web et JAXB (Java API for XML Binding) permettant d'associer une classe Java à une représentation XML.</p>
-			
+
 			<p>L'implémentation d'un service Web passe par l'écriture et l'implémentation d'une <strong>SEI</strong> (Service Endpoint Implementation).
 			Cette interface et son implémentation peuvent être fournies par le développeur ou peuvent être générées à partir d'un ficher WSDL (<i>Cf.</i> ci-dessous).</p>
-			
+
 			<figure>
 				<figcaption>Une SEI avec JAX-WS SOAP</figcaption>
 				<pre><code class="java">
@@ -330,7 +330,7 @@ public interface HelloService {
 
 </code></pre>
 			</figure>
-			
+
 			<figure>
 				<figcaption>La classe d'implémentation de la SEI</figcaption>
 				<pre><code class="java">
@@ -338,7 +338,7 @@ package fr.epsi.i4;
 
 import javax.jws.WebService;
 
-@WebService(endpointInterface="fr.epsi.i4.HelloService", 
+@WebService(endpointInterface="fr.epsi.i4.HelloService",
     targetNamespace="http://epsi.fr/ws/hello", serviceName="HelloService")
 public class HelloServiceImpl implements HelloService {
 
@@ -378,14 +378,14 @@ public class HelloService {
 </code></pre>
 				</figure>
 			</aside>
-			
+
 			<p>Cette <strong>SEI</strong> permet de gérer un échange de messages comme celui-ci&nbsp;:</p>
-			
+
 			<figure>
 				<figcaption>Message de l'expéditeur</figcaption>
 				<pre><code class="xml">
-&lt;soapenv:Envelope 
-  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+&lt;soapenv:Envelope
+  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
   xmlns:hel="http://epsi.fr/ws/hello"&gt;
    &lt;soapenv:Header/&gt;
    &lt;soapenv:Body&gt;
@@ -407,9 +407,9 @@ public class HelloService {
 
 </code></pre>
 			</figure>
-			
+
 			<p>Nous allons maintenant décrire les annotations Java utilisées pour transformer la classe <code>HelloService</code> en service Web&nbsp;:</p>
-			
+
 			<dl>
 				<dt><a href="http://docs.oracle.com/javase/7/docs/api/javax/jws/WebService.html">@WebService</a></dt>
 				<dd>Désigne une classe comme étant une SEI ou une implémentation d'une SEI.
@@ -466,7 +466,7 @@ public class HelloService {
 					</dl>
 					<pre><code class="java">
 public String sayHello(
-     @WebParam String name, 
+     @WebParam String name,
      @WebParam(header=true) UserCredentials userCredentials,
      @WebParam(header=true, mode=Mode.OUT) Holder&lt;ServerInfo&gt; serverInfo);
 
@@ -489,24 +489,24 @@ public String sayHello(
 				</dd>
 
 			</dl>
-			
+
 			<aside>
 				<p>Avec JAX-WS, les exceptions lancées par une méthode d'une SEI sont automatiquement transformées en SOAP fault.</p>
 			</aside>
 
 		</section>
-		
+
 		<section>
 			<h2>Déployer un service Web dans un serveur d'application Java EE</h2>
 
 			<p>Pour déployer un service Web développé avec JAX-WS, soit vous disposez d'un serveur d'application
 			Java EE (comme Glassfish ou TomEE), soit vous ne disposez que d'un conteneur de Servlet (comme Tomcat ou Jetty).</p>
-			
+
 			<p>
 			Pour un déploiement dans un serveur d'application Java EE, il suffit d'embarquer votre implémentation dans
 			une application Web Java et de déployer cette application. Le serveur d'application s'occupe du reste...
 			</p>
-			
+
 			<p>
 			Pour un déploiement dans un conteneur de Servlet, il faut incorporer une implémentation de JAX-WS dans votre application Web
 			et se conformer à sa documentation car JAX-WS ne définit pas de standard de configuration et de déploiement.</p>
@@ -520,14 +520,14 @@ public String sayHello(
 			<h2 id="java_gentools">Les outils Java de génération</h2>
 			<dl>
 				<dt>Java &#8594; WSDL (Contract last)</dt>
-				<dd>L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsgen.html">wsgen</a></strong> 
+				<dd>L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsgen.html">wsgen</a></strong>
 				livré avec le JDK peut générer un fichier WSDL à partir d'une classe compilée.
 				<aside>On peut demander à un serveur Java EE de générer le WSDL après le déploiement du service en passant <em>wsdl</em> comme paramètre de l'URL du service.</aside>
 				</dd>
 				<dt>WSDL &#8594; Java (Contract first)</dt>
 				<dd>L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsimport.html">wsimport</a></strong> livré avec le JDK
 				peut générer toutes les classes Java nécessaires à l'implémentation d'un client ou d'un service à partir d'un fichier WSDL.
-				
+
 					<figure>
 						<figcaption>Générer les classes compilées</figcaption>
 						<pre><code class="bash">wsimport http://localhost:8080/hello-service/webservices/HelloService?wsdl</code></pre>
@@ -553,7 +553,7 @@ java.net.URL wsdlDocumentLocation = new java.net.URL("file:HelloService.wsdl");
 
 // Le qualified name du service spécifié par les attributs
 // targetNamespace et name de la balise racine dans le WSDL
-javax.xml.namespace.QName serviceName = 
+javax.xml.namespace.QName serviceName =
              new javax.xml.namespace.QName("http://epsi.fr/ws/hello","HelloService");
 
 // Creation d'une stub vers le service Web
@@ -568,7 +568,7 @@ System.out.println(helloService.sayHello("world"));
 
 </code></pre>
 			</figure>
-			<p>Le code précédent pose un problème : le client utilise l'URL du service 
+			<p>Le code précédent pose un problème : le client utilise l'URL du service
 			spécifiée dans la section <em>wsdl:service</em> du WSDL. Il est souvent
 			utile de pouvoir changer dynamiquement l'URL du endpoint.</p>
 			<figure>
@@ -584,7 +584,7 @@ HelloService helloService = service.getPort(HelloService.class);
 javax.xml.ws.BindingProvider bp = (javax.xml.ws.BindingProvider) helloService;
 
 // ENDPOINT_ADDRESS_PROPERTY est une propriété donnant l'URL du endpoint
-bp.getRequestContext().put(javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY, 
+bp.getRequestContext().put(javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                            "http://monendpoint.com/monservice");
 
 // Exemple d'appel du service
@@ -600,21 +600,21 @@ System.out.println(helloService.sayHello("world"));
 			<h2>Excercice&nbsp;: &Eacute;crire un programme client d'un service Web</h2>
 			<p>&Eacute;crivez une client pour le service Web SOAP disponible à cette adresse&nbsp;: <a class="explicit" href="http://ws-meteo.herokuapp.com/">http://ws-meteo.herokuapp.com/</a>.</p>
 			<p>Par exemple, vous pouvez écrire un programme qui accepte le nom d'une ville en paramètre et qui affiche la température obtenue pour cette ville après un appel au service Web.</p>
-			
+
 			<aside class="tip">
 				<p>En Java, pensez à utiliser <a href="#java_gentools"><strong>wsimport</strong></a> pour générer le stub client.</p>
 			</aside>
 
 		</section>
 	</article>
-	
+
 	<article class="exercice">
 		<section>
 			<h2>Excercice&nbsp;: &Eacute;crire un service Web</h2>
-			
+
 			<p>Reprenez l'implémentation de la SEI donnée en exemple <a href="#jaxws">plus haut</a> et créez une application Web Java EE incorporant ce service. Déployez ensuite cette application dans un serveur
 			d'application comme <a href="https://tomee.apache.org/">TomEE Plus</a>. Vérifiez que le service fonctionne en utilisant par exemple <a href="http://sourceforge.net/projects/soapui/">SoapUI</a>.</p>
-			
+
 			<p>Vous pouvez ensuite écrire un programme Java client de votre service.</p>
 
 		</section>
@@ -631,7 +631,7 @@ System.out.println(helloService.sayHello("world"));
 				<dd><a href="http://www.mkyong.com/tutorials/jax-ws-tutorials/" class="explicit">http://www.mkyong.com/tutorials/jax-ws-tutorials/</a></dd>
 			</dl>
 		</section>
-	</article>	
+	</article>
 
 	<footer class="license">
 		<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/fr/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/fr/88x31.png" /></a><br />Cette œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/fr/">Licence Creative Commons Attribution -  Partage dans les Mêmes Conditions 3.0 France</a>.
