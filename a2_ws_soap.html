@@ -299,6 +299,100 @@
 
 	<article>
 		<section>
+			<h2 id="java_gentools">Les outils Java de génération</h2>
+			<dl>
+				<dt>Java &#8594; WSDL (Contract last)</dt>
+				<dd>L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsgen.html">wsgen</a></strong>
+				livré avec le JDK peut générer un fichier WSDL à partir d'une classe compilée.
+				<aside>On peut demander à un serveur Java EE de générer le WSDL après le déploiement du service en passant <em>wsdl</em> comme paramètre de l'URL du service.</aside>
+				</dd>
+				<dt>WSDL &#8594; Java (Contract first)</dt>
+				<dd>L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsimport.html">wsimport</a></strong> livré avec le JDK
+				peut générer toutes les classes Java nécessaires à l'implémentation d'un client ou d'un service à partir d'un fichier WSDL.
+
+					<figure>
+						<figcaption>Générer les classes compilées</figcaption>
+						<pre><code class="bash">wsimport http://localhost:8080/hello-service/webservices/HelloService?wsdl</code></pre>
+						<figcaption>Générer uniquement les sources</figcaption>
+						<pre><code class="bash">wsimport -Xnocompile http://localhost:8080/hello-service/webservices/HelloService?wsdl</code></pre>
+					</figure>
+				</dd>
+			</dl>
+		</section>
+
+		<section>
+			<h2>Consommer un service Web avec JAX-WS</h2>
+			<p>Une application cliente d'un service Web SOAP peut utiliser un <strong>stub</strong>.
+			Un stub est une classe générée qui masque la complexité des échanges de messages
+			avec le serveur.
+			</p>
+			<p>Il est possible de créer un client à partir du code généré par <strong>wsimport</strong>.</p>
+			<figure>
+				<figcaption>Exemple d'accès à la SEI pour un client</figcaption>
+				<pre><code class="java">
+// L'URL du WSDL (peut-être un fichier sur disque ou un lien HTTP)
+java.net.URL wsdlDocumentLocation = new java.net.URL("file:HelloService.wsdl");
+
+// Le qualified name du service spécifié par les attributs
+// targetNamespace et name de la balise racine dans le WSDL
+javax.xml.namespace.QName serviceName =
+             new javax.xml.namespace.QName("http://epsi.fr/ws/hello","HelloService");
+
+// Creation d'une stub vers le service Web
+javax.xml.ws.Service service = javax.xml.ws.Service.create(wsdlDocumentLocation, serviceName);
+
+// La SEI offrant les méthodes du service Web sous la forme d'un interface Java
+// L'interface est celle générée par wsimport
+HelloService helloService = service.getPort(HelloService.class);
+
+// Exemple d'appel du service
+System.out.println(helloService.sayHello("world"));
+
+</code></pre>
+			</figure>
+			<p>Le code précédent pose un problème : le client utilise l'URL du service
+			spécifiée dans la section <em>wsdl:service</em> du WSDL. Il est souvent
+			utile de pouvoir changer dynamiquement l'URL du endpoint.</p>
+			<figure>
+				<figcaption>Modification de l'URL du endpoint du service</figcaption>
+				<pre><code class="java">
+// ...
+
+// La SEI offrant les méthodes du service Web sous la forme d'un interface Java
+// L'interface est celle générée par wsimport
+HelloService helloService = service.getPort(HelloService.class);
+
+// Un service implémente l'interface javax.xml.ws.BindingProvider
+javax.xml.ws.BindingProvider bp = (javax.xml.ws.BindingProvider) helloService;
+
+// ENDPOINT_ADDRESS_PROPERTY est une propriété donnant l'URL du endpoint
+bp.getRequestContext().put(javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+                           "http://monendpoint.com/monservice");
+
+// Exemple d'appel du service
+System.out.println(helloService.sayHello("world"));
+
+</code></pre>
+			</figure>
+		</section>
+	</article>
+	
+	<article class="exercice">
+		<section>
+			<h2>Excercice&nbsp;: &Eacute;crire un programme client d'un service Web</h2>
+			<p>&Eacute;crivez une client pour le service Web SOAP disponible à cette adresse&nbsp;: <a class="explicit" href="http://ws-meteo.herokuapp.com/">http://ws-meteo.herokuapp.com/</a>.</p>
+			<p>Par exemple, vous pouvez écrire un programme qui accepte le nom d'une ville en paramètre et qui affiche la température obtenue pour cette ville après un appel au service Web.</p>
+
+			<aside class="tip">
+				<p>En Java, pensez à utiliser <a href="#java_gentools"><strong>wsimport</strong></a> pour générer le stub client.</p>
+			</aside>
+
+		</section>
+	</article>
+	
+	<article>
+
+		<section>
 			<h2 id="jaxws">Implémenter des services Web avec JAX-WS</h2>
 			<p>Depuis Java 6, l'environnement d'exécution Java inclut JAX-WS qui est l'API permettant d'implémenter des services
 			Web et JAXB (Java API for XML Binding) permettant d'associer une classe Java à une représentation XML.</p>
@@ -513,97 +607,6 @@ public String sayHello(
 			<p>Il existe plusieurs implémentations de JAX-WS&nbsp;: <a href="https://metro.java.net/">Metro</a>, <a href="https://cxf.apache.org/">CXF</a>...
 			Pour un déploiement en utilisant l'implémentation Metro sous Tomcat, vous pouvez suivre <a href="http://www.mkyong.com/webservices/jax-ws/deploy-jax-ws-web-services-on-tomcat/">ce tutoriel</a>.
 			</p>
-
-		</section>
-
-		<section>
-			<h2 id="java_gentools">Les outils Java de génération</h2>
-			<dl>
-				<dt>Java &#8594; WSDL (Contract last)</dt>
-				<dd>L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsgen.html">wsgen</a></strong>
-				livré avec le JDK peut générer un fichier WSDL à partir d'une classe compilée.
-				<aside>On peut demander à un serveur Java EE de générer le WSDL après le déploiement du service en passant <em>wsdl</em> comme paramètre de l'URL du service.</aside>
-				</dd>
-				<dt>WSDL &#8594; Java (Contract first)</dt>
-				<dd>L'utilitaire <strong><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/wsimport.html">wsimport</a></strong> livré avec le JDK
-				peut générer toutes les classes Java nécessaires à l'implémentation d'un client ou d'un service à partir d'un fichier WSDL.
-
-					<figure>
-						<figcaption>Générer les classes compilées</figcaption>
-						<pre><code class="bash">wsimport http://localhost:8080/hello-service/webservices/HelloService?wsdl</code></pre>
-						<figcaption>Générer uniquement les sources</figcaption>
-						<pre><code class="bash">wsimport -Xnocompile http://localhost:8080/hello-service/webservices/HelloService?wsdl</code></pre>
-					</figure>
-				</dd>
-			</dl>
-		</section>
-
-		<section>
-			<h2>Consommer un service Web avec JAX-WS</h2>
-			<p>Une application cliente d'un service Web SOAP peut utiliser un <strong>stub</strong>.
-			Un stub est une classe générée qui masque la complexité des échanges de messages
-			avec le serveur.
-			</p>
-			<p>Il est possible de créer un client à partir du code généré par <strong>wsimport</strong>.</p>
-			<figure>
-				<figcaption>Exemple d'accès à la SEI pour un client</figcaption>
-				<pre><code class="java">
-// L'URL du WSDL (peut-être un fichier sur disque ou un lien HTTP)
-java.net.URL wsdlDocumentLocation = new java.net.URL("file:HelloService.wsdl");
-
-// Le qualified name du service spécifié par les attributs
-// targetNamespace et name de la balise racine dans le WSDL
-javax.xml.namespace.QName serviceName =
-             new javax.xml.namespace.QName("http://epsi.fr/ws/hello","HelloService");
-
-// Creation d'une stub vers le service Web
-javax.xml.ws.Service service = javax.xml.ws.Service.create(wsdlDocumentLocation, serviceName);
-
-// La SEI offrant les méthodes du service Web sous la forme d'un interface Java
-// L'interface est celle générée par wsimport
-HelloService helloService = service.getPort(HelloService.class);
-
-// Exemple d'appel du service
-System.out.println(helloService.sayHello("world"));
-
-</code></pre>
-			</figure>
-			<p>Le code précédent pose un problème : le client utilise l'URL du service
-			spécifiée dans la section <em>wsdl:service</em> du WSDL. Il est souvent
-			utile de pouvoir changer dynamiquement l'URL du endpoint.</p>
-			<figure>
-				<figcaption>Modification de l'URL du endpoint du service</figcaption>
-				<pre><code class="java">
-// ...
-
-// La SEI offrant les méthodes du service Web sous la forme d'un interface Java
-// L'interface est celle générée par wsimport
-HelloService helloService = service.getPort(HelloService.class);
-
-// Un service implémente l'interface javax.xml.ws.BindingProvider
-javax.xml.ws.BindingProvider bp = (javax.xml.ws.BindingProvider) helloService;
-
-// ENDPOINT_ADDRESS_PROPERTY est une propriété donnant l'URL du endpoint
-bp.getRequestContext().put(javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                           "http://monendpoint.com/monservice");
-
-// Exemple d'appel du service
-System.out.println(helloService.sayHello("world"));
-
-</code></pre>
-			</figure>
-		</section>
-	</article>
-
-	<article class="exercice">
-		<section>
-			<h2>Excercice&nbsp;: &Eacute;crire un programme client d'un service Web</h2>
-			<p>&Eacute;crivez une client pour le service Web SOAP disponible à cette adresse&nbsp;: <a class="explicit" href="http://ws-meteo.herokuapp.com/">http://ws-meteo.herokuapp.com/</a>.</p>
-			<p>Par exemple, vous pouvez écrire un programme qui accepte le nom d'une ville en paramètre et qui affiche la température obtenue pour cette ville après un appel au service Web.</p>
-
-			<aside class="tip">
-				<p>En Java, pensez à utiliser <a href="#java_gentools"><strong>wsimport</strong></a> pour générer le stub client.</p>
-			</aside>
 
 		</section>
 	</article>
