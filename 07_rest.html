@@ -430,7 +430,17 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 		</dl>
 		
 	</article>
-	
+
+	<article class="exercice">
+		<h2>Exercice&nbsp;: Exploration d'un donjon</h2>
+		
+		<p>On désire réaliser un jeu d'exploration de donjon dans lequel le joueur visite un ensemble de salles.
+           Chaque salle communique avec une autre par une porte. Une salle peut contenir un nombre quelconque de portes.</p>
+        <p>Vous devez proposer une API Web de ce service afin de permettre à l'utilisateur de parcourir le donjon. 
+           Chaque salle est décrite par un court texte. Si le client le supporte, il est possible d'obtenir une illustration pour
+           certaines salles.</p>
+    </article>
+
 	<article class="exercice">
 		<h2>Exercice&nbsp;: Un service de paiement de factures</h2>
 		
@@ -457,164 +467,19 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 		
 		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
 		
-		<section style="display:none">
-		<h3>Correction</h3>
-		<dl>
-			<dt>créer facture</dt>
-			<dd>
-				<p>Le client réalise un <strong>POST</strong> en envoyant les informations nécessaires (au moins montant et IBAN pour identifier le créditeur)</p>
-				<figure>
-					<figcaption>Pseudo requête de création de facture</figcaption>
-					<pre><code>POST /factures HTTP/1.1
-Host: factureonline.com
-Content-type: application/x-www-form-urlencoded
-
-montant=3000&amp;iban=GB87BARC20658244971655</code></pre>
-				</figure>
-				
-				<p>Le serveur répond en fournissant l'URL de la facture créée</p>
-
-				<figure>
-					<figcaption>Pseudo réponse à la création de facture</figcaption>
-					<pre><code>HTTP/1.1 201 Created
-Location: URL_FACTURE
-Content-length: 0
-
-</code></pre>
-				</figure>
-				
-				<p>Le client peut ensuite obtenir les informations sur sa facture grâce à une requête GET sur l'URL de la facture</p>
-
-				<figure>
-					<figcaption>Pseudo réponse à la requête GET sur l'URL de la facture</figcaption>
-					<pre><code>HTTP/1.1 200 OK
-Link: &lt;URL_CREATION_AUTORISATION&gt;;rel="http://factureonline.com/autorisation"
-
-[information sur la facture]</code></pre>
-				</figure>
-
-				<p>Dans la réponse ci-dessus, le contenu le plus intéressant est l'en-tête <strong>Link</strong> permettant d'obtenir
-				le lien vers la création d'autorisation afin de continuer le processus de paiement.</p>
-			</dd>
-
-			<dt>autoriser paiement</dt>
-			<dd>
-				<p>En utilisant le lien avec le type de relation <strong>http://factureonline.com/autorisation</strong>, le client
-			peut créer un autorisation pour le montant de la facture grâce à une requête POST.</p>
-			
-				<figure>
-					<figcaption>Pseudo requête de création de l'autorisation</figcaption>
-					<pre><code>POST URL_CREATION_AUTORISATION HTTP/1.1
-Host: factureonline.com
-Content-Length: 0
-
-</code></pre>
-				</figure>
-				
-				<aside>Il n'est pas nécessaire de préciser le montant de l'autorisation. En effet, le serveur
-				doit forger une URL pour la création d'autorisation lui permettant d'identifier la facture.
-				Par exemple, si la facture a pour URL http://factureonline.com/factures/2015001 alors le serveur
-				peut décider de générer l'URL http://factureonline.com/factures/2015001/autorisation pour la création
-				d'une autorisation. Il peut donc sans difficulté retrouver les informations nécessaires pour identifier
-				la facture et en déduire le montant de l'autorisation.
-				</aside>
-				
-				<figure>
-					<figcaption>Pseudo réponse à la création de l'autorisation</figcaption>
-					<pre><code>HTTP/1.1 201 Created
-Location: URL_AUTORISATION
-Content-length: 0
-
-</code></pre>
-				</figure>
-
-				<p>Le client peut ensuite obtenir les informations sur son autorisation grâce à une requête GET sur l'URL de l'autorisation</p>
-
-				<figure>
-					<figcaption>Pseudo réponse à la requête GET sur l'URL de l'autorisation</figcaption>
-					<pre><code>HTTP/1.1 200 OK
-Link: &lt;URL_CREATION_CAPTURE&gt;;rel="http://factureonline.com/capture"
-
-[information sur l'autorisation]</code></pre>
-				</figure>
-
-				<p>Dans la réponse ci-dessus, le contenu le plus intéressant est l'en-tête <strong>Link</strong> permettant d'obtenir
-				le lien vers la création d'une capture afin de continuer le processus de paiement.</p>
-			</dd>
-
-			<dt>capturer paiement</dt>
-			<dd>
-				<p>En utilisant le lien avec le type de relation <strong>http://factureonline.com/capture</strong>, le client
-			peut créer une capture pour son autorisation grâce à une requête POST.</p>
-			
-				<figure>
-					<figcaption>Pseudo requête de création de la capture</figcaption>
-					<pre><code>POST URL_CREATION_CAPTURE HTTP/1.1
-Host: factureonline.com
-Content-Length: 0
-
-</code></pre>
-				</figure>
-				
-				<aside>Il n'est pas nécessaire de préciser l'autorisation concernée pour cette capture. En effet, le serveur
-				doit forger une URL pour la création de capture lui permettant d'identifier l'autorisation.
-				Par exemple, si l'autorisation a pour URL http://factureonline.com/factures/2015001/autorisation/2333
-				alors le serveur peut décider de générer l'URL http://factureonline.com/factures/2015001/autorisation/2333/capture
-				pour la création d'une capture. Il peut donc sans difficulté retrouver les informations nécessaires pour identifier
-				l'autorisation.
-				</aside>
-				
-				<figure>
-					<figcaption>Pseudo réponse à la création de la capture</figcaption>
-					<pre><code>HTTP/1.1 303 See Other
-Location: URL_RECU_FACTURATION
-Content-length: 0
-
-</code></pre>
-				</figure>
-				
-				<p>Pour une capture réussie, le serveur peut retourner une redirection vers l'URL qui détaillera le reçu du paiement (numéro de transaction, date...)</p>
-			</dd>
-		</dl>
-		</section>
-		
-
 		<p>Décrivez également des scénarios alternatifs&nbsp;:</p>
 		<ul>
 			<li>L'autorisation échoue car les informations bancaires fournies sont incorrectes</li>
 			<li>L'autorisation échoue car le client ne dispose pas du crédit suffisant sur son compte.</li>
 		</ul>
-		
-		<section style="display:none">
-		<h3>Correction</h3>
-		<p>Pour ces deux cas, le serveur retournera simplement une réponse 4XX (comme par exemple 400 BAD REQUEST) le
-		corps du message pourra détailler les raisons de l'échec. Dans tous les cas, le client ne disposera pas de lien
-		pour créer la capture, le processus de paiement sera donc bien interrompu.</p>
-		
-		<figure>
-			<figcaption>Pseudo réponse pour l'échec de création d'une autorisation</figcaption>
-			<pre><code>HTTP/1.1 400 Bad request
-Content-type: text/plain
-
-Les informations bancaires fournies sont incorrectes.</code></pre>
-		</figure>
-		
-		<aside>
-		<p>Notez que ce processus de paiement est relativement simple à implémenter côté client. Il suit
-		toujours le même modèle&nbsp;: création avec un POST, récupération des informations avec un GET. Le client
-		se contente de réagir en fonction du type de lien donné par le GET&nbsp;:</p>
-			<ul>
-				<li><strong>http://factureonline.com/autorisation</strong> pour la création d'une autorisation</li>
-				<li><strong>http://factureonline.com/capture</strong> pour la création d'une capture</li>
-			</ul>
-		</aside>
-		</section>
 	</article>
 
 	<article class="exercice">
 		<h2>Exercice&nbsp;: Un service de réservation de billet</h2>
 		
-		<p>On désire mettre en ligne un service de réservation de billets de concert. Le service ne gère pas de base de données des utilisateurs&nbsp;: un utilisateur est simplement identifié par un pseudo au moment de la réservation.</p>
+		<p>On désire mettre en ligne un service de réservation de billets de concert. Ce service, accessible grâce à une API Web,
+		sera utilisé par des applications de smartphone. 
+		Le service ne gère pas de base de données des utilisateurs&nbsp;: un utilisateur est simplement identifié par un pseudo au moment de la réservation.</p>
 		<p>Les cas d'utilisation définis sont&nbsp;:</p>
 		<ul>
 			<li>L'utilisateur consulte la liste des concerts disponibles</li>
@@ -626,187 +491,6 @@ Les informations bancaires fournies sont incorrectes.</code></pre>
 		<p><strong>Attention, un utilisateur qui a confirmé sa réservation ne peut plus l'annuler !</strong></p>
 		<p>Décrivez une API Web RESTful par des exemples de requêtes/réponses HTTP permettant de réaliser les cas d'utilisation ci-dessus.</p>
 		
-		
-		<section style="display:none">
-		<h3>Correction</h3>
-		<dl>
-			<dt>L'utilisateur consulte la liste des concerts disponibles</dt>
-
-		<dd>		
-			<p>GET /concerts</p>
-			<p>Le serveur répond 200 avec un type de contenu text/uri-list, c'est-à-dire une liste d'URL pointant
-			chacune sur un concert.</p>
-			<figure>
-				<figcaption>Exemple de réponse du serveur au format text/uri-list</figcaption>
-				<pre><code>http://monconcert.com/concerts/AAAAAA
-http://monconcert.com/concerts/BBBBBB
-http://monconcert.com/concerts/CCCCCC
-</code></pre>
-			</figure>
-
-			<p>Le client peut choisir le lien qu'il souhaite dans cette liste et faire un GET pour obtenir le
-			détail d'un concert au format HAL (application/hal+json).</p>
-			<figure>
-				<figcaption>Exemple de réponse du serveur pour un GET sur une URL de concert</figcaption>
-				<pre><code>{
-  "_links": {
-    "self": { "href": "http://monconcert.com/concerts/AAAAAA"},
-    "http://monconcert.com/reservation": { "href": "URL_POUR_RESERVER"}
-  }
-  "type": "h-event",
-  "properties": {
-    "name": "Mon concert",
-    "start": "2015-11-30 21:00:00",
-    "location": "Some bar in SF",
-    "summary": "good vibe"
-  }
-}
-	</code></pre>
-			</figure>
-			
-			<aside>
-				<p>Dans la représentation ci-dessus, on utilise le <a href="http://microformats.org/wiki/h-event">microformat h-event</a>
-				afin d'améliorer la portabilité du format de la représentation.</p>
-			</aside>
-		
-			<p>On peut imaginer accepter une négociation de contenu pour le format HAL (application/hal+json)
-			afin de fournir plus d'information au client directement dans la liste des concerts.</p>
-	
-			<figure>
-				<figcaption>Exemple de réponse du serveur au format application/hal+json</figcaption>
-				<pre><code>{
-  "_embedded": {
-    "item": [{
-      "_links": [{
-        "self": {"href": "http://monconcert.com/concerts/AAAAAA"},
-        "http://monconcert.org/reservation": { href="URL_POUR_RESERVER"}
-      }],
-      "name": "premier concert"
-    },
-    {
-      "_links": [{
-        "self": {"href": "http://monconcert.com/concerts/BBBBBB"},
-        "http://monconcert.org/reservation": { href="URL_POUR_RESERVER"}
-      }],
-      "name": "deuxième concert"
-    },
-    {
-      "_links": [{
-        "self": {"href": "http://monconcert.com/concerts/CCCCCC"},
-        "http://monconcert.org/reservation": { href="URL_POUR_RESERVER"}
-      }],
-      "name": "troisième concert"
-    }]
-  }
-}
-</code></pre>
-			</figure>
-		</dd>
-		
-		<dt>L'utilisateur réserve une place pour un concert avec un pseudo</dt>
-		
-		<dd>
-
-			<p>Pour réserver, le client effectue un <strong>POST</strong> sur le lien avec le type
-			de relation <strong>http://monconcert.org/reservation</strong> en envoyant dans le corps du message son pseudo.</p>
-			
-			<figure>
-				<figcaption>Pseudo requête de réservation</figcaption>
-				<pre><code>POST URL_POUR_RESERVER HTTP/1.1
-Content-type: text/plain
-
-spoonless</code></pre>
-			</figure>
-			
-			<aside>
-				<p>À charge pour le serveur de forger une URL pour la réservation qui lui permettent d'identifier le concert
-				concerné. Par exemple si l'URL du concert est http://monconcert.com/AAAAAA, alors le serveur
-				peut générer une URL pour la réservation de la forme http://monconcert.com/AAAAAA/reservations par exemple.</p>
-			</aside>
-			
-			<p>La réponse du serveur ressemblera à&nbsp;:</p>
-			<figure>
-				<figcaption>Pseudo réponse du serveur</figcaption>
-				<pre><code>HTTP/1.1 201 Created
-Location: URL_DE_LA_RESERVATION
-
-</code></pre>
-			</figure>
-		
-			<p>Le client peut ensuite obtenir la définition de sa réservation en faisant un GET sur l'URL donnée par
-			l'en-tête <strong>Location</strong>&nbsp;:</p>
-			
-			<figure>
-				<figcaption>Exemple de pseudo réponse pour un GET sur l'URL de la réservation</figcaption>
-				<pre><code>HTTP/1.1 200 OK
-Link: &lt;URL_DU_CONCERT&gt;;rel="http://monconcert.com/concert"
-Link: &lt;URL_DE_CONFIRMATION&gt;;rel="http://monconcert.com/confirmation"
-Link: &lt;URL_D_ANNULATION&gt;;rel="http://monconcert.com/annulation"
-Content-type: text/plain
-
-spoonless</code></pre>
-			</figure>
-		
-		</dd>
-		<dt>L'utilisateur annule sa réservation</dt>
-		<dd>
-			<p>Un effectuant un <strong>PUT</strong> sur l'URL donnée par le lien de type <strong>http://monconcert.com/annulation</strong>
-			et avec un corps de message vide, l'utilisateur réalise un annulation de sa réservation. Il s'agit de réaliser une mise
-			à jour avec un contenu vide.</p>
-	
-			<figure>
-				<figcaption>Exemple de pseudo requête pour annuler une réservation</figcaption>
-				<pre><code>PUT URL_D_ANNULATION HTTP/1.1
-Content-length: 0
-
-</code></pre>
-			</figure>
-
-			<aside>On peut aussi imaginer utiliser la méthode <strong>DELETE</strong> plutôt que <strong>PUT</strong>
-			pour réaliser une annulation de réservation.
-			</aside>
-		</dd>
-		
-		<dt>L'utilisateur confirme sa réservation</dt>
-		
-		<dd>
-			<p>L'utilisateur confirme sa réservation en effectuant un <strong>POST</strong> sur l'URL donnée par le lien
-			de type <strong>http://monconcert.com/confirmation</strong>. Il n'y a pas de corps à la requête.</p>
-
-			<figure>
-				<figcaption>Pseudo requête de confirmation</figcaption>
-				<pre><code>POST URL_DE_CONFIRMATION HTTP/1.1
-Content-Length: 0
-
-</code></pre>
-			</figure>
-		
-			<p>Si la confirmation est un succès alors, un appel GET sur l'URL de la réservation ne fournira
-			plus les liens de type <strong>http://monconcert.com/annulation</strong> et <strong>http://monconcert.com/confirmation</strong>.
-			Ainsi, le serveur précise au client qu'après une confirmation, ce dernier ne peut plus ni annuler sa réservation ni la
-			confirmer à nouveau.</p>
-	
-			<figure>
-				<figcaption>Exemple de pseudo réponse pour un GET sur l'URL de la réservation après une confirmation</figcaption>
-				<pre><code>HTTP/1.1 200 OK
-Link: &lt;URL_DU_CONCERT&gt;;rel="http://monconcert.com/concert"
-Content-type: text/plain
-
-spoonless</code></pre>
-			</figure>
-		</dd>
-		
-		<dt>Le gestionnaire du site consulte la liste des réservations confirmées pour un concert.</dt>
-		
-		<dd>
-			<p>Il suffit de fournir une URL spécifique qui liste les concerts avec, pour chacun, la liste des URL vers
-			les réservations. Ce qui est important ici, c'est que le gestionnaire de site a un rôle particulier et
-			que l'on souhaitera sans doute limiter l'accès à cette ressource. On peut imaginer une configuration réseau
-			dans laquelle le serveur dispose d'une interface réseau publique et d'une interface réseau pour un réseau
-			interne sécurisé uniquement accessible au gestionnaire du site.</p>
-		</dd>
-	</dl>
-	</section>
 	</article>
 	
 	<article class="exercice">
