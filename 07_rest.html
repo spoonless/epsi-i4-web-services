@@ -230,7 +230,7 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 			
 			<p>Un serveur a la responsabilité de fournir au client des informations sur la possibilité
 			de conserver une représentation et de la considérer comme valide pendant un certain laps de temps.
-			Cette contrainte est malheureusement très largement sous-estimée par les développeurs de services Web alors
+			Cette contrainte est malheureusement très largement sous-estimée par les développeurs d'API Web alors
 			qu'elle permet d'améliorer considérablement les performances d'une application. Il ne faut pas oublier
 			que la mise en cache est un mécanisme qui est largement exploité par les éléments intermédiaires du Web
 			comme les proxies pour améliorer l'efficacité des échanges.</p>
@@ -389,6 +389,46 @@ http://epsi.fr/bordeaux/informatique/i4/etudiants/noter?id=1337&amp;module=webse
 				le format autorisé des représentations).</p>
 			</aside>
 		</section>
+
+		<h2>Références</h2>
+
+		<h3>Sites Web &amp; articles</h3>
+		<dl>
+			<dt>REST cookbook</dt>
+			<dd><a class="explicit" href="http://restcookbook.com/">http://restcookbook.com/</a></dd>
+
+			<dt>Une étude de cas très complète (commander un café en REST)</dt>
+			<dd><a class="explicit" href="http://www.infoq.com/articles/webber-rest-workflow">http://www.infoq.com/articles/webber-rest-workflow</a></dd>
+
+			<dt>Le modèle de maturité de Richardson pour une approche REST</dt>
+			<dd><a class="explicit" href="http://martinfowler.com/articles/richardsonMaturityModel.html">http://martinfowler.com/articles/richardsonMaturityModel.html</a></dd>
+
+		</dl>
+	
+		<h3>Livres</h3>
+		<dl>
+			<dt><a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">Architectural Styles and the Design of Network-based Software Architectures</a></dt>
+			<dd>Roy Fielding - University of California, Irvine 2000 (La thèse de doctorat incluant la présentation de REST)</dd>
+
+			<dt><a href="http://shop.oreilly.com/product/0636920028468.do">RESTful Web APIs</a></dt>
+			<dd>Leonard Richardson, Mike Amundsen, Sam Ruby - O'Reilly 2013</dd>
+
+			<dt><a href="http://restinpractice.com/book/book.html">REST in Practice</a></dt>
+			<dd>Jim Webber, Savas Parastatidis, Ian Robinson - O'Reilly Media 2010</dd>
+
+			<dt><a href="https://www.packtpub.com/application-development/restful-java-web-services-second-edition">RESTful Java Web Services - Second Edition</a></dt>
+			<dd>Jobinesh Purushothaman - Packt Publishing 2015</dd>
+		</dl>
+
+		<h3>Applications de démo</h3>
+		<dl>
+			<dt><a href="http://rest-bookmarks.herokuapp.com/">REST bookmarks</a></dt>
+			<dd>Une application de démo de gestion de marque-pages (le code source en Java est disponible sur <a href="https://github.com/spoonless/rest-bookmarks">GitHub</a>)</dd>
+
+			<dt><a href="http://www.youtypeitwepostit.com">You type it, we post it!</a></dt>
+			<dd>Une application de démo issue de l'ouvrage <strong>RESTful Web APIs</strong> (le code source pour Node.js est disponible sur <a href="https://github.com/RESTful-Web-APIs/example-code">GitHub</a>)</dd>
+		</dl>
+		
 	</article>
 	
 	<article class="exercice">
@@ -783,48 +823,6 @@ spoonless</code></pre>
 			<li>L'utilisateur valide son panier pour le paiement en ligne</li>
 		</ul>
 		<p>Décrivez la réalisation d'une API Web RESTful par des exemples de requêtes/réponses HTTP.</p>
-	</article>
-	
-	<article>
-		<h2>Références</h2>
-
-		<h3>Sites Web &amp; articles</h3>
-		<dl>
-			<dt>REST cookbook</dt>
-			<dd><a class="explicit" href="http://restcookbook.com/">http://restcookbook.com/</a></dd>
-
-			<dt>Une étude de cas très complète (commander un café en REST)</dt>
-			<dd><a class="explicit" href="http://www.infoq.com/articles/webber-rest-workflow">http://www.infoq.com/articles/webber-rest-workflow</a></dd>
-
-			<dt>Le modèle de maturité de Richardson des services Web RESTful</dt>
-			<dd><a class="explicit" href="http://martinfowler.com/articles/richardsonMaturityModel.html">http://martinfowler.com/articles/richardsonMaturityModel.html</a></dd>
-
-		</dl>
-	
-		<h3>Livres</h3>
-		<dl>
-			<dt><a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">Architectural Styles and the Design of Network-based Software Architectures</a></dt>
-			<dd>Roy Fielding - University of California, Irvine 2000 (La thèse de doctorat incluant la présentation de REST)</dd>
-
-			<dt><a href="http://shop.oreilly.com/product/0636920028468.do">RESTful Web APIs</a></dt>
-			<dd>Leonard Richardson, Mike Amundsen, Sam Ruby - O'Reilly 2013</dd>
-
-			<dt><a href="http://restinpractice.com/book/book.html">REST in Practice</a></dt>
-			<dd>Jim Webber, Savas Parastatidis, Ian Robinson - O'Reilly Media 2010</dd>
-
-			<dt><a href="https://www.packtpub.com/application-development/restful-java-web-services-second-edition">RESTful Java Web Services - Second Edition</a></dt>
-			<dd>Jobinesh Purushothaman - Packt Publishing 2015</dd>
-		</dl>
-
-		<h3>Applications de démo</h3>
-		<dl>
-			<dt><a href="http://rest-bookmarks.herokuapp.com/">REST bookmarks</a></dt>
-			<dd>Une application de démo de gestion de marque-pages (le code source en Java est disponible sur <a href="https://github.com/spoonless/rest-bookmarks">GitHub</a>)</dd>
-
-			<dt><a href="http://www.youtypeitwepostit.com">You type it, we post it!</a></dt>
-			<dd>Une application de démo issue de l'ouvrage <strong>RESTful Web APIs</strong> (le code source pour Node.js est disponible sur <a href="https://github.com/RESTful-Web-APIs/example-code">GitHub</a>)</dd>
-		</dl>
-		
 	</article>
 
 	<footer class="license">
