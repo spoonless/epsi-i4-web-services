@@ -5,13 +5,10 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="fr" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta content="David Gayerie" name="author" />
-<meta content="Le protocole HTTP et les API Web" name="description" />
-<meta content="HTTP, API Web, Rest, Restful Web Service" name="keywords" />
-
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Sommaire &mdash; Documentation Web services 1.0</title>
+  <title>Recherche &mdash; Documentation Web services 1.0</title>
   
 
   
@@ -31,8 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/custom_rtd_theme.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Recherche" href="search.html" />
-    <link rel="next" title="Le protocole HTTP" href="http/http.html" /> 
+    <link rel="search" title="Recherche" href="#" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -51,7 +47,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> Web services
+            <a href="index.html" class="icon icon-home"> Web services
           
 
           
@@ -61,7 +57,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="#" method="get">
     <input type="text" name="q" placeholder="Recherche dans les pages" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -213,7 +209,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Web services</a>
+          <a href="index.html">Web services</a>
         
       </nav>
 
@@ -244,9 +240,9 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Accueil</a> &raquo;</li>
+      <li><a href="index.html">Accueil</a> &raquo;</li>
         
-      <li>Sommaire</li>
+      <li>Recherche</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -258,124 +254,29 @@
   </ul>
 
   
-  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
-      
-        <a href="http/http.html" class="btn btn-neutral float-right" title="Le protocole HTTP" accesskey="n">Suivant <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-  </div>
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sommaire">
-<h1>Sommaire<a class="headerlink" href="#sommaire" title="Lien permanent vers ce titre">¶</a></h1>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">HTTP, REST et les API Web</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="http/http.html">Le protocole HTTP</a></li>
-<li class="toctree-l1"><a class="reference internal" href="http/http_cas_utilisation.html">HTTP : les cas d’utilisation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="http/http_negociation_contenu.html">HTTP : la négociation de contenu</a></li>
-<li class="toctree-l1"><a class="reference internal" href="http/http_requetes_conditionnelles.html">HTTP : les requêtes conditionnelles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="http/http_gestion_cache.html">HTTP : la gestion du cache</a></li>
-<li class="toctree-l1"><a class="reference internal" href="http/http_liens.html">HTTP : les liens</a></li>
-<li class="toctree-l1"><a class="reference internal" href="http/rest.html">REST</a></li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Les services Web : SOAP / WSDL</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="http/java_ws.html">Les services Web avec Java</a></li>
-<li class="toctree-l1"><a class="reference internal" href="http/annexe_xml.html">Annexe : XML</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="introduction-service-web-et-api-web">
-<h1>Introduction : Service Web et API Web<a class="headerlink" href="#introduction-service-web-et-api-web" title="Lien permanent vers ce titre">¶</a></h1>
-<p>Le terme de service Web est problématique car, pour des raisons historiques,
-il peut regrouper plusieurs acceptions. Voici la définition du terme <em>Web service</em>
-donnée respectivement par le W3C :</p>
-<blockquote>
-<div><p>There are many things that might be called «&nbsp;Web services&nbsp;» in the world at large.
-However, for the purpose of this Working Group and this architecture,
-and <strong>without prejudice toward other definitions</strong>, we will use the following definition:</p>
-<p>A Web service is a software system designed to support <strong>interoperable</strong>
-machine-to-machine interaction over a network. It has an interface described
-in a machine-processable format (specifically WSDL). Other systems interact
-with the Web service in a manner prescribed by its description using SOAP-messages,
-typically conveyed using HTTP with an XML serialization in conjunction with
-other Web-related standards.</p>
-<p class="attribution">&mdash;<a class="reference external" href="https://www.w3.org/TR/2004/NOTE-ws-gloss-20040211/#webservice">Définition du W3C</a></p>
-</div></blockquote>
-<p>et par Wikipedia :</p>
-<blockquote>
-<div><p>The term web service is either</p>
-<ul class="simple">
-<li>(generic) a service offered by an electronic device to another electronic
-device, communicating with each other via the <strong>World Wide Web</strong>, or</li>
-<li>(specific) a web service implemented in the particular technology or brand,
-W3C Web Services.</li>
-</ul>
-<p>In a web service, the Web technology such as HTTP—originally designed for
-human-to-machine communication—is utilized for machine-to-machine communication,
-more specifically for transferring machine-readable file formats such as XML and JSON.</p>
-<p class="attribution">&mdash;<a class="reference external" href="http://en.wikipedia.org/wiki/Web_service">Article Wikipedia</a></p>
-</div></blockquote>
-<p>La définition du W3C restreint la notion de service Web à un ensemble de
-technologies (WSDL, SOAP, HTTP et XML). Cela est bien normal pour le consortium
-qui est responsable de la rédaction de la plupart des protocoles cités. L’article
-de Wikipédia donne une définition plus ouverte, allant jusqu’à distinguer des
-grands types de services Web.</p>
-<p>Pour l’ensemble de ce cours, nous opterons pour une distinction entre <strong>API Web</strong>
-et <strong>service Web</strong> qui s’impose de plus en plus dans la littérature.
-Une API Web (parfois nommée RESTful Web Services) est une interface programmatique
-basée sur HTTP permettant à un client et à un serveur d’interagir suivant un
-échange de requête/réponse. Un service Web est un protocole de communication
-basé sur les standards W3 tels que XML, SOAP et WSDL.</p>
-<p>Ce cours porte principalement sur les API Web au travers d’un approfondissement
-des connaissances sur le protocole HTTP et une présentation du modèle
-d’architecture REST. Les services Web proprement dits sont présentés dans les
-annexes pour celles et ceux qui désirent une introduction aux protocoles SOAP et WSDL.</p>
-<p>Cette œuvre est mise à disposition selon les termes de la <a class="reference external" href="https://creativecommons.org/licenses/by-sa/3.0/fr/">Licence Creative Commons Attribution</a> -  Partage dans les Mêmes Conditions 3.0 France</p>
-<a class="reference external image-reference" href="https://creativecommons.org/licenses/by-sa/3.0/fr/"><img alt="Licence Creative Commons" src="https://i.creativecommons.org/l/by-sa/3.0/fr/88x31.png" /></a>
-</div>
+  <noscript>
+  <div id="fallback" class="admonition warning">
+    <p class="last">
+      Please activate JavaScript to enable the search
+      functionality.
+    </p>
+  </div>
+  </noscript>
 
+  
+  <div id="search-results">
+  
+  </div>
 
            </div>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="http/http.html" class="btn btn-neutral float-right" title="Le protocole HTTP" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-    </div>
   
 
   <hr/>
@@ -410,6 +311,7 @@ annexes pour celles et ceux qui désirent une introduction aux protocoles SOAP e
         <script type="text/javascript" src="_static/doctools.js"></script>
         <script type="text/javascript" src="_static/translations.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="_static/searchtools.js"></script>
     
 
   
@@ -420,7 +322,14 @@ annexes pour celles et ceux qui désirent une introduction aux protocoles SOAP e
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(false);
       });
-  </script> 
+  </script>
+  <script type="text/javascript">
+    jQuery(function() { Search.loadIndex("searchindex.js"); });
+  </script>
+  
+  <script type="text/javascript" id="searchindexloader"></script>
+   
+
 
 </body>
 </html>
